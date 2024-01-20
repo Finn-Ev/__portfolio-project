@@ -10,7 +10,14 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private userService: UserService) {}
   @Get('me')
-  getMe(@GetUser('id') user: User) {
+  getMe(@GetUser() user: User) {
+    // return mock user
+    // return {
+    //   id: 1,
+    //   firstName: 'Finn',
+    //   lastName: 'Mertens',
+    // };
+
     return user;
   }
 

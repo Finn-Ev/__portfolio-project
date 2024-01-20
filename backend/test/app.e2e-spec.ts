@@ -28,7 +28,7 @@ describe('App e2e', () => {
 
     prisma = app.get(PrismaService);
 
-    await prisma.cleanDb();
+    await prisma.cleanDatabase();
 
     pactum.request.setBaseUrl(`http://localhost:${PORT}`);
   });
@@ -37,9 +37,9 @@ describe('App e2e', () => {
     await app.close();
   });
 
-  describe('Auth', () => {
-    const dto: AuthDto = { email: 'test@e2e.com', password: 'test1234' };
+  const userAuthDto: AuthDto = { email: 'test@e2e.com', password: 'test1234' };
 
+  describe('Auth', () => {
     describe('Register', () => {
       it('should throw an exception when no body was provided', () => {
         return supertest(app.getHttpServer())
@@ -50,21 +50,21 @@ describe('App e2e', () => {
       it('should throw an exception when the email is invalid', () => {
         return supertest(app.getHttpServer())
           .post('/auth/register')
-          .send({ ...dto, email: 'test_test.de' })
+          .send({ ...userAuthDto, email: 'test_test.de' })
           .expect(400);
       });
 
       it('should throw an exception when the password contains less than eight letters', () => {
         return supertest(app.getHttpServer())
           .post('/auth/register')
-          .send({ ...dto, password: '1234567' })
+          .send({ ...userAuthDto, password: '1234567' })
           .expect(400);
       });
 
       it('should register a user when the inputs are valid', () => {
         return supertest(app.getHttpServer())
           .post('/auth/register')
-          .send(dto)
+          .send(userAuthDto)
           .expect(201);
       });
     });
@@ -74,24 +74,24 @@ describe('App e2e', () => {
         return supertest(app.getHttpServer()).post('/auth/login').expect(400);
       });
 
-      it('should throw an exception when the email is invalid', () => {
+      it('should throw an 403 (forbidden) status when the user does not exist', () => {
         return supertest(app.getHttpServer())
           .post('/auth/login')
-          .send({ ...dto, email: 'test_test.de' })
-          .expect(400);
+          .send({ ...userAuthDto, email: 'test@test.de' })
+          .expect(403);
       });
 
-      it('should throw an exception when the password contains less than eight letters', () => {
+      it('should return a 403 (forbidden) status when the password is wrong', () => {
         return supertest(app.getHttpServer())
           .post('/auth/login')
-          .send({ ...dto, password: '1234567' })
-          .expect(400);
+          .send({ ...userAuthDto, password: 'WRONG123' })
+          .expect(403);
       });
 
       it('should login a user when credentials are valid', () => {
         return supertest(app.getHttpServer())
           .post('/auth/login')
-          .send(dto)
+          .send(userAuthDto)
           .expect(200)
           .then((response) => {
             userAccessToken = response.body.access_token;
@@ -102,11 +102,11 @@ describe('App e2e', () => {
 
   describe('User', () => {
     describe('Get current user', () => {
-      it('should throw an exception when no access-token was provided', () => {
+      it('should return a 401 status when no access-token was provided', () => {
         return supertest(app.getHttpServer()).get('/users/me').expect(401);
       });
 
-      it('should throw an exception when the access-token is invalid', () => {
+      it('should return a 401 status when the access-token is invalid', () => {
         return supertest(app.getHttpServer())
           .get('/users/me')
           .set('Authorization', 'Bearer __invalid__')
@@ -117,7 +117,11 @@ describe('App e2e', () => {
         return supertest(app.getHttpServer())
           .get('/users/me')
           .set('Authorization', `Bearer ${userAccessToken}`)
-          .expect(200);
+          .expect(200)
+          .expect((response: any) => {
+            const userInfo = JSON.parse(response.text);
+            expect(userInfo.email).toBe(userAuthDto.email);
+          });
       });
     });
 
