@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  dev-db:
+    image: postgres:16
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=database
+    networks:
+      - bookmark-demo-app
+  test-db:
+    image: postgres:16
+    ports:
+      - '5433:5432'
+    environment:
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=database_test
+    networks:
+      - bookmark-demo-app
+networks:
+  bookmark-demo-app:
