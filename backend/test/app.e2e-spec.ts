@@ -2,10 +2,10 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
-import * as pactum from 'pactum';
 import { AuthDto } from '../src/auth/dto/auth.dto';
 import { CreateBookmarkDto, EditBookmarkDto } from '../src/bookmark/dto';
 import * as supertest from 'supertest';
+import { EditUserDto } from '../src/user/dto/edit-user.dto';
 
 const PORT = 4002;
 
@@ -29,8 +29,6 @@ describe('App e2e', () => {
     prisma = app.get(PrismaService);
 
     await prisma.cleanDatabase();
-
-    pactum.request.setBaseUrl(`http://localhost:${PORT}`);
   });
 
   afterAll(async () => {
@@ -126,8 +124,11 @@ describe('App e2e', () => {
     });
 
     describe('Edit current user', () => {
-      it('should edit user', () => {
-        const editUserDto = { firstName: 'Finn' };
+      const validEmail = 'test@test.de';
+      const invalidEmail = 'test@test.';
+
+      it('should edit user when the new value is valid', () => {
+        const editUserDto: EditUserDto = { email: validEmail };
 
         return supertest(app.getHttpServer())
           .patch('/users/me')
@@ -135,8 +136,18 @@ describe('App e2e', () => {
           .send(editUserDto)
           .expect(200)
           .expect((response) => {
-            expect(response.body.firstName).toBe(editUserDto.firstName);
+            expect(response.body.email).toBe(editUserDto.email);
           });
+      });
+
+      it('should return a 400 status when the new value is invalid', () => {
+        const editUserDto: EditUserDto = { email: invalidEmail };
+
+        return supertest(app.getHttpServer())
+          .patch('/users/me')
+          .set('Authorization', `Bearer ${userAccessToken}`)
+          .send(editUserDto)
+          .expect(400);
       });
     });
 
