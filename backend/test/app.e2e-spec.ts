@@ -31,11 +31,12 @@ describe('App e2e', () => {
     await prisma.cleanDatabase();
   });
 
-  afterAll(async () => {
-    await app.close();
-  });
-
-  const userAuthDto: AuthDto = { email: 'test@e2e.com', password: 'test1234' };
+  const validUserAuthDto: AuthDto = {
+    email: 'test@e2e.com',
+    password: 'test1234',
+  };
+  const invalidEmail = 'test@e2e.';
+  const invalidPassword = '1234567'; // too short (min. 8 letters)
 
   describe('Auth', () => {
     describe('Register', () => {
@@ -45,25 +46,35 @@ describe('App e2e', () => {
           .expect(400);
       });
 
-      it('should throw an exception when the email is invalid', () => {
+      it('should throw an exception when the email is not a valid email', () => {
         return supertest(app.getHttpServer())
           .post('/auth/register')
-          .send({ ...userAuthDto, email: 'test_test.de' })
+          .send({ ...validUserAuthDto, email: invalidEmail })
           .expect(400);
       });
 
-      it('should throw an exception when the password contains less than eight letters', () => {
+      it('should throw an exception when the password is too short', () => {
         return supertest(app.getHttpServer())
           .post('/auth/register')
-          .send({ ...userAuthDto, password: '1234567' })
+          .send({ ...validUserAuthDto, password: invalidPassword })
           .expect(400);
       });
 
       it('should register a user when the inputs are valid', () => {
         return supertest(app.getHttpServer())
           .post('/auth/register')
-          .send(userAuthDto)
-          .expect(201);
+          .send(validUserAuthDto)
+          .expect(201)
+          .expect((response) => {
+            expect(response.body).toHaveProperty('access_token');
+          });
+      });
+
+      it('should return a 403 (forbidden) status when the email is already taken', () => {
+        return supertest(app.getHttpServer())
+          .post('/auth/register')
+          .send(validUserAuthDto)
+          .expect(403);
       });
     });
 
@@ -72,25 +83,42 @@ describe('App e2e', () => {
         return supertest(app.getHttpServer()).post('/auth/login').expect(400);
       });
 
-      it('should throw an 403 (forbidden) status when the user does not exist', () => {
+      it('should return a 400 status when the email is not a valid email', () => {
         return supertest(app.getHttpServer())
           .post('/auth/login')
-          .send({ ...userAuthDto, email: 'test@test.de' })
+          .send({ ...validUserAuthDto, email: invalidEmail })
+          .expect(400);
+      });
+
+      it('should return a 400 status when the password is too short', () => {
+        return supertest(app.getHttpServer())
+          .post('/auth/login')
+          .send({ ...validUserAuthDto, password: invalidPassword })
+          .expect(400);
+      });
+
+      it('should throw a 403 (forbidden) status when the user with that email does not exist', () => {
+        return supertest(app.getHttpServer())
+          .post('/auth/login')
+          .send({ ...validUserAuthDto, email: 'unknown@user.de' })
           .expect(403);
       });
 
       it('should return a 403 (forbidden) status when the password is wrong', () => {
         return supertest(app.getHttpServer())
           .post('/auth/login')
-          .send({ ...userAuthDto, password: 'WRONG123' })
+          .send({ ...validUserAuthDto, password: 'WRONG_PASSWORD' })
           .expect(403);
       });
 
       it('should login a user when credentials are valid', () => {
         return supertest(app.getHttpServer())
           .post('/auth/login')
-          .send(userAuthDto)
+          .send(validUserAuthDto)
           .expect(200)
+          .expect((response) => {
+            expect(response.body).toHaveProperty('access_token');
+          })
           .then((response) => {
             userAccessToken = response.body.access_token;
           });
@@ -118,17 +146,16 @@ describe('App e2e', () => {
           .expect(200)
           .expect((response: any) => {
             const userInfo = JSON.parse(response.text);
-            expect(userInfo.email).toBe(userAuthDto.email);
+            expect(userInfo.email).toBe(validUserAuthDto.email);
           });
       });
     });
 
     describe('Edit current user', () => {
-      const validEmail = 'test@test.de';
-      const invalidEmail = 'test@test.';
+      const newValidEmail = 'test@test.de';
 
       it('should edit user when the new value is valid', () => {
-        const editUserDto: EditUserDto = { email: validEmail };
+        const editUserDto: EditUserDto = { email: newValidEmail };
 
         return supertest(app.getHttpServer())
           .patch('/users/me')
@@ -178,14 +205,14 @@ describe('App e2e', () => {
           .set('Authorization', `Bearer ${userAccessToken}`)
           .send(dto)
           .expect(201)
-          .expect((response) => {
+          .then((response) => {
             bookmarkId = response.body.id;
           });
       });
     });
 
     describe('Get bookmarks', () => {
-      it('should get bookmarks', () => {
+      it('should get all available bookmarks', () => {
         return supertest(app.getHttpServer())
           .get('/bookmarks')
           .set('Authorization', `Bearer ${userAccessToken}`)
@@ -196,8 +223,8 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Get bookmark by id', () => {
-      it('should get bookmark by id', () => {
+    describe('Get bookmark', () => {
+      it('should get the bookmark by id', () => {
         return supertest(app.getHttpServer())
           .get(`/bookmarks/${bookmarkId}`)
           .set('Authorization', `Bearer ${userAccessToken}`)
@@ -246,5 +273,9 @@ describe('App e2e', () => {
           });
       });
     });
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });
