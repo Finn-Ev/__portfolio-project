@@ -6,7 +6,6 @@ import { ConfigService } from '@nestjs/config';
 import { AuthDto } from '../../dto/auth.dto';
 import { jwtDecode } from 'jwt-decode';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
 
 describe('AuthService', () => {
   let authService: AuthService;
