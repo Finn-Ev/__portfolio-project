@@ -51,7 +51,7 @@ describe('BookmarkService', () => {
         ],
       });
 
-      const bookmarks = await bookmarkService.getBookmarks(mainUserId);
+      const bookmarks = await bookmarkService.findAll(mainUserId);
 
       expect(Array.isArray(bookmarks)).toBe(true);
       expect(bookmarks.length).toBe(2);
@@ -77,7 +77,7 @@ describe('BookmarkService', () => {
         },
       });
 
-      const bookmark = await bookmarkService.getBookmarkById(
+      const bookmark = await bookmarkService.findOne(
         mainUserId,
         createdBookmark.id,
       );
@@ -94,7 +94,7 @@ describe('BookmarkService', () => {
         link: 'https://example.com/new-bookmark',
       };
 
-      const { id: newBookmarkId } = await bookmarkService.createBookmark(
+      const { id: newBookmarkId } = await bookmarkService.create(
         mainUserId,
         bookmarkDto,
       );
@@ -125,7 +125,7 @@ describe('BookmarkService', () => {
         link: 'https://example.com/updated-bookmark',
       };
 
-      await bookmarkService.editBookmarkById(
+      await bookmarkService.update(
         mainUserId,
         originalBookmark.id,
         editBookmarkDto,
@@ -163,11 +163,7 @@ describe('BookmarkService', () => {
       };
 
       await expect(
-        bookmarkService.editBookmarkById(
-          mainUserId,
-          createdBookmark.id,
-          editBookmarkDto,
-        ),
+        bookmarkService.update(mainUserId, createdBookmark.id, editBookmarkDto),
       ).rejects.toThrowError(ForbiddenException);
 
       const hopefullyNotEditedBookmark =
@@ -191,7 +187,7 @@ describe('BookmarkService', () => {
         },
       });
 
-      await bookmarkService.deleteBookmarkById(mainUserId, createdBookmark.id);
+      await bookmarkService.remove(mainUserId, createdBookmark.id);
 
       const deletedBookmark = await prismaService.bookmark.findUnique({
         where: {
@@ -221,7 +217,7 @@ describe('BookmarkService', () => {
       const currentBookmarkCount = await prismaService.bookmark.count();
 
       await expect(
-        bookmarkService.deleteBookmarkById(mainUserId, createdBookmark.id),
+        bookmarkService.remove(mainUserId, createdBookmark.id),
       ).rejects.toThrow(ForbiddenException);
 
       const newBookmarkCount = await prismaService.bookmark.count();

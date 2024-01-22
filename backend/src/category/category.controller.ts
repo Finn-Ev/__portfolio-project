@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { STATUS_CODES } from 'http';
 
 @Controller('category')
 export class CategoryController {
@@ -39,6 +42,7 @@ export class CategoryController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
     return this.categoryService.remove(+id);
   }

@@ -6,24 +6,7 @@ import { CreateBookmarkDto, UpdateBookmarkDto } from './dto/';
 export class BookmarkService {
   constructor(private prisma: PrismaService) {}
 
-  getBookmarks(userId: number) {
-    return this.prisma.bookmark.findMany({
-      where: {
-        userId,
-      },
-    });
-  }
-
-  getBookmarkById(userId: number, bookmarkId: number) {
-    return this.prisma.bookmark.findFirst({
-      where: {
-        id: bookmarkId,
-        userId,
-      },
-    });
-  }
-
-  async createBookmark(userId: number, dto: CreateBookmarkDto) {
+  async create(userId: number, dto: CreateBookmarkDto) {
     const bookmark = await this.prisma.bookmark.create({
       data: {
         userId,
@@ -34,19 +17,30 @@ export class BookmarkService {
     return bookmark;
   }
 
-  async editBookmarkById(
-    userId: number,
-    bookmarkId: number,
-    dto: UpdateBookmarkDto,
-  ) {
-    // get the bookmark by id
+  findAll(userId: number) {
+    return this.prisma.bookmark.findMany({
+      where: {
+        userId,
+      },
+    });
+  }
+
+  findOne(userId: number, bookmarkId: number) {
+    return this.prisma.bookmark.findFirst({
+      where: {
+        id: bookmarkId,
+        userId,
+      },
+    });
+  }
+
+  async update(userId: number, bookmarkId: number, dto: UpdateBookmarkDto) {
     const bookmark = await this.prisma.bookmark.findUnique({
       where: {
         id: bookmarkId,
       },
     });
 
-    // check if user owns the bookmark
     if (!bookmark || bookmark.userId !== userId)
       throw new ForbiddenException('Access to resources denied');
 
@@ -60,14 +54,13 @@ export class BookmarkService {
     });
   }
 
-  async deleteBookmarkById(userId: number, bookmarkId: number) {
+  async remove(userId: number, bookmarkId: number) {
     const bookmark = await this.prisma.bookmark.findUnique({
       where: {
         id: bookmarkId,
       },
     });
 
-    // check if user owns the bookmark
     if (!bookmark || bookmark.userId !== userId)
       throw new ForbiddenException('Access to resources denied');
 
