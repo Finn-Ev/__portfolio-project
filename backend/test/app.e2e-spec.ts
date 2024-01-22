@@ -5,7 +5,7 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from '../src/auth/dto/auth.dto';
 import { CreateBookmarkDto, UpdateBookmarkDto } from '../src/bookmark/dto';
 import * as supertest from 'supertest';
-import { EditUserDto } from '../src/user/dto/edit-user.dto';
+import { UpdateUserDto } from '../src/user/dto/update-user.dto';
 
 const PORT = 4002;
 
@@ -155,7 +155,7 @@ describe('App e2e', () => {
       const newValidEmail = 'test@test.de';
 
       it('should edit user when the new value is valid', () => {
-        const editUserDto: EditUserDto = { email: newValidEmail };
+        const editUserDto: UpdateUserDto = { email: newValidEmail };
 
         return supertest(app.getHttpServer())
           .patch('/users/me')
@@ -168,7 +168,7 @@ describe('App e2e', () => {
       });
 
       it('should return a 400 status when the new value is invalid', () => {
-        const editUserDto: EditUserDto = { email: invalidEmail };
+        const editUserDto: UpdateUserDto = { email: invalidEmail };
 
         return supertest(app.getHttpServer())
           .patch('/users/me')
