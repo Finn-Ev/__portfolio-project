@@ -1,6 +1,6 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateBookmarkDto, EditBookmarkDto } from './dto/';
+import { CreateBookmarkDto, UpdateBookmarkDto } from './dto/';
 
 @Injectable()
 export class BookmarkService {
@@ -37,7 +37,7 @@ export class BookmarkService {
   async editBookmarkById(
     userId: number,
     bookmarkId: number,
-    dto: EditBookmarkDto,
+    dto: UpdateBookmarkDto,
   ) {
     // get the bookmark by id
     const bookmark = await this.prisma.bookmark.findUnique({

@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from '../src/auth/dto/auth.dto';
-import { CreateBookmarkDto, EditBookmarkDto } from '../src/bookmark/dto';
+import { CreateBookmarkDto, UpdateBookmarkDto } from '../src/bookmark/dto';
 import * as supertest from 'supertest';
 import { EditUserDto } from '../src/user/dto/edit-user.dto';
 
@@ -236,7 +236,7 @@ describe('App e2e', () => {
     });
 
     describe('Edit bookmark by id', () => {
-      const dto: EditBookmarkDto = {
+      const dto: UpdateBookmarkDto = {
         title:
           'Kubernetes Course - Full Beginners Tutorial (Containerize Your Apps!)',
         description:
