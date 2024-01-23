@@ -1,26 +1,76 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class CategoryService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(private prisma: PrismaService) {}
+
+  async create(userId: number, dto: CreateCategoryDto) {
+    const category = await this.prisma.category.create({
+      data: {
+        userId,
+        ...dto,
+      },
+    });
+
+    return category;
   }
 
-  findAll() {
-    return `This action returns all category`;
+  findAllFromUser(userId: number) {
+    return this.prisma.category.findMany({
+      where: {
+        userId,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  findOneFromUser(userId: number, categoryId: number) {
+    return this.prisma.category.findUnique({
+      where: {
+        userId,
+        id: categoryId,
+      },
+    });
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(userId: number, categoryId: number, dto: UpdateCategoryDto) {
+    const category = await this.prisma.category.findUnique({
+      where: {
+        userId,
+        id: categoryId,
+      },
+    });
+
+    // if (!category || category.userId !== userId) throw new ForbiddenException('Access to resources denied');
+    if (!category) throw new ForbiddenException('Access to resources denied');
+
+    return this.prisma.category.update({
+      where: {
+        id: category.id,
+      },
+      data: {
+        ...dto,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(userId: number, categoryId: number) {
+    const category = await this.prisma.category.findUnique({
+      where: {
+        userId,
+        id: categoryId,
+      },
+    });
+
+    // if (!category || category.userId !== userId) throw new ForbiddenException('Access to resources denied');
+    if (!category) throw new ForbiddenException('Access to resources denied');
+
+    return this.prisma.category.delete({
+      where: {
+        id: categoryId,
+      },
+    });
   }
 }
