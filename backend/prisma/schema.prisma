@@ -12,7 +12,7 @@ model User {
     email  String @unique
     pwHash String
 
-    bookMarks Bookmark[]
+    categories Category[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -20,8 +20,21 @@ model User {
     @@map("users")
 }
 
-// TODO add category functionality (allow users to create categories and add bookmarks to them)
-// TODO add favorite functionality (allow users to favorite bookmarks)
+model Category {
+    id          Int     @id @default(autoincrement())
+    title       String
+    description String?
+
+    userId Int
+    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    bookmarks Bookmark[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("categories")
+}
 
 model Bookmark {
     id          Int     @id @default(autoincrement())
@@ -29,11 +42,13 @@ model Bookmark {
     description String?
     link        String
 
-    userId Int
-    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    categoryId Int
+    category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    isFavourite Boolean @default(false)
 
     @@map("bookmarks")
 }
