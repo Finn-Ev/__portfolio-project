@@ -6,6 +6,7 @@
     "private": true,
     "license": "UNLICENSED",
     "scripts": {
+        "prisma:dev:migrate": "npx prisma migrate dev",
         "prisma:dev:deploy": "npx prisma migrate deploy",
         "prisma:dev:studio": "npx prisma studio",
         "prisma:test:deploy": "dotenv -e .env.test -- npx prisma migrate deploy",
