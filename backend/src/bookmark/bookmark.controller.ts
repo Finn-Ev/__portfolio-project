@@ -28,15 +28,12 @@ export class BookmarkController {
 
   @Get()
   findAll(@GetUser('id') userId: number) {
-    return this.bookmarkService.findAll(userId);
+    return this.bookmarkService.findAllFromCategory(userId);
   }
 
   @Get(':id')
-  findOne(
-    @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) bookmarkId: number,
-  ) {
-    return this.bookmarkService.findOne(userId, bookmarkId);
+  findOne(@GetUser('id') userId: number, @Param('id', ParseIntPipe) bookmarkId: number) {
+    return this.bookmarkService.findOneFromCategory(userId, bookmarkId);
   }
 
   @Patch(':id')
@@ -50,10 +47,7 @@ export class BookmarkController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  remove(
-    @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) bookmarkId: number,
-  ) {
+  remove(@GetUser('id') userId: number, @Param('id', ParseIntPipe) bookmarkId: number) {
     return this.bookmarkService.remove(userId, bookmarkId);
   }
 }

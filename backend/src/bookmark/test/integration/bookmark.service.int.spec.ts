@@ -3,16 +3,19 @@ import { BookmarkService } from '../../bookmark.service';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { ForbiddenException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { CategoryService } from '../../../category/category.service';
+import { CreateBookmarkDto } from '../../dto';
 
 describe('BookmarkService', () => {
   let bookmarkService: BookmarkService;
   let prismaService: PrismaService;
 
   let mainUserId: number;
+  let mainCategoryId: number;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ConfigService, BookmarkService, PrismaService],
+      providers: [ConfigService, BookmarkService, PrismaService, CategoryService],
     }).compile();
 
     bookmarkService = module.get<BookmarkService>(BookmarkService);
@@ -28,93 +31,100 @@ describe('BookmarkService', () => {
     });
 
     mainUserId = mainUser.id;
+
+    const mainCategory = await prismaService.category.create({
+      data: {
+        userId: mainUser.id,
+        title: 'Test Category',
+      },
+    });
+
+    mainCategoryId = mainCategory.id;
   });
 
   afterEach(async () => {
     await prismaService.cleanDatabase();
   });
 
-  describe('getBookmarks', () => {
-    it('should return an array of bookmarks', async () => {
-      await prismaService.bookmark.createMany({
-        data: [
-          {
-            userId: mainUserId,
-            title: 'Bookmark 1',
-            link: 'https://example.com/bookmark1',
-          },
-          {
-            userId: mainUserId,
-            title: 'Bookmark 2',
-            link: 'https://example.com/bookmark2',
-          },
-        ],
-      });
-
-      const bookmarks = await bookmarkService.findAll(mainUserId);
-
-      expect(Array.isArray(bookmarks)).toBe(true);
-      expect(bookmarks.length).toBe(2);
-
-      expect(bookmarks[0].userId).toBe(mainUserId);
-      expect(bookmarks[1].userId).toBe(mainUserId);
-
-      expect(bookmarks[0].title).toBe('Bookmark 1');
-      expect(bookmarks[1].title).toBe('Bookmark 2');
-
-      expect(bookmarks[0].link).toBe('https://example.com/bookmark1');
-      expect(bookmarks[1].link).toBe('https://example.com/bookmark2');
-    });
-  });
-
-  describe('getBookmarkById', () => {
-    it('should return the bookmark with the specified ID', async () => {
-      const createdBookmark = await prismaService.bookmark.create({
-        data: {
-          userId: mainUserId,
-          title: 'Test Bookmark',
-          link: 'https://example.com/bookmark',
-        },
-      });
-
-      const bookmark = await bookmarkService.findOne(
-        mainUserId,
-        createdBookmark.id,
-      );
-
-      expect(bookmark).toBeDefined();
-      expect(bookmark.id).toBe(createdBookmark.id);
-    });
-  });
-
-  describe('createBookmark', () => {
+  describe('create', () => {
     it('should create a new bookmark', async () => {
-      const bookmarkDto = {
+      const bookmarkDto: CreateBookmarkDto = {
         title: 'New Bookmark',
         link: 'https://example.com/new-bookmark',
       };
 
-      const { id: newBookmarkId } = await bookmarkService.create(
-        mainUserId,
-        bookmarkDto,
-      );
+      const { id: newBookmarkId } = await bookmarkService.create(mainCategoryId, bookmarkDto);
 
       const newBookmark = await prismaService.bookmark.findUnique({
         where: { id: newBookmarkId },
       });
 
       expect(newBookmark).toBeDefined();
-      expect(newBookmark.userId).toBe(mainUserId);
+      expect(newBookmark.categoryId).toBe(mainCategoryId);
       expect(newBookmark.title).toBe(bookmarkDto.title);
       expect(newBookmark.link).toBe(bookmarkDto.link);
     });
   });
 
-  describe('editBookmarkById', () => {
+  describe('findAllFromCategory', () => {
+    it('should return an array of bookmarks', async () => {
+      prismaService.bookmark.deleteMany(); // delete the category created in beforeEach to avoid confusion
+
+      const newBookmarkData = [
+        {
+          categoryId: mainCategoryId,
+          title: 'Bookmark 1',
+          link: 'https://example.com/bookmark1',
+        },
+        {
+          categoryId: mainCategoryId,
+          title: 'Bookmark 2',
+          link: 'https://example.com/bookmark2',
+        },
+      ];
+
+      await prismaService.bookmark.createMany({
+        data: newBookmarkData,
+      });
+
+      const bookmarks = await bookmarkService.findAllFromCategory(mainCategoryId);
+
+      expect(Array.isArray(bookmarks)).toBe(true);
+      expect(bookmarks.length).toBe(2); // 2 from beforeEach + 1 from the beforeEach-method
+
+      expect(bookmarks[0].categoryId).toBe(mainCategoryId);
+      expect(bookmarks[1].categoryId).toBe(mainCategoryId);
+
+      expect(bookmarks[0].title).toBe(newBookmarkData[0].title);
+      expect(bookmarks[1].title).toBe(newBookmarkData[1].title);
+
+      expect(bookmarks[0].link).toBe(newBookmarkData[0].link);
+      expect(bookmarks[1].link).toBe(newBookmarkData[1].link);
+    });
+  });
+
+  describe('findOneFromCategory', () => {
+    it('should return the bookmark with the specified ID', async () => {
+      const createdBookmark = await prismaService.bookmark.create({
+        data: {
+          categoryId: mainCategoryId,
+          title: 'Test Bookmark',
+          link: 'https://example.com/bookmark',
+        },
+      });
+
+      const bookmark = await bookmarkService.findOneFromCategory(mainCategoryId, createdBookmark.id);
+
+      expect(bookmark).toBeDefined();
+      expect(bookmark.id).toBe(createdBookmark.id);
+    });
+  });
+
+  describe('update', () => {
     it('should edit the bookmark with the specified ID', async () => {
       const originalBookmark = await prismaService.bookmark.create({
         data: {
-          userId: mainUserId,
+          categoryId: mainCategoryId,
           title: 'Test Bookmark',
           link: 'https://example.com/bookmark',
         },
@@ -125,11 +135,7 @@ describe('BookmarkService', () => {
         link: 'https://example.com/updated-bookmark',
       };
 
-      await bookmarkService.update(
-        mainUserId,
-        originalBookmark.id,
-        editBookmarkDto,
-      );
+      await bookmarkService.update(mainUserId, originalBookmark.id, editBookmarkDto);
 
       const editedBookmark = await prismaService.bookmark.findUnique({
         where: { id: originalBookmark.id },
@@ -141,17 +147,24 @@ describe('BookmarkService', () => {
       expect(editedBookmark!.link).toBe(editBookmarkDto.link);
     });
 
-    it('should throw ForbiddenException if user does not own the bookmark', async () => {
+    it('should throw ForbiddenException if bookmark does not belong to the user', async () => {
       const secondUser = await prismaService.user.create({
         data: {
+          email: 'new@user.de',
           pwHash: '#hash#',
-          email: 'test2@example.com',
         },
       });
 
-      const createdBookmark = await prismaService.bookmark.create({
+      const categoryFromTheSecondCategory = await prismaService.category.create({
         data: {
           userId: secondUser.id,
+          title: 'A Category of the second user',
+        },
+      });
+
+      const bookmarkFromTheSecondUser = await prismaService.bookmark.create({
+        data: {
+          categoryId: categoryFromTheSecondCategory.id,
           title: 'Test Bookmark',
           link: 'https://example.com/bookmark',
         },
@@ -163,25 +176,24 @@ describe('BookmarkService', () => {
       };
 
       await expect(
-        bookmarkService.update(mainUserId, createdBookmark.id, editBookmarkDto),
+        bookmarkService.update(mainUserId, bookmarkFromTheSecondUser.id, editBookmarkDto),
       ).rejects.toThrowError(ForbiddenException);
 
-      const hopefullyNotEditedBookmark =
-        await prismaService.bookmark.findUnique({
-          where: { id: createdBookmark.id },
-        });
+      const hopefullyNotEditedBookmark = await prismaService.bookmark.findUnique({
+        where: { id: bookmarkFromTheSecondUser.id },
+      });
 
-      expect(hopefullyNotEditedBookmark!.id).toBe(createdBookmark.id);
-      expect(hopefullyNotEditedBookmark!.title).toBe(createdBookmark.title);
-      expect(hopefullyNotEditedBookmark!.link).toBe(createdBookmark.link);
+      expect(hopefullyNotEditedBookmark!.id).toBe(bookmarkFromTheSecondUser.id);
+      expect(hopefullyNotEditedBookmark!.title).toBe(bookmarkFromTheSecondUser.title);
+      expect(hopefullyNotEditedBookmark!.link).toBe(bookmarkFromTheSecondUser.link);
     });
   });
 
-  describe('deleteBookmarkById', () => {
+  describe('remove', () => {
     it('should delete the bookmark with the specified ID', async () => {
       const createdBookmark = await prismaService.bookmark.create({
         data: {
-          userId: mainUserId,
+          categoryId: mainCategoryId,
           title: 'Test Bookmark',
           link: 'https://example.com/bookmark',
         },
@@ -201,14 +213,21 @@ describe('BookmarkService', () => {
     it('should throw ForbiddenException if user does not own the bookmark', async () => {
       const secondUser = await prismaService.user.create({
         data: {
+          email: 'new@user.de',
           pwHash: '#hash#',
-          email: 'test2@example.com',
         },
       });
 
-      const createdBookmark = await prismaService.bookmark.create({
+      const categoryFromTheSecondCategory = await prismaService.category.create({
         data: {
           userId: secondUser.id,
+          title: 'A Category of the second user',
+        },
+      });
+
+      const bookmarkFromTheSecondUser = await prismaService.bookmark.create({
+        data: {
+          categoryId: categoryFromTheSecondCategory.id,
           title: 'Test Bookmark',
           link: 'https://example.com/bookmark',
         },
@@ -216,9 +235,9 @@ describe('BookmarkService', () => {
 
       const currentBookmarkCount = await prismaService.bookmark.count();
 
-      await expect(
-        bookmarkService.remove(mainUserId, createdBookmark.id),
-      ).rejects.toThrow(ForbiddenException);
+      await expect(bookmarkService.remove(mainUserId, bookmarkFromTheSecondUser.id)).rejects.toThrow(
+        ForbiddenException,
+      );
 
       const newBookmarkCount = await prismaService.bookmark.count();
 

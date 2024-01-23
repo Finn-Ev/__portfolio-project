@@ -1,15 +1,19 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBookmarkDto, UpdateBookmarkDto } from './dto/';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class BookmarkService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private categoryService: CategoryService,
+  ) {}
 
-  async create(userId: number, dto: CreateBookmarkDto) {
+  async create(categoryId: number, dto: CreateBookmarkDto) {
     const bookmark = await this.prisma.bookmark.create({
       data: {
-        userId,
+        categoryId: categoryId,
         ...dto,
       },
     });
@@ -17,19 +21,19 @@ export class BookmarkService {
     return bookmark;
   }
 
-  findAll(userId: number) {
+  findAllFromCategory(categoryId: number) {
     return this.prisma.bookmark.findMany({
       where: {
-        userId,
+        categoryId,
       },
     });
   }
 
-  findOne(userId: number, bookmarkId: number) {
-    return this.prisma.bookmark.findFirst({
+  findOneFromCategory(categoryId: number, bookmarkId: number) {
+    return this.prisma.bookmark.findUnique({
       where: {
         id: bookmarkId,
-        userId,
+        categoryId,
       },
     });
   }
@@ -41,11 +45,15 @@ export class BookmarkService {
       },
     });
 
-    if (!bookmark || bookmark.userId !== userId)
-      throw new ForbiddenException('Access to resources denied');
+    if (!bookmark) throw new ForbiddenException('Access to resources denied');
+
+    const correspondingCategory = await this.categoryService.findOneFromUser(userId, bookmark.categoryId);
+
+    if (!correspondingCategory) throw new ForbiddenException('Access to resources denied');
 
     return this.prisma.bookmark.update({
       where: {
+        categoryId: bookmark.categoryId,
         id: bookmarkId,
       },
       data: {
@@ -61,8 +69,9 @@ export class BookmarkService {
       },
     });
 
-    if (!bookmark || bookmark.userId !== userId)
-      throw new ForbiddenException('Access to resources denied');
+    const correspondingCategory = await this.categoryService.findOneFromUser(userId, bookmark.categoryId);
+
+    if (!bookmark || !correspondingCategory) throw new ForbiddenException('Access to resources denied');
 
     await this.prisma.bookmark.delete({
       where: {
