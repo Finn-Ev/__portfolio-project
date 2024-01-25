@@ -12,6 +12,7 @@ describe('BookmarkService', () => {
 
   let mainUserId: number;
   let mainCategoryId: number;
+  let secondaryCategoryId: number;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -40,6 +41,15 @@ describe('BookmarkService', () => {
     });
 
     mainCategoryId = mainCategory.id;
+
+    const secondaryCategory = await prismaService.category.create({
+      data: {
+        userId: mainUser.id,
+        title: 'Test Category',
+      },
+    });
+
+    secondaryCategoryId = secondaryCategory.id;
   });
 
   afterEach(async () => {
@@ -67,11 +77,11 @@ describe('BookmarkService', () => {
     });
   });
 
-  describe('findAllFromCategory', () => {
-    it('should return an array of bookmarks', async () => {
+  describe('findAllForCategory', () => {
+    it('should return an array of bookmarks from the specified category sorted by the creation date', async () => {
       prismaService.bookmark.deleteMany(); // delete the category created in beforeEach to avoid confusion
 
-      const newBookmarkData = [
+      const newBookmarksData = [
         {
           categoryId: mainCategoryId,
           title: 'Bookmark 1',
@@ -82,25 +92,38 @@ describe('BookmarkService', () => {
           title: 'Bookmark 2',
           link: 'https://example.com/bookmark2',
         },
+        {
+          categoryId: secondaryCategoryId,
+          title: 'Bookmark 2',
+          link: 'https://example.com/bookmark2',
+        },
       ];
 
-      await prismaService.bookmark.createMany({
-        data: newBookmarkData,
+      await prismaService.bookmark.create({
+        data: newBookmarksData[0],
+      });
+
+      await prismaService.bookmark.create({
+        data: newBookmarksData[1],
       });
 
       const bookmarks = await bookmarkService.findAllForCategory(mainUserId, mainCategoryId);
 
+      expect(new Date(bookmarks[0].createdAt).getTime()).toBeLessThan(
+        new Date(bookmarks[1].createdAt).getTime(),
+      );
+
       expect(Array.isArray(bookmarks)).toBe(true);
-      expect(bookmarks.length).toBe(2); // 2 from beforeEach + 1 from the beforeEach-method
+      expect(bookmarks.length).toBe(2); // only the bookmarks from the main category
 
       expect(bookmarks[0].categoryId).toBe(mainCategoryId);
       expect(bookmarks[1].categoryId).toBe(mainCategoryId);
 
-      expect(bookmarks[0].title).toBe(newBookmarkData[0].title);
-      expect(bookmarks[1].title).toBe(newBookmarkData[1].title);
+      expect(bookmarks[0].title).toBe(newBookmarksData[0].title);
+      expect(bookmarks[1].title).toBe(newBookmarksData[1].title);
 
-      expect(bookmarks[0].link).toBe(newBookmarkData[0].link);
-      expect(bookmarks[1].link).toBe(newBookmarkData[1].link);
+      expect(bookmarks[0].link).toBe(newBookmarksData[0].link);
+      expect(bookmarks[1].link).toBe(newBookmarksData[1].link);
     });
 
     it('should throw ForbiddenException if category does not belong to the user', async () => {
@@ -120,6 +143,62 @@ describe('BookmarkService', () => {
 
       await expect(bookmarkService.findAllForCategory(mainUserId, createdCategory.id)).rejects.toThrowError(
         ForbiddenException,
+      );
+    });
+  });
+
+  describe('findAll', () => {
+    it('should return an array of all bookmarks by the user sorted by the creation date', async () => {
+      prismaService.bookmark.deleteMany(); // delete the category created in beforeEach to avoid confusion
+
+      const newBookmarksData = [
+        {
+          categoryId: mainCategoryId,
+          title: 'Bookmark 1',
+          link: 'https://example.com/bookmark1',
+        },
+        {
+          categoryId: mainCategoryId,
+          title: 'Bookmark 2',
+          link: 'https://example.com/bookmark2',
+        },
+        {
+          categoryId: secondaryCategoryId,
+          title: 'Bookmark 2',
+          link: 'https://example.com/bookmark2',
+        },
+      ];
+
+      await prismaService.bookmark.create({
+        data: newBookmarksData[0],
+      });
+
+      await prismaService.bookmark.create({
+        data: newBookmarksData[1],
+      });
+
+      const bookmarks = await bookmarkService.findAll(mainUserId);
+
+      expect(Array.isArray(bookmarks)).toBe(true);
+      expect(bookmarks.length).toBe(3);
+
+      expect(bookmarks[0].categoryId).toBe(mainCategoryId);
+      expect(bookmarks[1].categoryId).toBe(mainCategoryId);
+      expect(bookmarks[2].categoryId).toBe(secondaryCategoryId);
+
+      expect(bookmarks[0].title).toBe(newBookmarksData[0].title);
+      expect(bookmarks[1].title).toBe(newBookmarksData[1].title);
+      expect(bookmarks[2].title).toBe(newBookmarksData[2].title);
+
+      expect(bookmarks[0].link).toBe(newBookmarksData[0].link);
+      expect(bookmarks[1].link).toBe(newBookmarksData[1].link);
+      expect(bookmarks[2].link).toBe(newBookmarksData[2].link);
+
+      expect(new Date(bookmarks[0].createdAt).getTime()).toBeLessThan(
+        new Date(bookmarks[1].createdAt).getTime(),
+      );
+      expect(new Date(bookmarks[1].createdAt).getTime()).toBeLessThan(
+        new Date(bookmarks[2].createdAt).getTime(),
       );
     });
   });
