@@ -1,6 +1,10 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateBookmarkDto {
+  @IsNumber()
+  @IsNotEmpty()
+  categoryId: number;
+
   @IsString()
   @IsNotEmpty()
   title: string;

@@ -1,4 +1,4 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBookmarkDto, UpdateBookmarkDto } from './dto/';
 import { CategoryService } from '../category/category.service';
@@ -10,10 +10,9 @@ export class BookmarkService {
     private categoryService: CategoryService,
   ) {}
 
-  async create(categoryId: number, dto: CreateBookmarkDto) {
+  async create(dto: CreateBookmarkDto) {
     const bookmark = await this.prisma.bookmark.create({
       data: {
-        categoryId: categoryId,
         ...dto,
       },
     });
@@ -21,7 +20,11 @@ export class BookmarkService {
     return bookmark;
   }
 
-  findAllFromCategory(categoryId: number) {
+  async findAllForCategory(userId, categoryId: number) {
+    const correspondingCategory = await this.categoryService.findOne(userId, categoryId);
+
+    if (!correspondingCategory) throw new ForbiddenException('Access to resources denied');
+
     return this.prisma.bookmark.findMany({
       where: {
         categoryId,
@@ -29,13 +32,36 @@ export class BookmarkService {
     });
   }
 
-  findOneFromCategory(categoryId: number, bookmarkId: number) {
-    return this.prisma.bookmark.findUnique({
+  async findAll(userId) {
+    const userCategories = await this.categoryService.findAll(userId);
+
+    const bookmarks = await Promise.all(
+      userCategories.map(async (category) => {
+        return await this.prisma.bookmark.findMany({
+          where: {
+            categoryId: category.id,
+          },
+        });
+      }),
+    );
+
+    return bookmarks;
+  }
+
+  async findOne(userId, bookmarkId: number) {
+    const bookmark = await this.prisma.bookmark.findUnique({
       where: {
         id: bookmarkId,
-        categoryId,
       },
     });
+
+    if (!bookmark) throw new NotFoundException();
+
+    const correspondingCategory = await this.categoryService.findOne(userId, bookmark.categoryId);
+
+    if (!correspondingCategory) throw new ForbiddenException('Access to resources denied');
+
+    return bookmark;
   }
 
   async update(userId: number, bookmarkId: number, dto: UpdateBookmarkDto) {
@@ -45,9 +71,9 @@ export class BookmarkService {
       },
     });
 
-    if (!bookmark) throw new ForbiddenException('Access to resources denied');
+    if (!bookmark) throw new NotFoundException();
 
-    const correspondingCategory = await this.categoryService.findOneFromUser(userId, bookmark.categoryId);
+    const correspondingCategory = await this.categoryService.findOne(userId, bookmark.categoryId);
 
     if (!correspondingCategory) throw new ForbiddenException('Access to resources denied');
 
@@ -69,7 +95,7 @@ export class BookmarkService {
       },
     });
 
-    const correspondingCategory = await this.categoryService.findOneFromUser(userId, bookmark.categoryId);
+    const correspondingCategory = await this.categoryService.findOne(userId, bookmark.categoryId);
 
     if (!bookmark || !correspondingCategory) throw new ForbiddenException('Access to resources denied');
 

@@ -84,7 +84,7 @@ describe('CategoryService', () => {
         data: newCategoriesData,
       });
 
-      const categories = await categoryService.findAllFromUser(mainUserId);
+      const categories = await categoryService.findAll(mainUserId);
 
       expect(Array.isArray(categories)).toBe(true);
       expect(categories.length).toBe(2);
@@ -102,7 +102,7 @@ describe('CategoryService', () => {
 
   describe('findOneFromUser', () => {
     it('should return the category with the specified ID', async () => {
-      const category = await categoryService.findOneFromUser(mainUserId, mainCategoryId);
+      const category = await categoryService.findOne(mainUserId, mainCategoryId);
 
       expect(category).toBeDefined();
       expect(category.id).toBe(mainCategoryId);

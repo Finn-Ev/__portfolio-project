@@ -22,18 +22,24 @@ export class BookmarkController {
   constructor(private bookmarkService: BookmarkService) {}
 
   @Post()
-  create(@GetUser('id') userId: number, @Body() dto: CreateBookmarkDto) {
-    return this.bookmarkService.create(userId, dto);
-  }
-
-  @Get()
-  findAll(@GetUser('id') userId: number) {
-    return this.bookmarkService.findAllFromCategory(userId);
+  create(@Body() dto: CreateBookmarkDto) {
+    // the dto has the categoryId as a property which then links the bookmark to the user
+    return this.bookmarkService.create(dto);
   }
 
   @Get(':id')
   findOne(@GetUser('id') userId: number, @Param('id', ParseIntPipe) bookmarkId: number) {
-    return this.bookmarkService.findOneFromCategory(userId, bookmarkId);
+    return this.bookmarkService.findOne(userId, bookmarkId);
+  }
+
+  @Get('')
+  findAll(@GetUser('id') userId: number) {
+    return this.bookmarkService.findAll(userId);
+  }
+
+  @Get('/category/:id')
+  findAllForCategory(@GetUser('id') userId: number, @Param('id', ParseIntPipe) categoryId: number) {
+    return this.bookmarkService.findAllForCategory(userId, categoryId);
   }
 
   @Patch(':id')

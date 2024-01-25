@@ -49,11 +49,12 @@ describe('BookmarkService', () => {
   describe('create', () => {
     it('should create a new bookmark', async () => {
       const bookmarkDto: CreateBookmarkDto = {
+        categoryId: mainCategoryId,
         title: 'New Bookmark',
         link: 'https://example.com/new-bookmark',
       };
 
-      const { id: newBookmarkId } = await bookmarkService.create(mainCategoryId, bookmarkDto);
+      const { id: newBookmarkId } = await bookmarkService.create(bookmarkDto);
 
       const newBookmark = await prismaService.bookmark.findUnique({
         where: { id: newBookmarkId },
@@ -87,7 +88,7 @@ describe('BookmarkService', () => {
         data: newBookmarkData,
       });
 
-      const bookmarks = await bookmarkService.findAllFromCategory(mainCategoryId);
+      const bookmarks = await bookmarkService.findAllForCategory(mainUserId, mainCategoryId);
 
       expect(Array.isArray(bookmarks)).toBe(true);
       expect(bookmarks.length).toBe(2); // 2 from beforeEach + 1 from the beforeEach-method
@@ -101,6 +102,26 @@ describe('BookmarkService', () => {
       expect(bookmarks[0].link).toBe(newBookmarkData[0].link);
       expect(bookmarks[1].link).toBe(newBookmarkData[1].link);
     });
+
+    it('should throw ForbiddenException if category does not belong to the user', async () => {
+      const otherUser = await prismaService.user.create({
+        data: {
+          email: 'other@user.de',
+          pwHash: 'password',
+        },
+      });
+
+      const createdCategory = await prismaService.category.create({
+        data: {
+          userId: otherUser.id,
+          title: 'Test Category',
+        },
+      });
+
+      await expect(bookmarkService.findAllForCategory(mainUserId, createdCategory.id)).rejects.toThrowError(
+        ForbiddenException,
+      );
+    });
   });
 
   describe('findOneFromCategory', () => {
@@ -113,10 +134,31 @@ describe('BookmarkService', () => {
         },
       });
 
-      const bookmark = await bookmarkService.findOneFromCategory(mainCategoryId, createdBookmark.id);
+      const bookmark = await bookmarkService.findOne(mainUserId, createdBookmark.id);
 
       expect(bookmark).toBeDefined();
       expect(bookmark.id).toBe(createdBookmark.id);
+    });
+
+    it('should throw ForbiddenException if bookmark does not belong to the user', async () => {
+      const otherUser = await prismaService.user.create({
+        data: {
+          email: 'other@user.de',
+          pwHash: 'password',
+        },
+      });
+
+      const createdBookmark = await prismaService.bookmark.create({
+        data: {
+          categoryId: mainCategoryId,
+          title: 'Test Bookmark',
+          link: 'https://example.com/bookmark',
+        },
+      });
+
+      await expect(bookmarkService.findOne(otherUser.id, createdBookmark.id)).rejects.toThrowError(
+        ForbiddenException,
+      );
     });
   });
 
