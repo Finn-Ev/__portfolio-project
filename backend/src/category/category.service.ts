@@ -2,21 +2,18 @@ import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/com
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class CategoryService {
   constructor(private prisma: PrismaService) {}
 
   async create(userId: number, dto: CreateCategoryDto) {
-    const category = await this.prisma.category.create({
+    return this.prisma.category.create({
       data: {
         userId,
         ...dto,
       },
     });
-
-    return category;
   }
 
   findAll(userId: number) {
