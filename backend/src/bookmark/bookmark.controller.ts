@@ -32,7 +32,7 @@ export class BookmarkController {
     return this.bookmarkService.findOne(userId, bookmarkId);
   }
 
-  @Get('')
+  @Get()
   findAll(@GetUser('id') userId: number) {
     return this.bookmarkService.findAll(userId);
   }

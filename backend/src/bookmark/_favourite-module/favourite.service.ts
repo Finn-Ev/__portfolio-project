@@ -16,13 +16,11 @@ export class FavouriteService {
   }
 
   async setFavourite(userId: number, bookmarkId: number, newValue: boolean) {
-    if (
-      !(await this.bookmarkService.checkIfUserOwnsBookmark(userId, bookmarkId))
-    ) {
+    if (!(await this.bookmarkService.checkIfUserOwnsBookmark(userId, bookmarkId))) {
       throw new ForbiddenException();
     }
 
-    await this.prismaService.bookmark.update({
+    return this.prismaService.bookmark.update({
       where: { id: bookmarkId },
       data: { isFavourite: newValue },
     });
