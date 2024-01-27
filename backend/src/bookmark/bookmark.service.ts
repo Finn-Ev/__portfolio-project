@@ -6,12 +6,12 @@ import { CategoryService } from '../category/category.service';
 @Injectable()
 export class BookmarkService {
   constructor(
-    private prisma: PrismaService,
+    private prismaService: PrismaService,
     private categoryService: CategoryService,
   ) {}
 
   async create(dto: CreateBookmarkDto) {
-    return this.prisma.bookmark.create({
+    return this.prismaService.bookmark.create({
       data: {
         ...dto,
       },
@@ -23,7 +23,7 @@ export class BookmarkService {
 
     if (!correspondingCategory) throw new ForbiddenException('Access to resources denied');
 
-    const bookmarks = await this.prisma.bookmark.findMany({
+    const bookmarks = await this.prismaService.bookmark.findMany({
       where: {
         categoryId,
       },
@@ -41,7 +41,7 @@ export class BookmarkService {
 
     const bookmarksInsideCategories = await Promise.all(
       userCategories.map(async (category) => {
-        return this.prisma.bookmark.findMany({
+        return this.prismaService.bookmark.findMany({
           where: {
             categoryId: category.id,
           },
@@ -59,7 +59,7 @@ export class BookmarkService {
   }
 
   async findOne(userId: number, bookmarkId: number) {
-    const bookmark = await this.prisma.bookmark.findUnique({
+    const bookmark = await this.prismaService.bookmark.findUnique({
       where: {
         id: bookmarkId,
       },
@@ -67,15 +67,14 @@ export class BookmarkService {
 
     if (!bookmark) throw new NotFoundException();
 
-    const correspondingCategory = await this.categoryService.findOne(userId, bookmark.categoryId);
-
-    if (!correspondingCategory) throw new ForbiddenException('Access to resources denied');
+    if (!(await this.checkIfUserOwnsBookmark(userId, bookmarkId)))
+      throw new ForbiddenException('Access to resources denied');
 
     return bookmark;
   }
 
   async update(userId: number, bookmarkId: number, dto: UpdateBookmarkDto) {
-    const bookmark = await this.prisma.bookmark.findUnique({
+    const bookmark = await this.prismaService.bookmark.findUnique({
       where: {
         id: bookmarkId,
       },
@@ -87,7 +86,7 @@ export class BookmarkService {
 
     if (!correspondingCategory) throw new ForbiddenException('Access to resources denied');
 
-    return this.prisma.bookmark.update({
+    return this.prismaService.bookmark.update({
       where: {
         categoryId: bookmark.categoryId,
         id: bookmarkId,
@@ -99,20 +98,28 @@ export class BookmarkService {
   }
 
   async remove(userId: number, bookmarkId: number) {
-    const bookmark = await this.prisma.bookmark.findUnique({
+    if (!(await this.checkIfUserOwnsBookmark(userId, bookmarkId)))
+      throw new ForbiddenException('Access to resources denied');
+
+    await this.prismaService.bookmark.delete({
       where: {
         id: bookmarkId,
       },
     });
+  }
 
-    const correspondingCategory = await this.categoryService.findOne(userId, bookmark.categoryId);
-
-    if (!bookmark || !correspondingCategory) throw new ForbiddenException('Access to resources denied');
-
-    await this.prisma.bookmark.delete({
-      where: {
-        id: bookmarkId,
-      },
+  // HELPER
+  async checkIfUserOwnsBookmark(userId: number, bookmarkId: number) {
+    const bookmark = await this.prismaService.bookmark.findUnique({
+      where: { id: bookmarkId },
     });
+
+    if (!bookmark) return false;
+
+    const correspondingCategory = await this.prismaService.category.findUnique({
+      where: { userId, id: bookmark.categoryId },
+    });
+
+    return !!correspondingCategory;
   }
 }

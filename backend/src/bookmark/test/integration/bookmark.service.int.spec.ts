@@ -16,7 +16,12 @@ describe('BookmarkService', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ConfigService, BookmarkService, PrismaService, CategoryService],
+      providers: [
+        ConfigService,
+        BookmarkService,
+        PrismaService,
+        CategoryService,
+      ],
     }).compile();
 
     bookmarkService = module.get<BookmarkService>(BookmarkService);
@@ -107,7 +112,10 @@ describe('BookmarkService', () => {
         data: newBookmarksData[1],
       });
 
-      const bookmarks = await bookmarkService.findAllForCategory(mainUserId, mainCategoryId);
+      const bookmarks = await bookmarkService.findAllForCategory(
+        mainUserId,
+        mainCategoryId,
+      );
 
       expect(new Date(bookmarks[0].createdAt).getTime()).toBeLessThan(
         new Date(bookmarks[1].createdAt).getTime(),
@@ -141,9 +149,9 @@ describe('BookmarkService', () => {
         },
       });
 
-      await expect(bookmarkService.findAllForCategory(mainUserId, createdCategory.id)).rejects.toThrowError(
-        ForbiddenException,
-      );
+      await expect(
+        bookmarkService.findAllForCategory(mainUserId, createdCategory.id),
+      ).rejects.toThrowError(ForbiddenException);
     });
   });
 
@@ -175,6 +183,10 @@ describe('BookmarkService', () => {
 
       await prismaService.bookmark.create({
         data: newBookmarksData[1],
+      });
+
+      await prismaService.bookmark.create({
+        data: newBookmarksData[2],
       });
 
       const bookmarks = await bookmarkService.findAll(mainUserId);
@@ -213,7 +225,10 @@ describe('BookmarkService', () => {
         },
       });
 
-      const bookmark = await bookmarkService.findOne(mainUserId, createdBookmark.id);
+      const bookmark = await bookmarkService.findOne(
+        mainUserId,
+        createdBookmark.id,
+      );
 
       expect(bookmark).toBeDefined();
       expect(bookmark.id).toBe(createdBookmark.id);
@@ -235,9 +250,9 @@ describe('BookmarkService', () => {
         },
       });
 
-      await expect(bookmarkService.findOne(otherUser.id, createdBookmark.id)).rejects.toThrowError(
-        ForbiddenException,
-      );
+      await expect(
+        bookmarkService.findOne(otherUser.id, createdBookmark.id),
+      ).rejects.toThrowError(ForbiddenException);
     });
   });
 
@@ -256,7 +271,11 @@ describe('BookmarkService', () => {
         link: 'https://example.com/updated-bookmark',
       };
 
-      await bookmarkService.update(mainUserId, originalBookmark.id, editBookmarkDto);
+      await bookmarkService.update(
+        mainUserId,
+        originalBookmark.id,
+        editBookmarkDto,
+      );
 
       const editedBookmark = await prismaService.bookmark.findUnique({
         where: { id: originalBookmark.id },
@@ -276,12 +295,14 @@ describe('BookmarkService', () => {
         },
       });
 
-      const categoryFromTheSecondCategory = await prismaService.category.create({
-        data: {
-          userId: secondUser.id,
-          title: 'A Category of the second user',
+      const categoryFromTheSecondCategory = await prismaService.category.create(
+        {
+          data: {
+            userId: secondUser.id,
+            title: 'A Category of the second user',
+          },
         },
-      });
+      );
 
       const bookmarkFromTheSecondUser = await prismaService.bookmark.create({
         data: {
@@ -297,16 +318,25 @@ describe('BookmarkService', () => {
       };
 
       await expect(
-        bookmarkService.update(mainUserId, bookmarkFromTheSecondUser.id, editBookmarkDto),
+        bookmarkService.update(
+          mainUserId,
+          bookmarkFromTheSecondUser.id,
+          editBookmarkDto,
+        ),
       ).rejects.toThrowError(ForbiddenException);
 
-      const hopefullyNotEditedBookmark = await prismaService.bookmark.findUnique({
-        where: { id: bookmarkFromTheSecondUser.id },
-      });
+      const hopefullyNotEditedBookmark =
+        await prismaService.bookmark.findUnique({
+          where: { id: bookmarkFromTheSecondUser.id },
+        });
 
       expect(hopefullyNotEditedBookmark!.id).toBe(bookmarkFromTheSecondUser.id);
-      expect(hopefullyNotEditedBookmark!.title).toBe(bookmarkFromTheSecondUser.title);
-      expect(hopefullyNotEditedBookmark!.link).toBe(bookmarkFromTheSecondUser.link);
+      expect(hopefullyNotEditedBookmark!.title).toBe(
+        bookmarkFromTheSecondUser.title,
+      );
+      expect(hopefullyNotEditedBookmark!.link).toBe(
+        bookmarkFromTheSecondUser.link,
+      );
     });
   });
 
@@ -339,12 +369,14 @@ describe('BookmarkService', () => {
         },
       });
 
-      const categoryFromTheSecondCategory = await prismaService.category.create({
-        data: {
-          userId: secondUser.id,
-          title: 'A Category of the second user',
+      const categoryFromTheSecondCategory = await prismaService.category.create(
+        {
+          data: {
+            userId: secondUser.id,
+            title: 'A Category of the second user',
+          },
         },
-      });
+      );
 
       const bookmarkFromTheSecondUser = await prismaService.bookmark.create({
         data: {
@@ -356,9 +388,9 @@ describe('BookmarkService', () => {
 
       const currentBookmarkCount = await prismaService.bookmark.count();
 
-      await expect(bookmarkService.remove(mainUserId, bookmarkFromTheSecondUser.id)).rejects.toThrow(
-        ForbiddenException,
-      );
+      await expect(
+        bookmarkService.remove(mainUserId, bookmarkFromTheSecondUser.id),
+      ).rejects.toThrow(ForbiddenException);
 
       const newBookmarkCount = await prismaService.bookmark.count();
 
