@@ -5,10 +5,10 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class CategoryService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prismaService: PrismaService) {}
 
   async create(userId: number, dto: CreateCategoryDto) {
-    return this.prisma.category.create({
+    return this.prismaService.category.create({
       data: {
         userId,
         ...dto,
@@ -17,7 +17,7 @@ export class CategoryService {
   }
 
   findAll(userId: number) {
-    return this.prisma.category.findMany({
+    return this.prismaService.category.findMany({
       where: {
         userId,
       },
@@ -25,7 +25,7 @@ export class CategoryService {
   }
 
   async findOne(userId: number, categoryId: number) {
-    const category = await this.prisma.category.findUnique({
+    const category = await this.prismaService.category.findUnique({
       where: {
         userId,
         id: categoryId,
@@ -40,7 +40,7 @@ export class CategoryService {
   }
 
   async update(userId: number, categoryId: number, dto: UpdateCategoryDto) {
-    const category = await this.prisma.category.findUnique({
+    const category = await this.prismaService.category.findUnique({
       where: {
         userId,
         id: categoryId,
@@ -49,7 +49,7 @@ export class CategoryService {
 
     if (!category) throw new ForbiddenException();
 
-    return this.prisma.category.update({
+    return this.prismaService.category.update({
       where: {
         id: category.id,
       },
@@ -60,7 +60,7 @@ export class CategoryService {
   }
 
   async remove(userId: number, categoryId: number) {
-    const category = await this.prisma.category.findUnique({
+    const category = await this.prismaService.category.findUnique({
       where: {
         userId,
         id: categoryId,
@@ -69,7 +69,7 @@ export class CategoryService {
 
     if (!category) throw new ForbiddenException();
 
-    return this.prisma.category.delete({
+    return this.prismaService.category.delete({
       where: {
         id: categoryId,
       },

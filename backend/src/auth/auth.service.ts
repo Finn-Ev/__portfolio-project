@@ -11,7 +11,7 @@ import { JwtPayload } from './types/jwt.payload';
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
+    private prismaService: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
   ) {}
@@ -27,7 +27,7 @@ export class AuthService {
     const hash = await argon.hash(dto.password);
 
     try {
-      const user = await this.prisma.user.create({
+      const user = await this.prismaService.user.create({
         data: {
           email: dto.email,
           pwHash: hash,
@@ -54,7 +54,7 @@ export class AuthService {
    * @throws ForbiddenException if the provided credentials are invalid.
    */
   async login(dto: AuthDto) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
         email: dto.email,
       },

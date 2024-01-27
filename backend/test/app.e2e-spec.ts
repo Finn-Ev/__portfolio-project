@@ -21,6 +21,7 @@ const validUserAuthDto: AuthDto = {
   email: 'test@e2e.com',
   password: 'test1234',
 };
+
 const invalidEmail = 'test@e2e.';
 const invalidPassword = '1234567'; //  too short (min. 8 letters)
 
@@ -75,7 +76,7 @@ describe('App e2e', () => {
             });
         });
 
-        it('should return a 403 (forbidden) status when the email is already taken', () => {
+        it('should return a 403 status when the email is already taken', () => {
           return supertest(app.getHttpServer()).post(authRegisterEndpoint).send(validUserAuthDto).expect(403);
         });
       });
@@ -99,14 +100,14 @@ describe('App e2e', () => {
             .expect(400);
         });
 
-        it('should throw a 403 (forbidden) status when the user with that email does not exist', () => {
+        it('should throw a 403 status when the user with that email does not exist', () => {
           return supertest(app.getHttpServer())
             .post(authLoginEndpoint)
             .send({ ...validUserAuthDto, email: 'unknown@user.de' })
             .expect(403);
         });
 
-        it('should return a 403 (forbidden) status when the password is wrong', () => {
+        it('should return a 403 status when the password is wrong', () => {
           return supertest(app.getHttpServer())
             .post(authLoginEndpoint)
             .send({ ...validUserAuthDto, password: 'WRONG_PASSWORD' })
@@ -326,14 +327,13 @@ describe('App e2e', () => {
             .set('Authorization', `Bearer ${userAccessToken}`)
             .expect(200)
             .expect((response) => {
-              // expect(response.body.id).toBe(bookmarkId);
-              expect(response.body).toMatchObject({});
+              expect(response.body.id).toBe(bookmarkId);
             });
         });
 
         it('should return a 404 status when the bookmark does not exist', () => {
           return supertest(app.getHttpServer())
-            .get(`${bookmarksEndpoint}/99999`)
+            .get(`${bookmarksEndpoint}/0`)
             .set('Authorization', `Bearer ${userAccessToken}`)
             .expect(404);
         });
@@ -341,9 +341,8 @@ describe('App e2e', () => {
 
       describe('Edit bookmark by ID', () => {
         const dto: UpdateBookmarkDto = {
-          title: 'Kubernetes Course - Full Beginners Tutorial (Containerize Your Apps!)',
-          description:
-            'Learn how to use Kubernetes in this complete course. Kubernetes makes it possible to containerize applications and simplifies app deployment to production.',
+          title: 'New title',
+          description: 'New description',
         };
         it('should edit bookmark', () => {
           return supertest(app.getHttpServer())

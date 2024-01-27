@@ -3,7 +3,7 @@ import { CategoryService } from '../../category.service';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { ForbiddenException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CreateCategoryDto, UpdateCategoryDto } from '../../dto';
+import { UpdateCategoryDto } from '../../dto';
 
 describe('CategoryService', () => {
   let categoryService: CategoryService;
