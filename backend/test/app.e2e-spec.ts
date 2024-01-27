@@ -15,6 +15,7 @@ const authLoginEndpoint = '/auth/login';
 const usersMeEndpoint = '/users/me';
 const categoryEndpointPath = '/categories';
 const bookmarksEndpoint = '/bookmarks';
+const favouritesEndpoint = '/favourites';
 
 const validUserAuthDto: AuthDto = {
   email: 'test@e2e.com',
@@ -48,7 +49,7 @@ describe('App e2e', () => {
   });
 
   describe('CREATE, GET AND UPDATE', () => {
-    describe('Auth', () => {
+    describe('AUTH', () => {
       describe('Register', () => {
         it('should throw an exception when the email is not a valid email', () => {
           return supertest(app.getHttpServer())
@@ -127,7 +128,7 @@ describe('App e2e', () => {
       });
     });
 
-    describe('User', () => {
+    describe('USER', () => {
       describe('Get current user', () => {
         it('should return a 401 status when no access-token was provided', () => {
           return supertest(app.getHttpServer()).get(usersMeEndpoint).expect(401);
@@ -182,7 +183,7 @@ describe('App e2e', () => {
       describe('Delete User', () => {});
     });
 
-    describe('Categories', () => {
+    describe('CATEGORIES', () => {
       describe('Get empty categories', () => {
         it('should get categories', () => {
           return supertest(app.getHttpServer())
@@ -264,7 +265,7 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Bookmarks', () => {
+    describe('BOOKMARKS', () => {
       describe('Get empty bookmarks', () => {
         it('should get no bookmarks from the category', () => {
           return supertest(app.getHttpServer())
@@ -332,7 +333,7 @@ describe('App e2e', () => {
 
         it('should return a 404 status when the bookmark does not exist', () => {
           return supertest(app.getHttpServer())
-            .get(`/${bookmarksEndpoint}/__invalid__`)
+            .get(`${bookmarksEndpoint}/99999`)
             .set('Authorization', `Bearer ${userAccessToken}`)
             .expect(404);
         });
@@ -353,6 +354,50 @@ describe('App e2e', () => {
             .expect((response) => {
               expect(response.body.title).toBe(dto.title);
               expect(response.body.description).toBe(dto.description);
+            });
+        });
+      });
+
+      describe('FAVOURITES', () => {
+        it('should add bookmark to favourites', () => {
+          return supertest(app.getHttpServer())
+            .patch(`${favouritesEndpoint}/set/${bookmarkId}/true`)
+            .set('Authorization', `Bearer ${userAccessToken}`)
+            .expect(200)
+            .expect((response) => {
+              expect(response.body.id).toBe(bookmarkId);
+              expect(response.body.isFavourite).toBe(true);
+            });
+        });
+
+        it('should get available favourites', () => {
+          return supertest(app.getHttpServer())
+            .get(favouritesEndpoint)
+            .set('Authorization', `Bearer ${userAccessToken}`)
+            .expect(200)
+            .expect((response) => {
+              expect(response.body.length).toBe(1);
+            });
+        });
+
+        it('should remove bookmark from favourites', () => {
+          return supertest(app.getHttpServer())
+            .patch(`${favouritesEndpoint}/set/${bookmarkId}/false`)
+            .set('Authorization', `Bearer ${userAccessToken}`)
+            .expect(200)
+            .expect((response) => {
+              expect(response.body.id).toBe(bookmarkId);
+              expect(response.body.isFavourite).toBe(false);
+            });
+        });
+
+        it('should get empty favourites', () => {
+          return supertest(app.getHttpServer())
+            .get(favouritesEndpoint)
+            .set('Authorization', `Bearer ${userAccessToken}`)
+            .expect(200)
+            .expect((response) => {
+              expect(response.body.length).toBe(0);
             });
         });
       });

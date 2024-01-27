@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-  ParseBoolPipe,
-  ParseIntPipe,
-  Patch,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Param, ParseBoolPipe, ParseIntPipe, Patch, UseGuards } from '@nestjs/common';
 import { JwtGuard } from '../../auth/guard/jwt.guard';
 import { FavouriteService } from './favourite.service';
 import { GetUser } from '../../auth/decorator/get-user.decorator';
@@ -17,12 +9,12 @@ export class FavouriteController {
   constructor(private favouriteService: FavouriteService) {}
 
   @Get()
-  async getFavourites(@GetUser('id') userId: number) {
+  async findAll(@GetUser('id') userId: number) {
     return this.favouriteService.getFavourites(userId);
   }
 
-  @Patch('mark/:bookmark_id/:new_value')
-  async setFavourite(
+  @Patch('set/:bookmark_id/:new_value')
+  async set(
     @GetUser('id') userId: number,
     @Param('bookmark_id', ParseIntPipe) bookmarkId: number,
     @Param('new_value', ParseBoolPipe) newValue: boolean,
