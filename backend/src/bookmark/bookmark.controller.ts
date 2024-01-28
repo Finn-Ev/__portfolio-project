@@ -22,9 +22,8 @@ export class BookmarkController {
   constructor(private bookmarkService: BookmarkService) {}
 
   @Post()
-  create(@Body() dto: CreateBookmarkDto) {
-    // the dto has the categoryId as a property which then links the bookmark to the user
-    return this.bookmarkService.create(dto);
+  create(@GetUser('id') userId: number, @Body() dto: CreateBookmarkDto) {
+    return this.bookmarkService.create(userId, dto);
   }
 
   @Get(':id')

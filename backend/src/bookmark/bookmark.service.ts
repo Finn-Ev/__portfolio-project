@@ -10,7 +10,11 @@ export class BookmarkService {
     private categoryService: CategoryService,
   ) {}
 
-  async create(dto: CreateBookmarkDto) {
+  async create(userId: number, dto: CreateBookmarkDto) {
+    const correspondingCategory = await this.categoryService.findOne(userId, dto.categoryId);
+
+    if (!correspondingCategory) throw new ForbiddenException();
+
     return this.prismaService.bookmark.create({
       data: {
         ...dto,
@@ -21,7 +25,7 @@ export class BookmarkService {
   async findAllForCategory(userId: number, categoryId: number) {
     const correspondingCategory = await this.categoryService.findOne(userId, categoryId);
 
-    if (!correspondingCategory) throw new ForbiddenException('Access to resources denied');
+    if (!correspondingCategory) throw new ForbiddenException();
 
     const bookmarks = await this.prismaService.bookmark.findMany({
       where: {
@@ -67,8 +71,7 @@ export class BookmarkService {
 
     if (!bookmark) throw new NotFoundException();
 
-    if (!(await this.checkIfUserOwnsBookmark(userId, bookmarkId)))
-      throw new ForbiddenException('Access to resources denied');
+    if (!(await this.checkIfUserOwnsBookmark(userId, bookmarkId))) throw new ForbiddenException();
 
     return bookmark;
   }
@@ -84,7 +87,7 @@ export class BookmarkService {
 
     const correspondingCategory = await this.categoryService.findOne(userId, bookmark.categoryId);
 
-    if (!correspondingCategory) throw new ForbiddenException('Access to resources denied');
+    if (!correspondingCategory) throw new ForbiddenException();
 
     return this.prismaService.bookmark.update({
       where: {
@@ -98,8 +101,7 @@ export class BookmarkService {
   }
 
   async remove(userId: number, bookmarkId: number) {
-    if (!(await this.checkIfUserOwnsBookmark(userId, bookmarkId)))
-      throw new ForbiddenException('Access to resources denied');
+    if (!(await this.checkIfUserOwnsBookmark(userId, bookmarkId))) throw new ForbiddenException();
 
     await this.prismaService.bookmark.delete({
       where: {
