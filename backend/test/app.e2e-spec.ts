@@ -387,7 +387,7 @@ describe('App e2e', () => {
       });
 
       describe('PATCH /favourites/set/:bookmarkId/false', () => {
-        it('PATCH /favourites/set/:bookmarkId/:value', () => {
+        it('should set bookmark as favourite', () => {
           return supertest(app.getHttpServer())
             .patch(`${favouritesEndpoint}/set/${bookmarkId}/false`)
             .set('Authorization', `Bearer ${userAccessToken}`)
@@ -414,30 +414,36 @@ describe('App e2e', () => {
   });
 
   describe('DELETION', () => {
-    describe('DELETE /bookmarks/:bookmarkId', () => {
-      it('should delete bookmark', () => {
-        return supertest(app.getHttpServer())
-          .delete(`${bookmarksEndpoint}/${bookmarkId}`)
-          .set('Authorization', `Bearer ${userAccessToken}`)
-          .expect(204);
+    describe('BOOKMARKS', () => {
+      describe('DELETE /bookmarks/:bookmarkId', () => {
+        it('should delete bookmark', () => {
+          return supertest(app.getHttpServer())
+            .delete(`${bookmarksEndpoint}/${bookmarkId}`)
+            .set('Authorization', `Bearer ${userAccessToken}`)
+            .expect(204);
+        });
       });
     });
 
-    describe('DELETE /categories/:categoryId', () => {
-      it('should delete category', () => {
-        return supertest(app.getHttpServer())
-          .delete(`${categoryEndpointPath}/${categoryId}`)
-          .set('Authorization', `Bearer ${userAccessToken}`)
-          .expect(204);
+    describe('CATEGORIES', () => {
+      describe('DELETE /categories/:categoryId', () => {
+        it('should delete category', () => {
+          return supertest(app.getHttpServer())
+            .delete(`${categoryEndpointPath}/${categoryId}`)
+            .set('Authorization', `Bearer ${userAccessToken}`)
+            .expect(204);
+        });
       });
     });
 
-    describe('DELETE /users/me', () => {
-      it('should delete the current user', () => {
-        return supertest(app.getHttpServer())
-          .delete(usersMeEndpoint)
-          .set('Authorization', `Bearer ${userAccessToken}`)
-          .expect(204);
+    describe('USERS', () => {
+      describe('DELETE /users/me', () => {
+        it('should delete the current user', () => {
+          return supertest(app.getHttpServer())
+            .delete(usersMeEndpoint)
+            .set('Authorization', `Bearer ${userAccessToken}`)
+            .expect(204);
+        });
       });
     });
   });
