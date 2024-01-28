@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { BookmarkService } from './bookmark.service';
 import { BookmarkController } from './bookmark.controller';
 import { CategoryService } from '../category/category.service';
-import { FavouriteModule } from './_favourite-module/favourite.module';
-import { FavouriteController } from './_favourite-module/favourite.controller';
+import { FavouriteModule } from './module-favourite/favourite.module';
+import { FavouriteController } from './module-favourite/favourite.controller';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
