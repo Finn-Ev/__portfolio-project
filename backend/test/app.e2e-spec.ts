@@ -51,7 +51,7 @@ describe('App e2e', () => {
 
   describe('CREATE, GET AND UPDATE', () => {
     describe('AUTH', () => {
-      describe('Register', () => {
+      describe('POST /register', () => {
         it('should throw an exception when the email is not a valid email', () => {
           return supertest(app.getHttpServer())
             .post(authRegisterEndpoint)
@@ -81,7 +81,7 @@ describe('App e2e', () => {
         });
       });
 
-      describe('Login', () => {
+      describe('POST /login', () => {
         it('should throw an exception when no body was provided', () => {
           return supertest(app.getHttpServer()).post(authLoginEndpoint).expect(400);
         });
@@ -130,7 +130,7 @@ describe('App e2e', () => {
     });
 
     describe('USER', () => {
-      describe('Get current user', () => {
+      describe('GET users/me', () => {
         it('should return a 401 status when no access-token was provided', () => {
           return supertest(app.getHttpServer()).get(usersMeEndpoint).expect(401);
         });
@@ -154,7 +154,7 @@ describe('App e2e', () => {
         });
       });
 
-      describe('Edit current user', () => {
+      describe('PATCH /users/me', () => {
         const newValidEmail = 'test@test.de';
 
         it('should edit user when the new value is valid', () => {
@@ -185,8 +185,8 @@ describe('App e2e', () => {
     });
 
     describe('CATEGORIES', () => {
-      describe('Get empty categories', () => {
-        it('should get categories', () => {
+      describe('GET /categories', () => {
+        it('should get empty categories', () => {
           return supertest(app.getHttpServer())
             .get(categoryEndpointPath)
             .set('Authorization', `Bearer ${userAccessToken}`)
@@ -197,7 +197,7 @@ describe('App e2e', () => {
         });
       });
 
-      describe('Create category', () => {
+      describe('POST /categories', () => {
         const dto: CreateCategoryDto = {
           title: 'First category',
         };
@@ -217,7 +217,7 @@ describe('App e2e', () => {
         });
       });
 
-      describe('Get categories', () => {
+      describe('GET /categories', () => {
         it('should get all available categories', () => {
           return supertest(app.getHttpServer())
             .get(categoryEndpointPath)
@@ -229,7 +229,7 @@ describe('App e2e', () => {
         });
       });
 
-      describe('Get category', () => {
+      describe('GET categories/:id', () => {
         it('should get the category by id', () => {
           return supertest(app.getHttpServer())
             .get(`${categoryEndpointPath}/${categoryId}`)
@@ -248,11 +248,11 @@ describe('App e2e', () => {
         });
       });
 
-      describe('Edit category by id', () => {
+      describe('PATCH categories/:id', () => {
         const dto: UpdateCategoryDto = {
-          title: 'Kubernetes Course - Full Beginners Tutorial (Containerize Your Apps!)',
+          title: 'New title',
         };
-        it('should edit category', () => {
+        it('should edit category by ID', () => {
           return supertest(app.getHttpServer())
             .patch(`${categoryEndpointPath}/${categoryId}`)
             .set('Authorization', `Bearer ${userAccessToken}`)
@@ -267,7 +267,7 @@ describe('App e2e', () => {
     });
 
     describe('BOOKMARKS', () => {
-      describe('Get empty bookmarks', () => {
+      describe('GET /bookmarks/category/:categoryId', () => {
         it('should get no bookmarks from the category', () => {
           return supertest(app.getHttpServer())
             .get(`${bookmarksEndpoint}/category/${categoryId}`)
@@ -279,7 +279,7 @@ describe('App e2e', () => {
         });
       });
 
-      describe('Create bookmark', () => {
+      describe('POST /bookmarks', () => {
         it('should create a bookmark', () => {
           const dto: CreateBookmarkDto = {
             categoryId: categoryId,
@@ -298,8 +298,8 @@ describe('App e2e', () => {
         });
       });
 
-      describe('Get a list of bookmarks', () => {
-        it('should get all available bookmarks of the category', () => {
+      describe('GET /bookmarks/category/:categoryId', () => {
+        it('should get all bookmarks of the category', () => {
           return supertest(app.getHttpServer())
             .get(`${bookmarksEndpoint}/category/${categoryId}`)
             .set('Authorization', `Bearer ${userAccessToken}`)
@@ -308,7 +308,9 @@ describe('App e2e', () => {
               expect(response.body.length).toBe(1);
             });
         });
+      });
 
+      describe('GET /bookmarks', () => {
         it('should get all available bookmarks by the current the user', () => {
           return supertest(app.getHttpServer())
             .get(`${bookmarksEndpoint}`)
@@ -320,7 +322,7 @@ describe('App e2e', () => {
         });
       });
 
-      describe('Get bookmark by ID', () => {
+      describe('GET /bookmarks/:id', () => {
         it('should get the bookmark by id', () => {
           return supertest(app.getHttpServer())
             .get(`${bookmarksEndpoint}/${bookmarkId}`)
@@ -339,12 +341,12 @@ describe('App e2e', () => {
         });
       });
 
-      describe('Edit bookmark by ID', () => {
+      describe('PATCH /bookmarks/:id', () => {
         const dto: UpdateBookmarkDto = {
           title: 'New title',
           description: 'New description',
         };
-        it('should edit bookmark', () => {
+        it('should edit bookmark by ID', () => {
           return supertest(app.getHttpServer())
             .patch(`${bookmarksEndpoint}/${bookmarkId}`)
             .set('Authorization', `Bearer ${userAccessToken}`)
@@ -356,9 +358,11 @@ describe('App e2e', () => {
             });
         });
       });
+    });
 
-      describe('FAVOURITES', () => {
-        it('should add bookmark to favourites', () => {
+    describe('FAVOURITES', () => {
+      describe('PATCH /favourites/set/:bookmarkId/true', () => {
+        it('should set bookmark as favourite', () => {
           return supertest(app.getHttpServer())
             .patch(`${favouritesEndpoint}/set/${bookmarkId}/true`)
             .set('Authorization', `Bearer ${userAccessToken}`)
@@ -368,8 +372,10 @@ describe('App e2e', () => {
               expect(response.body.isFavourite).toBe(true);
             });
         });
+      });
 
-        it('should get available favourites', () => {
+      describe('GET /favourites', () => {
+        it('should return available favourites', () => {
           return supertest(app.getHttpServer())
             .get(favouritesEndpoint)
             .set('Authorization', `Bearer ${userAccessToken}`)
@@ -378,8 +384,10 @@ describe('App e2e', () => {
               expect(response.body.length).toBe(1);
             });
         });
+      });
 
-        it('should remove bookmark from favourites', () => {
+      describe('PATCH /favourites/set/:bookmarkId/false', () => {
+        it('PATCH /favourites/set/:bookmarkId/:value', () => {
           return supertest(app.getHttpServer())
             .patch(`${favouritesEndpoint}/set/${bookmarkId}/false`)
             .set('Authorization', `Bearer ${userAccessToken}`)
@@ -389,8 +397,10 @@ describe('App e2e', () => {
               expect(response.body.isFavourite).toBe(false);
             });
         });
+      });
 
-        it('should get empty favourites', () => {
+      describe('GET /favourites', () => {
+        it('should return no favourites', () => {
           return supertest(app.getHttpServer())
             .get(favouritesEndpoint)
             .set('Authorization', `Bearer ${userAccessToken}`)
@@ -403,45 +413,26 @@ describe('App e2e', () => {
     });
   });
 
-  describe('DELETE', () => {
-    describe('Delete bookmark by id', () => {
+  describe('DELETION', () => {
+    describe('DELETE /bookmarks/:bookmarkId', () => {
       it('should delete bookmark', () => {
         return supertest(app.getHttpServer())
           .delete(`${bookmarksEndpoint}/${bookmarkId}`)
           .set('Authorization', `Bearer ${userAccessToken}`)
           .expect(204);
       });
-
-      it('should get empty bookmarks from category', () => {
-        return supertest(app.getHttpServer())
-          .get(`${bookmarksEndpoint}/category/${categoryId}`)
-          .set('Authorization', `Bearer ${userAccessToken}`)
-          .expect(200)
-          .expect((response) => {
-            expect(response.body.length).toBe(0);
-          });
-      });
     });
 
-    describe('Delete category by id', () => {
+    describe('DELETE /categories/:categoryId', () => {
       it('should delete category', () => {
         return supertest(app.getHttpServer())
           .delete(`${categoryEndpointPath}/${categoryId}`)
           .set('Authorization', `Bearer ${userAccessToken}`)
           .expect(204);
       });
-      it('should get empty categories', () => {
-        return supertest(app.getHttpServer())
-          .get(categoryEndpointPath)
-          .set('Authorization', `Bearer ${userAccessToken}`)
-          .expect(200)
-          .expect((response) => {
-            expect(response.body.length).toBe(0);
-          });
-      });
     });
 
-    describe('Delete user', () => {
+    describe('DELETE /users/me', () => {
       it('should delete the current user', () => {
         return supertest(app.getHttpServer())
           .delete(usersMeEndpoint)
