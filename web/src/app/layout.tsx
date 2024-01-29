@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
-import './globals.css';
+import '../styles/globals.css';
+import NavBar from '../components/MainNav';
+import { cn } from '../lib/utils';
+import { Toaster } from '../components/ui/toast/Toaster';
+
+import { ThemeProvider } from '../providers';
 
 const avenirFont = localFont({
   src: [
@@ -29,8 +34,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={avenirFont.className}>{children}</body>
+    <html suppressHydrationWarning>
+      <ThemeProvider>
+        <body className={cn('min-h-screen antialiased dark:bg-zinc-800', avenirFont.className)}>
+          <div className="container flex mx-auto px-4 ">
+            <NavBar />
+            <div>{children}</div>
+            <Toaster />
+          </div>
+        </body>
+      </ThemeProvider>
     </html>
   );
 }
