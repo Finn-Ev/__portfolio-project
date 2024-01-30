@@ -36,8 +36,8 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <ThemeProvider>
-        <body className={cn('min-h-screen antialiased dark:bg-zinc-800', avenirFont.className)}>
-          <div className="container flex mx-auto px-4 ">
+        <body className={cn('min-h-screen antialiased bg-background-page', avenirFont.className)}>
+          <div className="container flex mx-auto px-0 xl:px-4">
             <NavBar />
             <div>{children}</div>
             <Toaster />
