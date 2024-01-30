@@ -5,7 +5,8 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --background-page: 0 0% 95%;
+    --foreground: 0 0% 4%;
 
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -36,7 +37,8 @@
   }
 
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 0 0% 5%;
+    --background-page: 0 0 10%;
     --foreground: 0 0% 98%;
 
     --card: 240 10% 3.9%;
@@ -72,5 +74,10 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* suppressHydrationWarning-prop doesn't seem to work */
+  nextjs-portal {
+    display: none;
   }
 }
