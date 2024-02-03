@@ -1,12 +1,13 @@
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, Res } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 import { AuthDto } from './dto/auth.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtPayload } from './types/jwt.payload';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
    * @returns The registered user.
    * @throws {ForbiddenException} If the user already exists.
    */
-  async register(dto: AuthDto) {
+  async register(dto: AuthDto, res) {
     const hash = await argon.hash(dto.password);
 
     try {
@@ -36,7 +37,15 @@ export class AuthService {
 
       delete user.pwHash;
 
-      return this.signToken(user.id, user.email);
+      const token = await this.signToken(user.id, user.email);
+
+      res.cookie('user_token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        // sameSite: 'strict',
+      });
+
+      return token;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -53,7 +62,7 @@ export class AuthService {
    * @returns A token representing the authenticated user.
    * @throws ForbiddenException if the provided credentials are invalid.
    */
-  async login(dto: AuthDto) {
+  async login(dto: AuthDto, res: Response) {
     const user = await this.prismaService.user.findUnique({
       where: {
         email: dto.email,
@@ -70,7 +79,22 @@ export class AuthService {
       throw new ForbiddenException('Invalid credentials');
     }
 
-    return this.signToken(user.id, user.email);
+    const token = await this.signToken(user.id, user.email);
+
+    res.cookie('user_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      // sameSite: 'strict',
+    });
+
+    return token;
+  }
+
+  async logout(res: Response) {
+    res.clearCookie('user_token');
+    return {
+      message: 'Cookie has been cleared',
+    };
   }
 
   /**
