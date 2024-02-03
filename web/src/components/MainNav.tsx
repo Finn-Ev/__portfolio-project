@@ -1,6 +1,6 @@
 'use client';
 
-import { AlignLeft, Info, List, PanelTopClose, Star } from 'lucide-react';
+import { AlignLeft, Info, List, PanelTopClose, Star, User } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { useEffect, useState } from 'react';
 import { cn } from '../lib/utils';
@@ -66,7 +66,7 @@ export default function MainNav() {
                   //   expanded ? 'opacity-100 duration-500' : 'opacity-0 h-0 w-0 duration-100',
                 }
               >
-                <Info />
+                <User />
               </Link>
             </>
           )}
