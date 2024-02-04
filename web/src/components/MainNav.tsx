@@ -40,7 +40,7 @@ export default function MainNav() {
 
               <Link
                 onClick={() => setExpanded(false)}
-                href={'/bookmarks/profile'}
+                href={'/bookmarks/settings'}
                 className={
                   cn()
                   //   'transition-opacity',
