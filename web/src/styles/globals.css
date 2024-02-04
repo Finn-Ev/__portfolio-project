@@ -77,7 +77,7 @@
   }
 
   /* suppressHydrationWarning-prop doesn't seem to work */
-  nextjs-portal {
+  /* nextjs-portal {
     display: none;
-  }
+  } */
 }

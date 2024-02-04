@@ -2,30 +2,12 @@
 
 import { AlignLeft, Info, List, PanelTopClose, Star, User } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { cn } from '../lib/utils';
 import Link from 'next/link';
 
 export default function MainNav() {
   const [expanded, setExpanded] = useState(false);
-  const [initialised, setInitialised] = useState(false);
-
-  //   useEffect(() => {
-  //     const navExpanded = localStorage.getItem('navExpanded');
-  //     if (navExpanded) {
-  //       setExpanded(navExpanded === 'true');
-  //       setInitialised(true);
-  //     }
-  //   }, []);
-
-  //   function setExpandedAndStore(expanded: boolean) {
-  //     setExpanded(expanded);
-  //     localStorage.setItem('navExpanded', expanded.toString());
-  //   }
-
-  //   if (!initialised) {
-  //     return null;
-  //   }
 
   return (
     <div className="fade-in-20 h-screen bg-background">
@@ -41,14 +23,12 @@ export default function MainNav() {
               'transition-transform duration-300 cursor-pointer z-10',
               expanded ? '-rotate-90' : 'rotate-90',
             )}
-            //   onClick={() => setExpandedAndStore(!expanded)}
             onClick={() => setExpanded(!expanded)}
           />
 
           {expanded && (
             <>
-              <Link
-                href={'/'}
+              <div
                 className={
                   cn()
                   //   'transition-opacity',
@@ -56,10 +36,11 @@ export default function MainNav() {
                 }
               >
                 <ThemeToggle />
-              </Link>
+              </div>
 
               <Link
-                href={'/'}
+                onClick={() => setExpanded(false)}
+                href={'/bookmarks/profile'}
                 className={
                   cn()
                   //   'transition-opacity',
@@ -74,7 +55,7 @@ export default function MainNav() {
 
         <hr className="bg-foreground text-foreground h-px w-full my-1" />
 
-        <Link href={'/'} className="flex gap-2  h-7">
+        <Link href={'/bookmarks'} className="flex gap-2  h-7" onClick={() => setExpanded(false)}>
           <AlignLeft className="cursor-pointer" />
 
           <span
@@ -87,7 +68,7 @@ export default function MainNav() {
           </span>
         </Link>
 
-        <Link href={'/'} className="flex gap-2 h-7">
+        <Link href={'/bookmarks/favourites'} className="flex gap-2 h-7" onClick={() => setExpanded(false)}>
           <Star />
           <span
             className={cn(

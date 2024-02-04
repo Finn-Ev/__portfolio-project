@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import '../styles/globals.css';
-import NavBar from '../components/MainNav';
 import { cn } from '../lib/utils';
 import { Toaster } from '../components/ui/toast/Toaster';
 
@@ -34,16 +33,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html suppressHydrationWarning>
-      <ThemeProvider>
-        <body className={cn('min-h-screen antialiased bg-background-page', avenirFont.className)}>
-          <div className="container flex mx-auto px-0 xl:px-4">
-            <NavBar />
-            <div>{children}</div>
-            <Toaster />
-          </div>
-        </body>
-      </ThemeProvider>
+    <html>
+      {/* <ThemeProvider> */}
+      <body className={cn('min-h-screen antialiased bg-background-page', avenirFont.className)}>
+        <div>{children}</div>
+        <Toaster />
+      </body>
+      {/* </ThemeProvider> */}
     </html>
   );
 }
