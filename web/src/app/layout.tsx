@@ -5,6 +5,8 @@ import { cn } from '../lib/utils';
 import { Toaster } from '../components/ui/toast/Toaster';
 
 import { ThemeProvider } from '../providers';
+import { Main } from 'next/document';
+import MainNav from '../components/MainNav';
 
 const avenirFont = localFont({
   src: [
@@ -36,8 +38,10 @@ export default function RootLayout({
     <html>
       {/* <ThemeProvider> */}
       <body className={cn('min-h-screen antialiased bg-background-page', avenirFont.className)}>
-        <div>{children}</div>
-        <Toaster />
+        <div className="container mx-auto px-0 xl:px-4">
+          {children}
+          <Toaster />
+        </div>
       </body>
       {/* </ThemeProvider> */}
     </html>

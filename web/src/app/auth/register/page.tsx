@@ -36,7 +36,7 @@ export default function Register() {
 
   return (
     <main>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 m-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
           <label htmlFor="username">Email: </label>
           <input type="email" id="email" name="email" required className="border rounded border-black" />
