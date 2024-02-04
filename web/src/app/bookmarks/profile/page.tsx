@@ -5,12 +5,12 @@ export default async function page() {
   const user = await getCurrentUser();
 
   if (!user) {
-    return <div>Not logged in</div>;
+    return null;
   }
 
   return (
     <div className="p-4 flex flex-col">
-      Logged in as {user.email}
+      Logged in as {user!.email}
       <LogoutBtn />
     </div>
   );
