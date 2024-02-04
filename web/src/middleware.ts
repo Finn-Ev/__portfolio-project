@@ -5,11 +5,19 @@ import type { NextRequest } from 'next/server';
 export async function middleware(request: NextRequest) {
   const userToken = cookies().get('user_token')?.value;
 
+  if (request.nextUrl.pathname === '/' && !userToken) {
+    return NextResponse.redirect(new URL('/auth', request.url));
+  }
+
+  if (request.nextUrl.pathname === '/' && userToken) {
+    return NextResponse.redirect(new URL('/bookmarks', request.url));
+  }
+
   if (request.nextUrl.pathname.startsWith('/auth') && userToken) {
-    return NextResponse.rewrite(new URL('/bookmarks', request.url));
+    return NextResponse.redirect(new URL('/bookmarks', request.url));
   }
 
   if (request.nextUrl.pathname.startsWith('/bookmarks') && !userToken) {
-    return NextResponse.rewrite(new URL('/auth', request.url));
+    return NextResponse.redirect(new URL('/auth', request.url));
   }
 }
