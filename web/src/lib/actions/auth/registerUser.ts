@@ -11,7 +11,7 @@ export async function registerUser(payload: { email: string; password: string })
 
     if (access_token) {
       cookies().set('user_token', access_token, {
-        // maxAge: 60 * 60 * 24 * 7, // TODO
+        maxAge: 60 * 60 * 24 * 7,
         path: '/',
         httpOnly: true,
       });
