@@ -5,8 +5,6 @@ import { cn } from '../lib/utils';
 import { Toaster } from '../components/ui/toast/Toaster';
 
 import { ThemeProvider } from '../providers';
-import { Main } from 'next/document';
-import MainNav from '../components/MainNav';
 
 const avenirFont = localFont({
   src: [
