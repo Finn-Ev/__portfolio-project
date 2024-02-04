@@ -39,12 +39,6 @@ export class AuthService {
 
       const token = await this.signToken(user.id, user.email);
 
-      res.cookie('user_token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        // sameSite: 'strict',
-      });
-
       return token;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -80,12 +74,6 @@ export class AuthService {
     }
 
     const token = await this.signToken(user.id, user.email);
-
-    res.cookie('user_token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      // sameSite: 'strict',
-    });
 
     return token;
   }
