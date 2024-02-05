@@ -1,7 +1,7 @@
 'use client';
 
 import { AlignLeft, Info, List, PanelTopClose, Star, User } from 'lucide-react';
-import ThemeToggle from './ThemeToggle';
+import ThemeToggle from './themeToggle';
 import { useState } from 'react';
 import { cn } from '../lib/utils';
 import Link from 'next/link';
