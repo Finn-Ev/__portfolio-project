@@ -1,6 +1,6 @@
 'use server';
 
-import MainNav from '../../components/MainNav';
+import MainNav from '../../components/mainNav';
 
 export default async function BookmarksLayout({ children }: { children: React.ReactNode }) {
   return (

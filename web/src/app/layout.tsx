@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import '../styles/globals.css';
 import { cn } from '../lib/utils';
-import { Toaster } from '../components/ui/toast/Toaster';
+import { Toaster } from '../components/ui/toast/toaster';
 
 import { ThemeProvider } from '../providers';
 

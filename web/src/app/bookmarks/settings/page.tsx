@@ -1,4 +1,4 @@
-import LogoutBtn from '../../../components/LogoutBtn';
+import LogoutBtn from '../../../components/logoutBtn';
 import { getCurrentUser } from '../../../lib/actions/auth';
 
 export default async function page() {
