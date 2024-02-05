@@ -1,15 +1,21 @@
 import Link from 'next/link';
+import { Button } from '../../components/ui/button';
 
 export default function page() {
   return (
-    <div className="flex flex-col gap-3">
-      <div className="font-bold">Welcome to this app</div>
-      <Link href={'/auth/login'} className="bg-background text-foreground w-fit p-3">
-        Login
-      </Link>
-      <Link href={'/auth/register'} className="bg-background text-foreground w-fit p-3">
-        Register
-      </Link>
-    </div>
+    <>
+      <div className="text-center mb-2">
+        <div className="font-bold text-2xl">Welcome to this app.</div>
+        <div className="text-lg">To continue, please login or register</div>
+      </div>
+      <div className="flex gap-2 flex-col md:flex-row">
+        <Link href={'/auth/login'}>
+          <Button>Login to my account.</Button>
+        </Link>
+        <Link href={'/auth/register'}>
+          <Button>Register a new account.</Button>
+        </Link>
+      </div>
+    </>
   );
 }

@@ -1,65 +1,118 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { registerUser } from '@/lib/actions/auth';
-
-import { useToast } from '../../../components/ui/toast/use-toast';
 import Link from 'next/link';
+import { useToast } from '../../../components/ui/toast/use-toast';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '../../../components/ui/button';
+import { Input } from '@/components/ui/input';
 
-export default function Register() {
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { registerUser } from '../../../lib/actions/auth';
+
+const formSchema = z
+  .object({
+    email: z
+      .string()
+      .min(1, { message: 'Enter an e-mail address' })
+      .email({ message: 'Invalid e-mail address' }),
+    password: z.string().min(8, { message: 'Password is too short' }),
+    passwordConfirmation: z.string().min(8, { message: 'Password is too short' }),
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "Passwords don't match",
+    path: ['passwordConfirmation'],
+  });
+
+export default function AuthForm() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
 
-    const payload = {
-      email: event.currentTarget.email.value,
-      password: event.currentTarget.password.value,
-    };
-
-    const response = await registerUser(payload);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const response = await registerUser(values);
 
     if (response) {
       toast({
-        title: "You're logged in",
+        title: "You're registered!",
       });
       router.push('/bookmarks');
     } else {
       toast({
         title: 'Error',
-        description: 'An error occurred while registering. Please try again.', // TODO - add better error message
+        description: 'Something went wrong. Please try again.',
         variant: 'destructive',
       });
     }
   };
 
   return (
-    <main>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div>
-          <label htmlFor="username">Email: </label>
-          <input type="email" id="email" name="email" required className="border rounded border-black" />
-        </div>
-        <div>
-          <label htmlFor="password">Password: </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            required
-            className="border rounded border-black"
+    <>
+      <h1 className="text-2xl mb-6">Register a new account.</h1>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-foreground">E-mail address</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-foreground">Password</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+                <FormDescription>Must be at least 8 characters long</FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="passwordConfirmation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-foreground">Confirm Password</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="mt-3 w-full">
+            Register.
+          </Button>
+        </form>
+      </Form>
 
-        <button type="submit" className="p-2 bg-background text-foreground w-fit rounded">
-          Register
-        </button>
-
-        <Link href="/auth/login" className="p-2 bg-background text-foreground w-fit rounded">
-          Already have an account? Login
-        </Link>
-      </form>
-    </main>
+      <Link href="/auth/login" className="flex justify-center">
+        <Button variant={'link'}>Already have an account?</Button>
+      </Link>
+    </>
   );
 }
