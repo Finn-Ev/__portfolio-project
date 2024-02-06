@@ -9,12 +9,12 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   register(@Body() dto: AuthDto, @Res({ passthrough: true }) response) {
-    return this.authService.register(dto, response);
+    return this.authService.register(dto);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
   login(@Body() dto: AuthDto, @Res({ passthrough: true }) response) {
-    return this.authService.login(dto, response);
+    return this.authService.login(dto);
   }
 }
