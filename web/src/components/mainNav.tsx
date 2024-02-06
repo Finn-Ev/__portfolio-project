@@ -1,6 +1,6 @@
 'use client';
 
-import { AlignLeft, Info, List, PanelTopClose, Star, User } from 'lucide-react';
+import { AlignLeft, Book, Info, List, PanelTopClose, Star, User } from 'lucide-react';
 import ThemeToggle from './themeToggle';
 import { useState } from 'react';
 import { cn } from '../lib/utils';
@@ -65,6 +65,18 @@ export default function MainNav() {
             )}
           >
             Bookmarks
+          </span>
+        </Link>
+
+        <Link href={'/bookmarks/categories'} className="flex gap-2 h-7" onClick={() => setExpanded(false)}>
+          <Book />
+          <span
+            className={cn(
+              'mt-[2px] transition-opacity',
+              expanded ? 'opacity-100 duration-500' : 'opacity-0 duration-100',
+            )}
+          >
+            Categories
           </span>
         </Link>
 
