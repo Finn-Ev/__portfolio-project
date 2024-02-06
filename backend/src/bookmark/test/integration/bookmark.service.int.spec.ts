@@ -4,7 +4,7 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import { ForbiddenException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CategoryService } from '../../../category/category.service';
-import { CreateBookmarkDto } from '../../dto';
+import { CreateBookmarkDto, UpdateBookmarkDto } from '../../dto';
 
 describe('BookmarkService', () => {
   let bookmarkService: BookmarkService;
@@ -336,6 +336,48 @@ describe('BookmarkService', () => {
 
       await expect(
         bookmarkService.update(mainUserId, bookmarkFromTheSecondUser.id, editBookmarkDto),
+      ).rejects.toThrowError(ForbiddenException);
+
+      const hopefullyNotEditedBookmark = await prismaService.bookmark.findUnique({
+        where: { id: bookmarkFromTheSecondUser.id },
+      });
+
+      expect(hopefullyNotEditedBookmark!.id).toBe(bookmarkFromTheSecondUser.id);
+      expect(hopefullyNotEditedBookmark!.title).toBe(bookmarkFromTheSecondUser.title);
+      expect(hopefullyNotEditedBookmark!.link).toBe(bookmarkFromTheSecondUser.link);
+    });
+
+    it('should throw ForbiddenException if new bookmark-category does not belong to the user', async () => {
+      const secondUser = await prismaService.user.create({
+        data: {
+          email: 'new@user.de',
+          pwHash: '#hash#',
+        },
+      });
+
+      const categoryFromTheSecondCategory = await prismaService.category.create({
+        data: {
+          userId: secondUser.id,
+          title: 'A Category of the second user',
+        },
+      });
+
+      const bookmarkFromTheSecondUser = await prismaService.bookmark.create({
+        data: {
+          categoryId: categoryFromTheSecondCategory.id,
+          title: 'Test Bookmark',
+          link: 'https://example.com/bookmark',
+        },
+      });
+
+      const updateBookmarkDto: UpdateBookmarkDto = {
+        title: 'Updated Bookmark',
+        link: 'https://example.com/updated-bookmark',
+        categoryId: categoryFromTheSecondCategory.id,
+      };
+
+      await expect(
+        bookmarkService.update(mainUserId, mainCategoryId, updateBookmarkDto),
       ).rejects.toThrowError(ForbiddenException);
 
       const hopefullyNotEditedBookmark = await prismaService.bookmark.findUnique({
