@@ -78,13 +78,6 @@ export class AuthService {
     return token;
   }
 
-  async logout(res: Response) {
-    res.clearCookie('user_token');
-    return {
-      message: 'Cookie has been cleared',
-    };
-  }
-
   /**
    * Generates a JWT token with the provided user ID and email.
    * @param userId - The ID of the user.
