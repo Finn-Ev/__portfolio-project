@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '../../../components/ui/toast/use-toast';
-import { loginUser } from '../../../lib/actions/auth/loginUser';
+import { loginUser } from '../../../lib/actions/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../../../components/ui/button';
 import { Input } from '@/components/ui/input';
