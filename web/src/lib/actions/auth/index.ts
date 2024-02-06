@@ -1,5 +1,5 @@
 // for better importing syntax
 export * from './getCurrentUser';
-export * from './registerUser';
-export * from './logoutUser';
-export * from './loginUser';
+export * from './register';
+export * from './logout';
+export * from './login';

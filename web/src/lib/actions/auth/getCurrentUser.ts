@@ -5,7 +5,7 @@ import { fetchBackend } from '../fetchBackend';
 
 export async function getCurrentUser(): Promise<User | null> {
   try {
-    const response = await fetchBackend('/users/me', 'GET', null);
+    const response = await fetchBackend('GET', '/users/me');
 
     if (response.status === 200) {
       return response.json();

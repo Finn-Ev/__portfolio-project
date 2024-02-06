@@ -4,21 +4,18 @@ type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PATCH';
 
 import { cookies } from 'next/headers';
 
-export async function fetchBackend(path: string, method: HttpMethod, payload: any = null) {
+export async function fetchBackend(method: HttpMethod, path: string, payload: any = null) {
   const accessToken = cookies().get('user_token')?.value;
 
-  // set up the basic fetch options
   const options: RequestInit = {
     cache: 'no-store',
     method: method,
-    credentials: 'include',
   };
 
   if (payload) {
     options.body = JSON.stringify(payload);
   }
 
-  // set up the headers
   const headers: HeadersInit = {};
 
   if (payload) {
