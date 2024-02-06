@@ -39,6 +39,20 @@ export class CategoryService {
     return category;
   }
 
+  async findRootCategory(userId: number) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    return await this.prismaService.category.findUnique({
+      where: {
+        id: user.rootCategoryId,
+      },
+    });
+  }
+
   async update(userId: number, categoryId: number, dto: UpdateCategoryDto) {
     const category = await this.prismaService.category.findUnique({
       where: {

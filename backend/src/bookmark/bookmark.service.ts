@@ -11,9 +11,15 @@ export class BookmarkService {
   ) {}
 
   async create(userId: number, dto: CreateBookmarkDto) {
-    const correspondingCategory = await this.categoryService.findOne(userId, dto.categoryId);
+    if (!dto.categoryId) {
+      const rootCategory = await this.categoryService.findRootCategory(userId);
 
-    if (!correspondingCategory) throw new ForbiddenException();
+      dto.categoryId = rootCategory.id;
+    } else {
+      const correspondingCategory = await this.categoryService.findOne(userId, dto.categoryId);
+
+      if (!correspondingCategory) throw new ForbiddenException();
+    }
 
     return this.prismaService.bookmark.create({
       data: {
@@ -89,9 +95,15 @@ export class BookmarkService {
 
     if (!correspondingCategory) throw new ForbiddenException();
 
+    // if the category is being changed, check if the new category belongs to the user
+    if (dto.categoryId && dto.categoryId !== bookmark.categoryId) {
+      const newCategory = await this.categoryService.findOne(userId, dto.categoryId);
+
+      if (!newCategory) throw new ForbiddenException();
+    }
+
     return this.prismaService.bookmark.update({
       where: {
-        categoryId: bookmark.categoryId,
         id: bookmarkId,
       },
       data: {

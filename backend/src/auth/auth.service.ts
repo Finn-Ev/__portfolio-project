@@ -8,6 +8,7 @@ import { AuthDto } from './dto/auth.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtPayload } from './types/jwt.payload';
 import { Response } from 'express';
+import { ROOT_CATEGORY_TITLE } from '../constants';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
    * @returns The registered user.
    * @throws {ForbiddenException} If the user already exists.
    */
-  async register(dto: AuthDto, res) {
+  async register(dto: AuthDto) {
     const hash = await argon.hash(dto.password);
 
     try {
@@ -35,11 +36,32 @@ export class AuthService {
         },
       });
 
+      // create a root-category for the user
+      const userRootCategory = await this.prismaService.category.create({
+        data: {
+          userId: user.id,
+          title: ROOT_CATEGORY_TITLE,
+        },
+      });
+
+      await this.prismaService.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          rootCategoryId: userRootCategory.id,
+        },
+      });
+
       delete user.pwHash;
 
       const token = await this.signToken(user.id, user.email);
 
-      return token;
+      return {
+        access_token: token,
+        root_category_id: userRootCategory.id,
+        // This is useful because the the client then can save the root category id and does not have to fetch it from the server every time.
+      };
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -56,7 +78,7 @@ export class AuthService {
    * @returns A token representing the authenticated user.
    * @throws ForbiddenException if the provided credentials are invalid.
    */
-  async login(dto: AuthDto, res: Response) {
+  async login(dto: AuthDto) {
     const user = await this.prismaService.user.findUnique({
       where: {
         email: dto.email,
@@ -75,7 +97,16 @@ export class AuthService {
 
     const token = await this.signToken(user.id, user.email);
 
-    return token;
+    const userRootCategory = await this.prismaService.category.findUnique({
+      where: {
+        id: user.rootCategoryId,
+      },
+    });
+
+    return {
+      access_token: token,
+      root_category_id: userRootCategory.id,
+    };
   }
 
   /**
@@ -84,18 +115,16 @@ export class AuthService {
    * @param email - The email of the user.
    * @returns A promise that resolves to an object containing the generated access token.
    */
-  async signToken(userId: number, email: string): Promise<{ access_token: string }> {
+  private async signToken(userId: number, email: string): Promise<string> {
     const payload: JwtPayload = { userId, email };
 
     const secret = this.config.get('JWT_SECRET');
 
     const token = await this.jwt.signAsync(payload, {
-      //   expiresIn: '1d',
+      expiresIn: '7d',
       secret,
     });
 
-    return {
-      access_token: token,
-    };
+    return token;
   }
 }

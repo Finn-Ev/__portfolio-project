@@ -12,7 +12,8 @@ model User {
     email  String @unique
     pwHash String
 
-    categories Category[]
+    rootCategoryId Int?
+    categories     Category[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

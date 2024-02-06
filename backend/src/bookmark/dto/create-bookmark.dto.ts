@@ -2,8 +2,8 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateBookmarkDto {
   @IsNumber()
-  @IsNotEmpty()
-  categoryId: number;
+  @IsOptional()
+  categoryId: number; // when this is not present, the root categoryId is used
 
   @IsString()
   @IsNotEmpty()
