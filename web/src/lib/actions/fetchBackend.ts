@@ -4,7 +4,11 @@ type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PATCH';
 
 import { cookies } from 'next/headers';
 
-export async function fetchBackend(method: HttpMethod, path: string, payload: any = null) {
+export async function fetchBackend<T>(
+  method: HttpMethod,
+  path: string,
+  payload: any = null,
+): Promise<{ value?: T; error?: Error }> {
   const accessToken = cookies().get('user_token')?.value;
 
   const options: RequestInit = {
@@ -29,8 +33,18 @@ export async function fetchBackend(method: HttpMethod, path: string, payload: an
   options.headers = headers;
 
   try {
-    return fetch(process.env.NEXT_PUBLIC_BACKEND_URL + path, options);
+    // console.log('fetching', process.env.NEXT_PUBLIC_BACKEND_URL + path, options);
+
+    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + path, options);
+
+    const responseBody = await response.json();
+
+    if (!response.ok) {
+      return { error: new Error(responseBody.message) };
+    }
+
+    return { value: responseBody as T };
   } catch (error) {
-    throw error;
+    return { error: error as Error };
   }
 }
