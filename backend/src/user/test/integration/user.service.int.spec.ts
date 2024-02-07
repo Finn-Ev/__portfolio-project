@@ -65,6 +65,7 @@ describe('CategoryService', () => {
   });
 
   describe('remove', () => {
+    // we basically test the cascading delete works correctly
     it('should delete the user current user and all their data', async () => {
       await userService.delete(mainUserId);
 
