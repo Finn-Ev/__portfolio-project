@@ -169,7 +169,7 @@ describe('CategoryService', () => {
   });
 
   describe('remove', () => {
-    it('should delete the categpry with the specified ID', async () => {
+    it('should delete the category with the specified ID and all corresponding bookmarks', async () => {
       await categoryService.remove(mainUserId, mainCategoryId);
 
       const deletedCategory = await prismaService.category.findUnique({
@@ -179,6 +179,14 @@ describe('CategoryService', () => {
       });
 
       expect(deletedCategory).toBeNull();
+
+      const deletedBookmarks = await prismaService.bookmark.findMany({
+        where: {
+          categoryId: mainCategoryId,
+        },
+      });
+
+      expect(deletedBookmarks.length).toBe(0);
     });
 
     it('should throw ForbiddenException if user does not own the category', async () => {
