@@ -34,7 +34,7 @@ export class AuthService {
         },
       });
 
-      // create a root-category for the user
+      // create the root-category for the user
       const userRootCategory = await this.prismaService.category.create({
         data: {
           userId: user.id,

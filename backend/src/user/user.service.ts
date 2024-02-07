@@ -6,7 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserService {
   constructor(private prismaService: PrismaService) {}
 
-  async editUser(userId: number, dto: UpdateUserDto) {
+  async update(userId: number, dto: UpdateUserDto) {
     const user = await this.prismaService.user.update({
       where: {
         id: userId,
@@ -21,7 +21,8 @@ export class UserService {
     return user;
   }
 
-  async deleteUser(userId: number) {
+  async delete(userId: number) {
+    // because of the cascading delete, the user's categories and bookmarks will be deleted as well
     return this.prismaService.user.delete({
       where: {
         id: userId,

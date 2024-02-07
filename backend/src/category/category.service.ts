@@ -92,6 +92,7 @@ export class CategoryService {
 
     if (!category) throw new ForbiddenException();
 
+    // because of the cascading delete, the user's bookmarks will be deleted as well
     return this.prismaService.category.delete({
       where: {
         id: categoryId,

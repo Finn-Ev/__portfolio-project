@@ -16,12 +16,12 @@ export class UserController {
 
   @Patch('me')
   updateMe(@GetUser('id') userId: number, @Body() dto: UpdateUserDto) {
-    return this.userService.editUser(userId, dto);
+    return this.userService.update(userId, dto);
   }
 
   @Delete('me')
   @HttpCode(204)
   deleteMe(@GetUser('id') userId: number) {
-    return this.userService.deleteUser(userId);
+    return this.userService.delete(userId);
   }
 }
