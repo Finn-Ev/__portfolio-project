@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthDto } from '../../dto/auth.dto';
 import { jwtDecode } from 'jwt-decode';
 import { JwtService } from '@nestjs/jwt';
+import exp from 'constants';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -20,23 +21,25 @@ describe('AuthService', () => {
     prismaService = module.get<PrismaService>(PrismaService);
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await prismaService.cleanDatabase();
   });
 
   describe('register', () => {
-    it('should create a user with the specified values and return a JWT containing the user email and the userId', async () => {
+    it('should create a user with the specified values and return the rootCategoryId of the user and a corresponding JWT', async () => {
       const dto: AuthDto = {
         email: 'test@test.de',
         password: 'test1234',
       };
 
-      const token = await authService.register(dto);
+      const response = await authService.register(dto);
 
-      expect(token).toBeInstanceOf(Object);
-      expect(token).toHaveProperty('access_token');
+      expect(response).toBeInstanceOf(Object);
+      expect(response).toHaveProperty('access_token');
+      expect(response).toHaveProperty('root_category_id');
 
-      const userData: any = jwtDecode(token.access_token);
+      const userData: any = jwtDecode(response.access_token);
+      const userRootCategoryId = response.root_category_id;
 
       expect(userData).toHaveProperty('userId');
       expect(userData).toHaveProperty('email');
@@ -52,6 +55,8 @@ describe('AuthService', () => {
 
       expect(registeredUser).toBeInstanceOf(Object);
       expect(registeredUser.email).toBe(dto.email);
+
+      expect(userRootCategoryId).toBe(registeredUser.rootCategoryId);
     });
 
     // it('should throw a ForbiddenException if email is already taken', async () => {
@@ -69,16 +74,11 @@ describe('AuthService', () => {
     // });
 
     describe('login', () => {
-      it('should return a JWT containing the user-email and ID if the credentials are valid', async () => {
+      it('should return the rootCategoryId of the user and a corresponding JWT if the credentials are valid', async () => {
         const dto: AuthDto = {
           email: 'test@test.de',
           password: 'test1234',
         };
-
-        await authService.register({
-          email: dto.email,
-          password: dto.password,
-        });
 
         const token = await authService.login(dto);
 
