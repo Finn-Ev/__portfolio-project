@@ -27,7 +27,7 @@ const invalidPassword = '1234567'; //  too short (min. 8 letters)
 
 describe('App e2e', () => {
   let app: INestApplication;
-  let prisma: PrismaService;
+  let prismaService: PrismaService;
 
   let userAccessToken: string;
   let categoryId: number;
@@ -44,9 +44,9 @@ describe('App e2e', () => {
     await app.init();
     await app.listen(PORT);
 
-    prisma = app.get(PrismaService);
+    prismaService = app.get(PrismaService);
 
-    await prisma.cleanDatabase();
+    await prismaService.cleanDatabase();
   });
 
   describe('CREATE, GET AND UPDATE', () => {
@@ -186,7 +186,10 @@ describe('App e2e', () => {
 
     describe('CATEGORIES', () => {
       describe('GET /categories', () => {
-        it('should get empty categories', () => {
+        it('should get empty categories', async () => {
+          // delete the root category
+          await prismaService.category.deleteMany({}); // TODO optimize this proces/logic in general
+
           return supertest(app.getHttpServer())
             .get(categoryEndpointPath)
             .set('Authorization', `Bearer ${userAccessToken}`)
@@ -201,7 +204,7 @@ describe('App e2e', () => {
         const dto: CreateCategoryDto = {
           title: 'First category',
         };
-        it('should create category', () => {
+        it('should create category', async () => {
           return supertest(app.getHttpServer())
             .post(categoryEndpointPath)
             .set('Authorization', `Bearer ${userAccessToken}`)
@@ -242,7 +245,7 @@ describe('App e2e', () => {
 
         it('should return a 403 status when the category was not found', () => {
           return supertest(app.getHttpServer())
-            .get(`${categoryEndpointPath}/0`)
+            .get(`${categoryEndpointPath}/99999999`)
             .set('Authorization', `Bearer ${userAccessToken}`)
             .expect(403);
         });

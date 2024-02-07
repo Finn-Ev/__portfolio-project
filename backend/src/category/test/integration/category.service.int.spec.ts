@@ -31,6 +31,16 @@ describe('CategoryService', () => {
 
     mainUserId = mainUser.id;
 
+    // set root category
+    await prismaService.user.update({
+      where: {
+        id: mainUser.id,
+      },
+      data: {
+        rootCategoryId: mainCategoryId,
+      },
+    });
+
     const mainCategory = await prismaService.category.create({
       data: {
         userId: mainUser.id,

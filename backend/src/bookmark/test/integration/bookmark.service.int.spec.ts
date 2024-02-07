@@ -33,14 +33,24 @@ describe('BookmarkService', () => {
 
     mainUserId = mainUser.id;
 
-    const mainCategory = await prismaService.category.create({
+    const rootCategory = await prismaService.category.create({
       data: {
         userId: mainUser.id,
         title: 'Test Category',
       },
     });
 
-    mainCategoryId = mainCategory.id;
+    mainCategoryId = rootCategory.id;
+
+    // set root category
+    await prismaService.user.update({
+      where: {
+        id: mainUser.id,
+      },
+      data: {
+        rootCategoryId: mainCategoryId,
+      },
+    });
 
     const secondaryCategory = await prismaService.category.create({
       data: {
@@ -57,9 +67,8 @@ describe('BookmarkService', () => {
   });
 
   describe('create', () => {
-    it('should create a new bookmark', async () => {
+    it('should create a new bookmark inside the root category when no category is specified', async () => {
       const bookmarkDto: CreateBookmarkDto = {
-        categoryId: mainCategoryId,
         title: 'New Bookmark',
         link: 'https://example.com/new-bookmark',
       };
@@ -72,6 +81,25 @@ describe('BookmarkService', () => {
 
       expect(newBookmark).toBeDefined();
       expect(newBookmark.categoryId).toBe(mainCategoryId);
+      expect(newBookmark.title).toBe(bookmarkDto.title);
+      expect(newBookmark.link).toBe(bookmarkDto.link);
+    });
+
+    it('should create a new bookmark inside the specified category', async () => {
+      const bookmarkDto: CreateBookmarkDto = {
+        categoryId: secondaryCategoryId,
+        title: 'New Bookmark',
+        link: 'https://example.com/new-bookmark',
+      };
+
+      const { id: newBookmarkId } = await bookmarkService.create(mainUserId, bookmarkDto);
+
+      const newBookmark = await prismaService.bookmark.findUnique({
+        where: { id: newBookmarkId },
+      });
+
+      expect(newBookmark).toBeDefined();
+      expect(newBookmark.categoryId).toBe(secondaryCategoryId);
       expect(newBookmark.title).toBe(bookmarkDto.title);
       expect(newBookmark.link).toBe(bookmarkDto.link);
     });
@@ -102,7 +130,7 @@ describe('BookmarkService', () => {
 
     it('should throw ForbiddenException if the category does not exist', async () => {
       const bookmarkDto: CreateBookmarkDto = {
-        categoryId: 0,
+        categoryId: 99999999,
         title: 'New Bookmark',
         link: 'https://example.com/new-bookmark',
       };
@@ -373,11 +401,11 @@ describe('BookmarkService', () => {
       const updateBookmarkDto: UpdateBookmarkDto = {
         title: 'Updated Bookmark',
         link: 'https://example.com/updated-bookmark',
-        categoryId: categoryFromTheSecondCategory.id,
+        categoryId: mainCategoryId, // this should cause the ForbiddenException
       };
 
       await expect(
-        bookmarkService.update(mainUserId, mainCategoryId, updateBookmarkDto),
+        bookmarkService.update(secondUser.id, bookmarkFromTheSecondUser.id, updateBookmarkDto),
       ).rejects.toThrowError(ForbiddenException);
 
       const hopefullyNotEditedBookmark = await prismaService.bookmark.findUnique({

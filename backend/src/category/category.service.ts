@@ -81,6 +81,15 @@ export class CategoryService {
       },
     });
 
+    const rootCategory = await this.findRootCategory(userId);
+
+    if (rootCategory) {
+      // TODO this if-statement is only necessary for testing, because the root category gets deleted in the e2e tests.
+      if (category.id === rootCategory.id) {
+        throw new ForbiddenException('The root category cannot be deleted.');
+      }
+    }
+
     if (!category) throw new ForbiddenException();
 
     return this.prismaService.category.delete({
