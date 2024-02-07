@@ -7,7 +7,7 @@ export default async function BookmarksLayout({ children }: { children: React.Re
     <main>
       <div className="container flex mx-auto px-0 xl:px-4">
         <MainNav />
-        <div>{children}</div>
+        <div className="w-full p-4">{children}</div>
       </div>
     </main>
   );

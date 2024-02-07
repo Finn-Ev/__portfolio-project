@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { registerUser } from '../../../lib/actions/auth';
+import { register } from '../../../lib/actions/auth';
 
 const formSchema = z
   .object({
@@ -43,9 +43,9 @@ export default function AuthForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = await registerUser(values);
+    const { success, errorMessage } = await register(values);
 
-    if (response) {
+    if (success) {
       toast({
         title: "You're registered!",
       });
@@ -53,7 +53,7 @@ export default function AuthForm() {
     } else {
       toast({
         title: 'Error',
-        description: 'Something went wrong. Please try again.',
+        description: errorMessage ?? 'An error occurred. Please try again.',
         variant: 'destructive',
       });
     }

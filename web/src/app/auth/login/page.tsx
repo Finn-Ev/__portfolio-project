@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '../../../components/ui/toast/use-toast';
-import { loginUser } from '../../../lib/actions/auth';
+import { login } from '../../../lib/actions/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../../../components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,7 +29,7 @@ export default function AuthForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = await loginUser(values);
+    const response = await login(values);
 
     if (response) {
       toast({

@@ -1,10 +1,11 @@
 'use client';
 
-import { AlignLeft, Book, Info, List, PanelTopClose, Star, User } from 'lucide-react';
+import { AlignLeft, Book, LogOut, PanelTopClose, Star, User } from 'lucide-react';
 import ThemeToggle from './themeToggle';
 import { useState } from 'react';
 import { cn } from '../lib/utils';
 import Link from 'next/link';
+import { logout } from '../lib/actions/auth';
 
 export default function MainNav() {
   const [expanded, setExpanded] = useState(false);
@@ -91,6 +92,10 @@ export default function MainNav() {
             Favourites
           </span>
         </Link>
+
+        <div className="mt-auto cursor-pointer" onClick={() => logout()}>
+          <LogOut />
+        </div>
       </div>
     </div>
   );
