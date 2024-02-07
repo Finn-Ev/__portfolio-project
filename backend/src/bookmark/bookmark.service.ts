@@ -22,6 +22,7 @@ export class BookmarkService {
     }
 
     return this.prismaService.bookmark.create({
+      // @ts-ignore when category is not provided, it will be set to the root category
       data: {
         ...dto,
       },

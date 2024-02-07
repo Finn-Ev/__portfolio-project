@@ -7,8 +7,6 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { AuthDto } from './dto/auth.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtPayload } from './types/jwt.payload';
-import { Response } from 'express';
-import { ROOT_CATEGORY_TITLE } from '../constants';
 
 @Injectable()
 export class AuthService {
@@ -40,7 +38,7 @@ export class AuthService {
       const userRootCategory = await this.prismaService.category.create({
         data: {
           userId: user.id,
-          title: ROOT_CATEGORY_TITLE,
+          title: '__ROOT__',
         },
       });
 
