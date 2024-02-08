@@ -84,13 +84,13 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new ForbiddenException('Invalid credentials');
+      throw new ForbiddenException('Invalid credentials. Please try again.');
     }
 
     const pwMatches = await argon.verify(user.pwHash, dto.password);
 
     if (!pwMatches) {
-      throw new ForbiddenException('Invalid credentials');
+      throw new ForbiddenException('Invalid credentials. Please try again.');
     }
 
     const token = await this.signToken(user.id, user.email);
