@@ -57,7 +57,7 @@ export default function AuthForm() {
               <FormItem>
                 <FormLabel className="text-foreground">E-mail address</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} />
+                  <Input type="email" placeholder="" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

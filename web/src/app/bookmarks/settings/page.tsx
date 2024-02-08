@@ -9,9 +9,9 @@ export default async function page() {
   }
 
   return (
-    <div className="p-4 flex flex-col">
+    <div className=" p-4 flex flex-col gap-4">
       Logged in as {user!.email}
-      <LogoutBtn />
+      <LogoutBtn className="max-w-64" />
     </div>
   );
 }

@@ -10,9 +10,11 @@ export default async function BookmarksPage() {
   }
 
   return (
-    <div className="flex justify-between w-full">
-      <h1>Here are all your bookmarks</h1>
-      <BookmarkForm />
+    <div>
+      <div className="flex justify-between items-center w-full mb-3">
+        <h1 className="font-semibold text-lg">All bookmarks</h1>
+        <BookmarkForm />
+      </div>
 
       {bookmarks!.length === 0 ? (
         <div>Create your first bookmark.</div>
