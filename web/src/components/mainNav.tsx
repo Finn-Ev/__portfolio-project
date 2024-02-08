@@ -1,11 +1,11 @@
 'use client';
 
-import { AlignLeft, Book, LogOut, PanelTopClose, Star, User } from 'lucide-react';
+import { AlignLeft, Book, PanelTopClose, Star, User } from 'lucide-react';
 import ThemeToggle from './themeToggle';
 import { useState } from 'react';
 import { cn } from '../lib/utils';
 import Link from 'next/link';
-import { logout } from '../lib/actions/auth';
+import { useRouter } from 'next/navigation';
 
 export default function MainNav() {
   const [expanded, setExpanded] = useState(false);
@@ -62,7 +62,7 @@ export default function MainNav() {
           <span
             className={cn(
               'mt-[2px] transition-opacity duration-100',
-              expanded ? 'opacity-100 duration-500' : 'opacity-0  duration-100',
+              expanded ? 'opacity-100 duration-500' : 'opacity-0  duration-100 pointer-events-none',
             )}
           >
             Bookmarks
@@ -74,7 +74,7 @@ export default function MainNav() {
           <span
             className={cn(
               'mt-[2px] transition-opacity',
-              expanded ? 'opacity-100 duration-500' : 'opacity-0 duration-100',
+              expanded ? 'opacity-100 duration-500' : 'opacity-0 duration-100 pointer-events-none',
             )}
           >
             Categories
@@ -86,16 +86,12 @@ export default function MainNav() {
           <span
             className={cn(
               'mt-[2px] transition-opacity',
-              expanded ? 'opacity-100 duration-500' : 'opacity-0 duration-100',
+              expanded ? 'opacity-100 duration-500' : 'opacity-0 duration-100 pointer-events-none',
             )}
           >
             Favourites
           </span>
         </Link>
-
-        <div className="mt-auto cursor-pointer" onClick={() => logout()}>
-          <LogOut />
-        </div>
       </div>
     </div>
   );
