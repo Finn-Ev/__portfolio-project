@@ -78,12 +78,12 @@ export default function BookmarkForm() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
             <FormField
               control={form.control}
-              name="title"
+              name="link"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Title</FormLabel>
+                  <FormLabel className="text-foreground">Link</FormLabel>
                   <FormControl>
-                    <Input placeholder="" {...field} />
+                    <Input placeholder="URL" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -91,12 +91,12 @@ export default function BookmarkForm() {
             />
             <FormField
               control={form.control}
-              name="link"
+              name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Link</FormLabel>
+                  <FormLabel className="text-foreground">Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="URL" {...field} />
+                    <Input placeholder="" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
