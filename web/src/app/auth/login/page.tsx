@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '../../../components/ui/toast/use-toast';
-import { login } from '../../../lib/actions/auth';
+import { authenticateUser } from '../../../lib/actions/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../../../components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,9 +29,9 @@ export default function AuthForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = await login(values);
+    const { success, errorMessage } = await authenticateUser(values);
 
-    if (response) {
+    if (success) {
       toast({
         title: "You're logged in",
       });
@@ -39,7 +39,7 @@ export default function AuthForm() {
     } else {
       toast({
         title: 'Error',
-        description: 'Something went wrong. Please try again.',
+        description: errorMessage ?? 'Something went wrong. Please try again.',
         variant: 'destructive',
       });
     }

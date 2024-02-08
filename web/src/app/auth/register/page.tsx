@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { register } from '../../../lib/actions/auth';
+import { authenticateUser } from '../../../lib/actions/auth';
 
 const formSchema = z
   .object({
@@ -43,7 +43,7 @@ export default function AuthForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { success, errorMessage } = await register(values);
+    const { success, errorMessage } = await authenticateUser(values, true);
 
     if (success) {
       toast({

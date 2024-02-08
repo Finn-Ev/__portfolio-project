@@ -4,16 +4,19 @@ import { cookies } from 'next/headers';
 import { fetchBackend } from '../fetchBackend';
 import { USER_ROOT_CATEGORY_ID_COOKIE_NAME, USER_TOKEN_COOKIE_NAME } from '../../../constants';
 
-export async function register(payload: {
-  email: string;
-  password: string;
-}): Promise<{ success: boolean; errorMessage?: string }> {
+type AuthResponse = { access_token: string; root_category_id: number };
+
+export async function authenticateUser(
+  payload: {
+    email: string;
+    password: string;
+  },
+  isNewUser: boolean = false,
+): Promise<{ success: boolean; errorMessage?: string }> {
+  const urlPath = isNewUser ? '/auth/register' : '/auth/login';
+
   try {
-    const response = await fetchBackend<{ access_token: string; root_category_id: number }>(
-      'POST',
-      '/auth/register',
-      payload,
-    );
+    const response = await fetchBackend<AuthResponse>('POST', urlPath, payload);
 
     if (!response.success) {
       return response; // don't need to try to set cookies if the request failed
