@@ -47,7 +47,7 @@ export default function BookmarkForm() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const response = await createBookmark(values);
 
-    if (response) {
+    if (response.success) {
       toast({
         title: 'Bookmark created!',
       });
@@ -57,7 +57,7 @@ export default function BookmarkForm() {
     } else {
       toast({
         title: 'Error',
-        description: 'Something went wrong. Please try again.',
+        description: response.errorMessage ?? 'Something went wrong. Please try again.',
         variant: 'destructive',
       });
     }

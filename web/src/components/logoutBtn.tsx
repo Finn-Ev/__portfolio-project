@@ -1,10 +1,15 @@
 'use client';
 
+import React, { HTMLAttributes } from 'react';
 import { Button } from './ui/button';
 import { logout } from '../lib/actions/auth';
 import { useRouter } from 'next/navigation';
 
-export default function LogoutBtn() {
+interface LogoutBtnProps {
+  className?: string;
+}
+
+export default function LogoutBtn({ className }: LogoutBtnProps) {
   const router = useRouter();
 
   async function handleLogout() {
@@ -13,5 +18,9 @@ export default function LogoutBtn() {
     router.push('/auth');
   }
 
-  return <Button onClick={handleLogout}>Logout</Button>;
+  return (
+    <Button className={className} onClick={handleLogout}>
+      Logout
+    </Button>
+  );
 }
