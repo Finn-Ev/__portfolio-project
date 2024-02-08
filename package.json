@@ -1,5 +1,5 @@
 {
     "scripts": {
-        "dev": "cd web && pnpm dev & cd backend && pnpm dev & cd backend && npx prisma studio"
+        "dev": "cd web && pnpm dev & cd backend && pnpm dev && sleep 1 & cd backend && npx prisma studio"
     }
 }
