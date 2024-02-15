@@ -364,10 +364,10 @@ describe('App e2e', () => {
     });
 
     describe('FAVOURITES', () => {
-      describe('PATCH /favourites/set/:bookmarkId/true', () => {
+      describe('PATCH /favourites/:bookmarkId/true', () => {
         it('should set bookmark as favourite', () => {
           return supertest(app.getHttpServer())
-            .patch(`${favouritesEndpoint}/set/${bookmarkId}/true`)
+            .patch(`${favouritesEndpoint}/${bookmarkId}/true`)
             .set('Authorization', `Bearer ${userAccessToken}`)
             .expect(200)
             .expect((response) => {
@@ -389,10 +389,10 @@ describe('App e2e', () => {
         });
       });
 
-      describe('PATCH /favourites/set/:bookmarkId/false', () => {
+      describe('PATCH /favourites/:bookmarkId/false', () => {
         it('should set bookmark as favourite', () => {
           return supertest(app.getHttpServer())
-            .patch(`${favouritesEndpoint}/set/${bookmarkId}/false`)
+            .patch(`${favouritesEndpoint}/${bookmarkId}/false`)
             .set('Authorization', `Bearer ${userAccessToken}`)
             .expect(200)
             .expect((response) => {

@@ -13,7 +13,7 @@ export class FavouriteController {
     return this.favouriteService.getFavourites(userId);
   }
 
-  @Patch('set/:bookmark_id/:new_value')
+  @Patch(':bookmark_id/:new_value')
   async set(
     @GetUser('id') userId: number,
     @Param('bookmark_id', ParseIntPipe) bookmarkId: number,
