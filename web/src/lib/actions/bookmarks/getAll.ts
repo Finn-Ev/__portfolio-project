@@ -1,9 +1,6 @@
-import { Bookmark } from '../../types';
-import { fetchBackend } from '../fetchBackend';
+import { Bookmark } from '@/lib/types';
+import { fetchBackend } from '@/lib/actions/fetchBackend';
 
-export async function getAllBookmarks(): Promise<{
-  value?: Bookmark[];
-  error?: Error;
-}> {
+export async function getAllBookmarks() {
   return fetchBackend<Bookmark[]>('GET', '/bookmarks');
 }
