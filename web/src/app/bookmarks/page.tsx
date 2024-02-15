@@ -1,8 +1,10 @@
-import BookmarkForm from '../../components/bookmarkForm';
-import BookmarkList from '../../components/bookmarkList';
-import BookmarkListItem from '../../components/bookmarkListItem';
-import ErrorMessage from '../../components/errorMessage';
-import { getAllBookmarks } from '../../lib/actions/bookmarks/getAll';
+import BookmarkForm from '@/components/bookmarkForm';
+import BookmarkList from '@/components/bookmarkList';
+import ErrorMessage from '@/components/errorMessage';
+import { getAllBookmarks } from '@/lib/actions/bookmarks/getAll';
+import PageHeader from '../../components/page-header';
+import { Button } from '../../components/ui/button';
+import { PlusCircle } from 'lucide-react';
 
 export default async function BookmarksPage() {
   const { value: bookmarks, errorMessage, success } = await getAllBookmarks();
@@ -13,11 +15,18 @@ export default async function BookmarksPage() {
 
   return (
     <div>
-      <div className="flex justify-between items-center w-full mb-4">
-        <h1 className="font-semibold text-lg">All bookmarks.</h1>
-        <BookmarkForm />
-      </div>
-
+      <PageHeader
+        title="All bookmarks."
+        actionButton={
+          <BookmarkForm
+            triggerElement={
+              <Button variant="outline">
+                Create Bookmark <PlusCircle className="ml-2" />
+              </Button>
+            }
+          />
+        }
+      />
       <BookmarkList emptyListText="Create your first bookmark." bookmarks={bookmarks!} />
     </div>
   );
