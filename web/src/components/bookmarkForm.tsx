@@ -49,7 +49,8 @@ export default function BookmarkForm() {
 
     if (response.success) {
       toast({
-        title: 'Bookmark created!',
+        title: 'Bookmark was created!',
+        variant: 'success',
       });
       setOpen(false);
       router.refresh();

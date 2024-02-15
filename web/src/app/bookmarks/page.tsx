@@ -5,10 +5,10 @@ import ErrorMessage from '../../components/errorMessage';
 import { getAllBookmarks } from '../../lib/actions/bookmarks/getAll';
 
 export default async function BookmarksPage() {
-  const { value: bookmarks, error } = await getAllBookmarks();
+  const { value: bookmarks, errorMessage, success } = await getAllBookmarks();
 
-  if (error) {
-    return <ErrorMessage message={error.message} />;
+  if (!success) {
+    return <ErrorMessage message={errorMessage!} />;
   }
 
   return (
