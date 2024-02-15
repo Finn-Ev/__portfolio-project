@@ -37,7 +37,13 @@ export async function fetchBackend<T>(
 
     const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + path, options);
 
+    if (response.status === 204) {
+      return { success: true, value: true as T }; // no body to parse
+    }
+
     const responseBody = await response.json();
+
+    // console.log('responseBody', responseBody);
 
     if (!response.ok) {
       return { success: false, errorMessage: responseBody.message };
