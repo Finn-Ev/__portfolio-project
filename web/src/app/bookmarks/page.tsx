@@ -1,4 +1,4 @@
-import BookmarkForm from '@/components/bookmarkForm';
+import BookmarkFormDialog from '@/components/bookmarkForm';
 import BookmarkList from '@/components/bookmarkList';
 import ErrorMessage from '@/components/errorMessage';
 import { getAllBookmarks } from '@/lib/actions/bookmarks/getAll';
@@ -18,7 +18,7 @@ export default async function BookmarksPage() {
       <PageHeader
         title="All bookmarks."
         actionButton={
-          <BookmarkForm
+          <BookmarkFormDialog
             triggerElement={
               <Button variant="outline">
                 Create Bookmark <PlusCircle className="ml-2" />

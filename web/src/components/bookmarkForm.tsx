@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { updateBookmark } from '../lib/actions/bookmarks/update';
 
-interface BookmarkFormProps {
+interface BookmarkFormDialogProps {
   triggerElement: React.ReactNode;
   bookmarkId?: number;
   defaultValues?: {
@@ -21,6 +21,7 @@ interface BookmarkFormProps {
     link?: string;
     description?: string | undefined;
   };
+  onClose?: () => void;
 }
 
 const formSchema = z.object({
@@ -29,13 +30,18 @@ const formSchema = z.object({
   description: z.string().optional(),
 });
 
-export default function BookmarkForm({ bookmarkId, defaultValues, triggerElement }: BookmarkFormProps) {
+export default function BookmarkFormDialog({
+  bookmarkId,
+  defaultValues,
+  triggerElement,
+  onClose,
+}: BookmarkFormDialogProps) {
+  const [open, setOpen] = useState(false);
+
   const isEditing = !!bookmarkId;
 
   const router = useRouter();
   const { toast } = useToast();
-
-  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,7 +57,6 @@ export default function BookmarkForm({ bookmarkId, defaultValues, triggerElement
     const response = isEditing ? await updateBookmark(bookmarkId!, values) : await createBookmark(values);
 
     if (response.success) {
-      setOpen(false);
       router.refresh();
       form.reset();
     } else {
@@ -61,6 +66,9 @@ export default function BookmarkForm({ bookmarkId, defaultValues, triggerElement
         variant: 'destructive',
       });
     }
+
+    setOpen(false);
+    onClose?.();
   };
 
   return (
@@ -68,7 +76,7 @@ export default function BookmarkForm({ bookmarkId, defaultValues, triggerElement
       <DialogTrigger asChild>{triggerElement}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create a bookmark</DialogTitle>
+          <DialogTitle>{isEditing ? 'Update bookmark' : 'Create new bookmark'}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
