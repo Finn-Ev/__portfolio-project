@@ -26,29 +26,26 @@ import { useToast } from './ui/toast/use-toast';
 import { Button } from './ui/button';
 import { deleteBookmark } from '../lib/actions/bookmarks/delete';
 import { useRouter } from 'next/navigation';
+import BookmarkForm from './bookmarkForm';
 
-export default function BookmarkListItem({ link, title, isFavourite, id }: Bookmark) {
+export default function BookmarkListItem({ id, link, title, isFavourite, description }: Bookmark) {
   const router = useRouter();
   const { toast } = useToast();
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  const [isFavouriteUIState, setIsFavouriteUIState] = useState(isFavourite);
-
   async function handleToggleFavourite() {
-    setIsFavouriteUIState(!isFavouriteUIState);
-
-    const { success, errorMessage } = await setFavourite(id, !isFavouriteUIState); // react has not yet updated the state here, so we need to use the opposite of isFavouriteUIState
+    const { success, errorMessage } = await setFavourite(id, !isFavourite); // react has not yet updated the state here, so we need to use the opposite of isFavouriteUIState
 
     if (!success) {
-      setIsFavouriteUIState(isFavouriteUIState);
       toast({
         title: 'Error',
         description: errorMessage ?? 'Something went wrong. Please try again.',
         variant: 'destructive',
       });
     }
+    router.refresh();
   }
 
   function handleEditBookmark() {
@@ -71,7 +68,7 @@ export default function BookmarkListItem({ link, title, isFavourite, id }: Bookm
       });
     }
 
-    router.refresh(); // refresh the page to reflect the changes
+    router.refresh();
 
     setIsDeleteDialogOpen(false);
   }
@@ -102,23 +99,31 @@ export default function BookmarkListItem({ link, title, isFavourite, id }: Bookm
                     onClick={handleToggleFavourite}
                   >
                     <Star
-                      fill={isFavouriteUIState ? '#FFD700 ' : 'none'}
-                      color={isFavouriteUIState ? '#FFD700 ' : 'black'}
+                      fill={isFavourite ? '#FFD700 ' : 'none'}
+                      color={isFavourite ? '#FFD700 ' : 'black'}
                     />
-                    {isFavouriteUIState ? 'Unfavourite' : 'Favourite'}
+                    {isFavourite ? 'Unfavourite' : 'Favourite'}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="flex items-center cursor-pointer gap-1"
                     onClick={handleEditBookmark}
                   >
-                    <Edit />
-                    Edit
+                    <BookmarkForm
+                      bookmarkId={id}
+                      defaultValues={{ title, link, description }}
+                      triggerElement={
+                        <>
+                          <Edit />
+                          Edit
+                        </>
+                      }
+                    />
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    className="flex items-center cursor-pointer gap-1 hover:text-destructive"
+                    className="flex items-center cursor-pointer gap-1"
                     onClick={() => setIsDeleteDialogOpen(true)}
                   >
-                    <Trash2 color="red" />
+                    <Trash2 />
                     Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -131,7 +136,7 @@ export default function BookmarkListItem({ link, title, isFavourite, id }: Bookm
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the bookmark.
             </AlertDialogDescription>

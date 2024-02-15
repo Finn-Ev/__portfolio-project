@@ -1,9 +1,7 @@
 'use client';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { PlusCircle } from 'lucide-react';
 import { Button } from './ui/button';
-import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { useToast } from './ui/toast/use-toast';
@@ -13,15 +11,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createBookmark } from '../lib/actions/bookmarks/create';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { updateBookmark } from '../lib/actions/bookmarks/update';
 
-// interface BookmarkFormProps {
-//   callback: () => void;
-//   defaultValues: {
-//     title: string;
-//     link: string;
-//     description?: string | undefined;
-//   };
-// }
+interface BookmarkFormProps {
+  triggerElement: React.ReactNode;
+  bookmarkId?: number;
+  defaultValues?: {
+    title?: string;
+    link?: string;
+    description?: string | undefined;
+  };
+}
 
 const formSchema = z.object({
   title: z.string().min(1, { message: 'Enter a title' }),
@@ -29,7 +29,9 @@ const formSchema = z.object({
   description: z.string().optional(),
 });
 
-export default function BookmarkForm() {
+export default function BookmarkForm({ bookmarkId, defaultValues, triggerElement }: BookmarkFormProps) {
+  const isEditing = !!bookmarkId;
+
   const router = useRouter();
   const { toast } = useToast();
 
@@ -41,17 +43,14 @@ export default function BookmarkForm() {
       title: '',
       link: '',
       description: '',
+      ...defaultValues,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = await createBookmark(values);
+    const response = isEditing ? await updateBookmark(bookmarkId!, values) : await createBookmark(values);
 
     if (response.success) {
-      toast({
-        title: 'Bookmark was created!',
-        variant: 'success',
-      });
       setOpen(false);
       router.refresh();
       form.reset();
@@ -66,11 +65,7 @@ export default function BookmarkForm() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">
-          Create Bookmark <PlusCircle className="ml-2" />
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{triggerElement}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create a bookmark</DialogTitle>
@@ -117,13 +112,10 @@ export default function BookmarkForm() {
               )}
             />
             <Button type="submit" className="mt-3 w-full">
-              Submit.
+              {isEditing ? 'Save.' : 'Submit.'}
             </Button>
           </form>
         </Form>
-        {/* <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );
