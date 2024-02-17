@@ -15,7 +15,7 @@ export default function BookmarkListColumn({
   setExpandedBookmarkId, // TODO: create a bookmarkList-context to prevent prop drilling
 }: BookmarkListProps) {
   return (
-    <ul className="flex flex-col gap-3 w-full">
+    <ul className="flex flex-col gap-3">
       {bookmarks!.map((bookmark, idx) => {
         return (
           <BookmarkListItem

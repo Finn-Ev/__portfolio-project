@@ -43,7 +43,7 @@ export default function BookmarkListItem({
     if (success) {
       toast({
         title: 'Bookmark updated',
-        description: `The bookmark has been marked as  ${isFavourite ? 'a' : 'no'} favourite.`,
+        description: `The bookmark has been marked as  ${isFavourite ? 'no' : 'a'} favourite.`,
       });
     } else {
       toast({
@@ -53,12 +53,11 @@ export default function BookmarkListItem({
       });
     }
 
-    setExpandedBookmarkId(id);
+    setExpandedBookmarkId(null);
     router.refresh();
   }
 
   async function handleDeleteBookmark() {
-    // setExpandedBookmarkId(null);
     const { success, errorMessage } = await deleteBookmark(id);
     if (success) {
       toast({
@@ -73,16 +72,13 @@ export default function BookmarkListItem({
       });
     }
 
+    setExpandedBookmarkId(null);
     router.refresh();
   }
 
   return (
-    <li>
-      <div
-        className={`group relative flex justify-between items-center bg-background text-foreground p-4 ${
-          isExpanded ? 'rounded-t-lg' : 'rounded-lg'
-        }`}
-      >
+    <li className="p-4 bg-background text-foreground rounded-lg">
+      <div className="relative flex justify-between items-center">
         <a href={link} target="_blank" className="flex items-center gap-2 hover:underline select-none">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -107,10 +103,10 @@ export default function BookmarkListItem({
         </div>
       </div>
       {isExpanded && (
-        <div className="flex flex-col p-4 rounded-b-lg bg-background select-none">
+        <div className="flex flex-col mt-2 select-none">
           {description && (
-            <div className="bg-background text-foreground w-full mr-4 mb-2">
-              <p>{description}</p>
+            <div className="bg-background leading-7 text-foreground mb-2">
+              <p className="overflow-x-auto">{description}</p>
             </div>
           )}
           <div className="w-full flex justify-between gap-2 ">

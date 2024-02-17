@@ -21,7 +21,7 @@ export default function BookmarkList({ emptyListText, bookmarks }: BookmarkListP
   // Otherwise, some resizing or repositioning or empty space would occur on the same row bookmarks
   if (width < 640) {
     return (
-      <div className="flex gap-3">
+      <div className="grid grid-cols-1 gap-3">
         <BookmarkListColumn
           bookmarks={bookmarks}
           expandedBookmarkId={expandedBookmarkId}
@@ -33,7 +33,7 @@ export default function BookmarkList({ emptyListText, bookmarks }: BookmarkListP
 
   if (width < 1024) {
     return (
-      <div className="flex gap-3">
+      <div className="grid grid-cols-2 gap-3">
         <BookmarkListColumn
           bookmarks={bookmarks.filter((_, idx) => idx % 2 === 0)}
           expandedBookmarkId={expandedBookmarkId}
@@ -50,7 +50,7 @@ export default function BookmarkList({ emptyListText, bookmarks }: BookmarkListP
 
   if (width < 1440) {
     return (
-      <div className="flex gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <BookmarkListColumn
           bookmarks={bookmarks.filter((_, idx) => idx % 3 === 0)}
           expandedBookmarkId={expandedBookmarkId}
@@ -71,7 +71,7 @@ export default function BookmarkList({ emptyListText, bookmarks }: BookmarkListP
   }
 
   return (
-    <div className="flex gap-3">
+    <div className="grid grid-cols-4 gap-3">
       <BookmarkListColumn
         bookmarks={bookmarks.filter((_, idx) => idx % 4 === 0)}
         expandedBookmarkId={expandedBookmarkId}

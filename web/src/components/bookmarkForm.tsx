@@ -76,7 +76,7 @@ export default function BookmarkFormDialog({
       <DialogTrigger asChild>{triggerElement}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{isEditing ? 'Update bookmark' : 'Create new bookmark'}</DialogTitle>
+          <DialogTitle>{isEditing ? 'Update bookmark.' : 'Create a new bookmark.'}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
