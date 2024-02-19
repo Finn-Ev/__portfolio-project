@@ -16,7 +16,7 @@ export default function BookmarkListColumn({
 }: BookmarkListProps) {
   return (
     <ul className="flex flex-col gap-3">
-      {bookmarks!.map((bookmark, idx) => {
+      {bookmarks!.map((bookmark) => {
         return (
           <BookmarkListItem
             key={bookmark.id}

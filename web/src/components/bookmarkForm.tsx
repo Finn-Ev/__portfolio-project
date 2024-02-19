@@ -21,7 +21,7 @@ interface BookmarkFormDialogProps {
     link?: string;
     description?: string | undefined;
   };
-  onClose?: () => void;
+  onClose?: () => void; // optional callback to be called when the dialog is closed
 }
 
 const formSchema = z.object({
