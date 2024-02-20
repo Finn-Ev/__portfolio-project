@@ -2,7 +2,7 @@ export type Bookmark = {
   id: number;
   title: string;
   link: string;
-  categoryId?: number;
+  categoryId: number;
   description?: string;
   isFavourite: boolean;
 

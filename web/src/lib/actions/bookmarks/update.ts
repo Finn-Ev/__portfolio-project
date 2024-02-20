@@ -5,8 +5,8 @@ import { fetchBackend } from '../fetchBackend';
 export async function updateBookmark(
   bookmarkId: number,
   data: {
-    title: string;
-    link: string;
+    title?: string;
+    link?: string;
     categoryId?: number;
     description?: string;
   },
