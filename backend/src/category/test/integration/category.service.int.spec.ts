@@ -3,7 +3,7 @@ import { CategoryService } from '../../category.service';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { ForbiddenException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UpdateCategoryDto } from '../../dto';
+import { CreateCategoryDto, UpdateCategoryDto } from '../../dto';
 
 describe('CategoryService', () => {
   let categoryService: CategoryService;
@@ -57,8 +57,9 @@ describe('CategoryService', () => {
 
   describe('create', () => {
     it('should create a new category', async () => {
-      const categoryDto = {
+      const categoryDto: CreateCategoryDto = {
         title: 'New Category',
+        description: 'A new category',
       };
 
       const { id: newCategoryId } = await categoryService.create(mainUserId, categoryDto);
@@ -70,6 +71,7 @@ describe('CategoryService', () => {
       expect(newCategory).toBeDefined();
       expect(newCategory.id).toBe(newCategoryId);
       expect(newCategory.title).toBe(categoryDto.title);
+      expect(newCategory.description).toBe(categoryDto.description);
     });
   });
 
