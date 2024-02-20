@@ -1,7 +1,7 @@
 'use client';
 
 import { Bookmark } from '@/lib/types';
-import BookmarkListItem from '@/components/bookmarkListItem';
+import BookmarkListItem from '@/components/bookmark-list-item';
 
 interface BookmarkListProps {
   bookmarks: Bookmark[];

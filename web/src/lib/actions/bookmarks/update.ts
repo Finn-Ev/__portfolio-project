@@ -1,6 +1,6 @@
 'use server';
 
-import { fetchBackend } from '../fetchBackend';
+import { fetchBackend } from '../fetch-backend';
 
 export async function updateBookmark(
   bookmarkId: number,

@@ -1,6 +1,6 @@
-import BookmarkList from '@/components/bookmarkList';
-import ErrorMessage from '@/components/errorMessage';
-import { getAllFavourites } from '../../../lib/actions/bookmarks/favourites/getAll';
+import BookmarkList from '@/components/bookmark-list';
+import ErrorMessage from '@/components/error-message';
+import { getAllFavourites } from '../../../lib/actions/bookmarks/favourites/get-all';
 import PageHeader from '../../../components/page-header';
 
 export default async function BookmarksPage() {

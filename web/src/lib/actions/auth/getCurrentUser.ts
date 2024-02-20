@@ -1,7 +1,7 @@
 'use server';
 
 import { User } from '../../types/user';
-import { fetchBackend } from '../fetchBackend';
+import { fetchBackend } from '../fetch-backend';
 
 export async function getCurrentUser(): Promise<User | null> {
   try {

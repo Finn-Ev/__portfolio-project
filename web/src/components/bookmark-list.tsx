@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { Bookmark } from '../lib/types';
-import useWindowResize from '../lib/utils/useWindowResize';
-import BookmarkListColumn from './bookmarkListColumn';
+import useWindowResize from '../lib/utils/use-window-resize';
+import BookmarkListColumn from './bookmark-list-column';
 
 interface BookmarkListProps {
   bookmarks: Bookmark[];

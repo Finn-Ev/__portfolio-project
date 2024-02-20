@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { fetchBackend } from '../fetchBackend';
+import { fetchBackend } from '../fetch-backend';
 import { USER_ROOT_CATEGORY_ID_COOKIE_NAME, USER_TOKEN_COOKIE_NAME } from '../../../constants';
 
 type AuthResponse = { access_token: string; root_category_id: number };
