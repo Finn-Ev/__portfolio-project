@@ -18,7 +18,7 @@ import { setFavourite } from '../lib/actions/bookmarks/favourites/set';
 import { useToast } from './ui/toast/use-toast';
 import { deleteBookmark } from '../lib/actions/bookmarks/delete';
 import { useRouter } from 'next/navigation';
-import BookmarkFormDialog from './bookmark-form';
+import BookmarkFormDialog from './bookmark-form-dialog';
 
 interface BookmarkListItemProps extends Bookmark {
   isExpanded: boolean;

@@ -1,4 +1,4 @@
-import BookmarkFormDialog from '@/components/bookmark-form';
+import BookmarkFormDialog from '@/components/bookmark-form-dialog';
 import BookmarkList from '@/components/bookmark-list';
 import ErrorMessage from '@/components/error-message';
 import { getAllBookmarks } from '@/lib/actions/bookmarks/get-all';
