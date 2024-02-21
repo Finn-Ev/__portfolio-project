@@ -26,7 +26,7 @@ export class BookmarkService {
     }
 
     return this.prismaService.bookmark.create({
-      // @ts-expect-error when category is not provided, it will be set to the root category
+      // @ts-expect-error when dto.categoryId is not provided, it has been set to the root category at this point
       data: {
         ...dto,
       },
