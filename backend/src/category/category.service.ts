@@ -19,8 +19,8 @@ export class CategoryService {
     });
   }
 
-  findAll(userId: number, includeBookmarks = true) {
-    return this.prismaService.category.findMany({
+  async findAll(userId: number, includeBookmarks = true) {
+    const categories = await this.prismaService.category.findMany({
       where: {
         userId,
       },
@@ -28,6 +28,16 @@ export class CategoryService {
         bookmarks: includeBookmarks,
       },
     });
+
+    // move the root category to the end of the array
+    const rootCategory = categories.find((category) => category.title === '__ROOT__');
+    if (rootCategory) {
+      const filteredCategories = categories.filter((category) => category.title !== '__ROOT__');
+      filteredCategories.push(rootCategory);
+      return filteredCategories;
+    }
+
+    return categories;
   }
 
   async findOne(userId: number, categoryId: number, includeBookmarks = true) {
@@ -95,7 +105,19 @@ export class CategoryService {
 
     if (!category) throw new ForbiddenException();
 
-    // because of the cascading delete, the user's bookmarks will be deleted as well
+    // move the bookmarks to the root category before deleting the category
+    await this.prismaService.bookmark.updateMany({
+      where: {
+        categoryId,
+      },
+      data: {
+        categoryId: rootCategoryId,
+      },
+    });
+
+    const allBookmarks = await this.prismaService.bookmark.findMany();
+    console.log({ allBookmarks });
+
     return this.prismaService.category.delete({
       where: {
         id: categoryId,

@@ -10,7 +10,11 @@ describe('CategoryService', () => {
   let prismaService: PrismaService;
 
   let mainUserId: number;
-  let mainCategoryId: number;
+  let mainUserRootCategoryId: number;
+  let mainUserTestCategoryId: number;
+
+  let categoryData: { userId: number; title: string; description: string };
+  let bookmarksData: { title: string; link: string; description: string; categoryId: number }[];
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -19,9 +23,9 @@ describe('CategoryService', () => {
 
     categoryService = module.get<CategoryService>(CategoryService);
     prismaService = module.get<PrismaService>(PrismaService);
-  });
 
-  beforeEach(async () => {
+    //////////////////////////
+    // set up the test data
     const mainUser = await prismaService.user.create({
       data: {
         pwHash: '#hash#',
@@ -31,27 +35,55 @@ describe('CategoryService', () => {
 
     mainUserId = mainUser.id;
 
+    const rootCategory = await prismaService.category.create({
+      data: {
+        userId: mainUser.id,
+        title: '__ROOT__',
+      },
+    });
+
+    mainUserRootCategoryId = rootCategory.id;
+
     // set root category
     await prismaService.user.update({
       where: {
         id: mainUser.id,
       },
       data: {
-        rootCategoryId: mainCategoryId,
+        rootCategoryId: rootCategory.id,
       },
     });
+
+    categoryData = { userId: mainUser.id, title: 'Test Category', description: 'A test category' };
 
     const mainCategory = await prismaService.category.create({
-      data: {
-        userId: mainUser.id,
-        title: 'Test Category',
-      },
+      data: categoryData,
     });
 
-    mainCategoryId = mainCategory.id;
+    mainUserTestCategoryId = mainCategory.id;
+
+    bookmarksData = [
+      {
+        title: 'Bookmark 1',
+        link: 'https://bookmark1.de',
+        description: 'A bookmark',
+        categoryId: mainUserTestCategoryId,
+      },
+      {
+        title: 'Bookmark 2',
+        link: 'https://bookmark2.de',
+        description: 'Another bookmark',
+        categoryId: mainUserTestCategoryId,
+      },
+    ];
+
+    // create sample bookmarks
+    await prismaService.bookmark.createMany({
+      data: bookmarksData,
+    });
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await prismaService.cleanDatabase();
   });
 
@@ -79,50 +111,27 @@ describe('CategoryService', () => {
 
   describe('findAll', () => {
     it('should return an array of categories', async () => {
-      await prismaService.category.deleteMany(); // delete the category created in beforeEach to avoid confusion
-
-      const newCategoriesData = [
-        {
-          userId: mainUserId,
-          title: 'Category 1',
-          description: 'My first category',
-        },
-        {
-          userId: mainUserId,
-          title: 'Category 2',
-          description: 'My second category',
-        },
-      ];
-
-      await prismaService.category.createMany({
-        data: newCategoriesData,
-      });
-
       const categories = await categoryService.findAll(mainUserId);
 
       expect(Array.isArray(categories)).toBe(true);
-      expect(categories.length).toBe(2);
+      expect(categories.length).toBe(3);
 
       expect(categories[0].userId).toBe(mainUserId);
       expect(categories[1].userId).toBe(mainUserId);
-
-      expect(categories[0].title).toBe(newCategoriesData[0].title);
-      expect(categories[1].title).toBe(newCategoriesData[1].title);
-
-      expect(categories[0].description).toBe(newCategoriesData[0].description);
-      expect(categories[1].description).toBe(newCategoriesData[1].description);
+      expect(categories[2].userId).toBe(mainUserId);
 
       expect(categories[0].bookmarks).toBeInstanceOf(Array);
       expect(categories[1].bookmarks).toBeInstanceOf(Array);
+      expect(categories[2].bookmarks).toBeInstanceOf(Array);
     });
   });
 
   describe('findOne', () => {
     it('should return the category with the specified ID', async () => {
-      const category = await categoryService.findOne(mainUserId, mainCategoryId);
+      const category = await categoryService.findOne(mainUserId, mainUserTestCategoryId);
 
       expect(category).toBeDefined();
-      expect(category.id).toBe(mainCategoryId);
+      expect(category.id).toBe(mainUserTestCategoryId);
     });
   });
 
@@ -132,15 +141,15 @@ describe('CategoryService', () => {
         title: 'Updated Category',
       };
 
-      await categoryService.update(mainUserId, mainCategoryId, editCategoryDto);
+      await categoryService.update(mainUserId, mainUserTestCategoryId, editCategoryDto);
 
       const editedCategory = await prismaService.category.findUnique({
-        where: { id: mainCategoryId },
+        where: { id: mainUserTestCategoryId },
         include: { bookmarks: true },
       });
 
       expect(editedCategory).toBeDefined();
-      expect(editedCategory!.id).toBe(mainCategoryId);
+      expect(editedCategory!.id).toBe(mainUserTestCategoryId);
       expect(editedCategory!.title).toBe(editCategoryDto.title);
       expect(editedCategory!.bookmarks).toBeInstanceOf(Array);
     });
@@ -178,30 +187,30 @@ describe('CategoryService', () => {
   });
 
   describe('remove', () => {
-    it('should delete the category with the specified ID and all corresponding bookmarks', async () => {
-      await categoryService.remove(mainUserId, mainCategoryId);
+    it('should delete the category with the specified ID and move the corresponding bookmarks to the root-category', async () => {
+      await categoryService.remove(mainUserId, mainUserTestCategoryId);
 
       const deletedCategory = await prismaService.category.findUnique({
         where: {
-          id: mainCategoryId,
+          id: mainUserTestCategoryId,
         },
       });
 
       expect(deletedCategory).toBeNull();
 
-      const deletedBookmarks = await prismaService.bookmark.findMany({
+      const movedBookmarks = await prismaService.bookmark.findMany({
         where: {
-          categoryId: mainCategoryId,
+          categoryId: mainUserRootCategoryId,
         },
       });
 
-      expect(deletedBookmarks.length).toBe(0);
+      expect(movedBookmarks.length).toBe(bookmarksData.length);
     });
 
     it('should throw ForbiddenException if user does not own the category', async () => {
       const secondUser = await prismaService.user.create({
         data: {
-          email: 'new@user.de',
+          email: 'new2@user.de',
           pwHash: '#hash#',
         },
       });
