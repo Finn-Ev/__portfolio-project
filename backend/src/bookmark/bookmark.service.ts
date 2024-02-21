@@ -12,9 +12,13 @@ export class BookmarkService {
 
   async create(userId: number, dto: CreateBookmarkDto) {
     if (!dto.categoryId) {
-      const rootCategory = await this.categoryService.findRootCategory(userId);
+      const { rootCategoryId } = await this.prismaService.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
 
-      dto.categoryId = rootCategory.id;
+      dto.categoryId = rootCategoryId;
     } else {
       const correspondingCategory = await this.categoryService.findOne(userId, dto.categoryId);
 

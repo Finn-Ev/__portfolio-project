@@ -29,7 +29,7 @@ export class CategoryController {
 
   @Get()
   findAll(@GetUser('id') userId: number) {
-    return this.categoryService.findAll(userId);
+    return this.categoryService.findAll(userId, true); // TODO: Add a query parameter to exclude bookmarks on demand
   }
 
   @Get(':id')

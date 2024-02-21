@@ -66,16 +66,18 @@ describe('CategoryService', () => {
 
       const newCategory = await prismaService.category.findUnique({
         where: { id: newCategoryId },
+        include: { bookmarks: true },
       });
 
       expect(newCategory).toBeDefined();
       expect(newCategory.id).toBe(newCategoryId);
       expect(newCategory.title).toBe(categoryDto.title);
       expect(newCategory.description).toBe(categoryDto.description);
+      expect(newCategory.bookmarks).toBeInstanceOf(Array);
     });
   });
 
-  describe('findAllFromUser', () => {
+  describe('findAll', () => {
     it('should return an array of categories', async () => {
       await prismaService.category.deleteMany(); // delete the category created in beforeEach to avoid confusion
 
@@ -109,10 +111,13 @@ describe('CategoryService', () => {
 
       expect(categories[0].description).toBe(newCategoriesData[0].description);
       expect(categories[1].description).toBe(newCategoriesData[1].description);
+
+      expect(categories[0].bookmarks).toBeInstanceOf(Array);
+      expect(categories[1].bookmarks).toBeInstanceOf(Array);
     });
   });
 
-  describe('findOneFromUser', () => {
+  describe('findOne', () => {
     it('should return the category with the specified ID', async () => {
       const category = await categoryService.findOne(mainUserId, mainCategoryId);
 
@@ -131,11 +136,13 @@ describe('CategoryService', () => {
 
       const editedCategory = await prismaService.category.findUnique({
         where: { id: mainCategoryId },
+        include: { bookmarks: true },
       });
 
       expect(editedCategory).toBeDefined();
       expect(editedCategory!.id).toBe(mainCategoryId);
       expect(editedCategory!.title).toBe(editCategoryDto.title);
+      expect(editedCategory!.bookmarks).toBeInstanceOf(Array);
     });
 
     it('should throw ForbiddenException if category does not belong to the user', async () => {

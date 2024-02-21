@@ -36,10 +36,9 @@ export class BookmarkController {
     return this.bookmarkService.findAll(userId);
   }
 
-  @Get('/category/:id')
-  findAllForCategory(@GetUser('id') userId: number, @Param('id', ParseIntPipe) categoryId: number) {
-    return this.bookmarkService.findAllForCategory(userId, categoryId);
-  }
+  //   not longer needed because the bookmarks can be accessed through the category
+  //   @Get('/category/:id')
+  //   findAllForCategory(@GetUser('id') userId: number, @Param('id', ParseIntPipe) categoryId: number)
 
   @Patch(':id')
   update(

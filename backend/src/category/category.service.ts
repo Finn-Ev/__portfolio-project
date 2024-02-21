@@ -13,22 +13,31 @@ export class CategoryService {
         userId,
         ...dto,
       },
-    });
-  }
-
-  findAll(userId: number) {
-    return this.prismaService.category.findMany({
-      where: {
-        userId,
+      include: {
+        bookmarks: true,
       },
     });
   }
 
-  async findOne(userId: number, categoryId: number) {
+  findAll(userId: number, includeBookmarks = true) {
+    return this.prismaService.category.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        bookmarks: includeBookmarks,
+      },
+    });
+  }
+
+  async findOne(userId: number, categoryId: number, includeBookmarks = true) {
     const category = await this.prismaService.category.findUnique({
       where: {
         userId,
         id: categoryId,
+      },
+      include: {
+        bookmarks: includeBookmarks,
       },
     });
 
@@ -37,20 +46,6 @@ export class CategoryService {
     }
 
     return category;
-  }
-
-  async findRootCategory(userId: number) {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    return await this.prismaService.category.findUnique({
-      where: {
-        id: user.rootCategoryId,
-      },
-    });
   }
 
   async update(userId: number, categoryId: number, dto: UpdateCategoryDto) {
@@ -70,6 +65,9 @@ export class CategoryService {
       data: {
         ...dto,
       },
+      include: {
+        bookmarks: true,
+      },
     });
   }
 
@@ -81,13 +79,18 @@ export class CategoryService {
       },
     });
 
-    const rootCategory = await this.findRootCategory(userId);
+    if (!category) {
+      throw new ForbiddenException('This category does not exist or does not belong to the user.');
+    }
 
-    if (rootCategory) {
-      // TODO this if-statement is only necessary for testing, because the root category gets deleted in the e2e tests.
-      if (category.id === rootCategory.id) {
-        throw new ForbiddenException('The root category cannot be deleted.');
-      }
+    const { rootCategoryId } = await this.prismaService.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (category.id === rootCategoryId) {
+      throw new ForbiddenException("The user's root category cannot be deleted.");
     }
 
     if (!category) throw new ForbiddenException();

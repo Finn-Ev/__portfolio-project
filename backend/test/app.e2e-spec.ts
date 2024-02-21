@@ -270,10 +270,10 @@ describe('App e2e', () => {
     });
 
     describe('BOOKMARKS', () => {
-      describe('GET /bookmarks/category/:categoryId', () => {
-        it('should get no bookmarks from the category', () => {
+      describe('GET /bookmarks', () => {
+        it('should get no bookmarks from the user', () => {
           return supertest(app.getHttpServer())
-            .get(`${bookmarksEndpoint}/category/${categoryId}`)
+            .get(`${bookmarksEndpoint}`)
             .set('Authorization', `Bearer ${userAccessToken}`)
             .expect(200)
             .expect((response) => {
@@ -297,18 +297,6 @@ describe('App e2e', () => {
             .expect(201)
             .then((response) => {
               bookmarkId = response.body.id;
-            });
-        });
-      });
-
-      describe('GET /bookmarks/category/:categoryId', () => {
-        it('should get all bookmarks of the category', () => {
-          return supertest(app.getHttpServer())
-            .get(`${bookmarksEndpoint}/category/${categoryId}`)
-            .set('Authorization', `Bearer ${userAccessToken}`)
-            .expect(200)
-            .expect((response) => {
-              expect(response.body.length).toBe(1);
             });
         });
       });
