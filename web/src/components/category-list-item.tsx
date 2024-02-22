@@ -1,4 +1,4 @@
-import { Trash2 } from 'lucide-react';
+import { Edit, Trash2 } from 'lucide-react';
 import { Category } from '../lib/types/category';
 import BookmarkList from './bookmark-list';
 import {
@@ -15,6 +15,7 @@ import {
 import { deleteCategory } from '../lib/actions/categories/delete';
 import { useToast } from './ui/toast/use-toast';
 import { useRouter } from 'next/navigation';
+import CategoryFormDialog from './category-form-dialog';
 
 const ROOT_CATEGORY_TITLE = '__ROOT__';
 
@@ -78,7 +79,17 @@ export default function CategoryListItem({ category }: CategoryListItemProps) {
               {category.description && <p className="mt-3 mb-2">{category.description}</p>}
             </div>
             <div>
-              <div className="flex items-center cursor-pointer gap-1">
+              <div className="flex items-center cursor-pointer gap-3">
+                <CategoryFormDialog
+                  categoryId={category.id}
+                  defaultValues={{ description: category.description, title: category.title }}
+                  triggerElement={
+                    <div className="flex items-center cursor-pointer gap-1">
+                      <Edit />
+                      Edit
+                    </div>
+                  }
+                />
                 <AlertDialog>
                   <AlertDialogTrigger className="flex items-center gap-1">
                     <Trash2 />
@@ -103,8 +114,11 @@ export default function CategoryListItem({ category }: CategoryListItemProps) {
           </div>
         </div>
         <div>
-          {categoryIsEmpty && <p className="p-4">This category is empty</p>}
-          <BookmarkList bookmarks={category.bookmarks} />
+          {categoryIsEmpty ? (
+            <p className="p-4">This category is empty</p>
+          ) : (
+            <BookmarkList bookmarks={category.bookmarks} />
+          )}
         </div>
       </div>
     </>
