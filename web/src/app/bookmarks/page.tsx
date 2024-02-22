@@ -21,7 +21,7 @@ export default async function BookmarksPage() {
           <BookmarkFormDialog
             triggerElement={
               <Button variant="outline">
-                Create Bookmark <PlusCircle className="ml-2" />
+                Create bookmark <PlusCircle className="ml-2" />
               </Button>
             }
           />
