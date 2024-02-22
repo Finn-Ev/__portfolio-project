@@ -20,7 +20,7 @@ interface CategoryFormDialogProps {
     title?: string;
     description?: string | undefined;
   };
-  onClose?: () => void; // optional callback to be called when the dialog is closed
+  onClose?: () => void; // optional callback to be called when the dialog gets closed
 }
 
 const formSchema = z.object({
@@ -45,8 +45,8 @@ export default function CategoryFormDialog({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
-
       description: '',
+      ...defaultValues,
     },
   });
 
@@ -55,7 +55,7 @@ export default function CategoryFormDialog({
 
     if (response.success) {
       router.refresh();
-      form.reset();
+      if (!isEditing) form.reset(); // only reset the form if we're creating a new category; otherwise the form would have the original values from before editing the category
     } else {
       toast({
         title: 'Error',

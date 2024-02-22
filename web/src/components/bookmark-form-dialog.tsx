@@ -58,7 +58,7 @@ export default function BookmarkFormDialog({
 
     if (response.success) {
       router.refresh();
-      form.reset();
+      if (!isEditing) form.reset(); // only reset the form if we're creating a new bookmark; otherwise the form would have the original values from before editing the bookmark
     } else {
       toast({
         title: 'Error',
