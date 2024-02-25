@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { authenticateUser } from '../../../lib/actions/auth';
+import showErrorToast from '@/lib/utils/show-error-toast';
 
 const formSchema = z
   .object({
@@ -51,11 +52,7 @@ export default function AuthForm() {
       });
       router.push('/bookmarks');
     } else {
-      toast({
-        title: 'Error',
-        description: errorMessage ?? 'An error occurred. Please try again.',
-        variant: 'destructive',
-      });
+      showErrorToast(errorMessage);
     }
   };
 

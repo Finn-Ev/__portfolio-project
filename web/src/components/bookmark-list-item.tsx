@@ -19,6 +19,7 @@ import { useToast } from './ui/toast/use-toast';
 import { deleteBookmark } from '../lib/actions/bookmarks/delete';
 import { useRouter } from 'next/navigation';
 import BookmarkFormDialog from './bookmark-form-dialog';
+import showErrorToast from '../lib/utils/show-error-toast';
 
 interface BookmarkListItemProps extends Bookmark {
   isExpanded: boolean;
@@ -38,7 +39,7 @@ export default function BookmarkListItem({
   const { toast } = useToast();
 
   async function handleToggleFavourite() {
-    const { success, errorMessage } = await setFavourite(id, !isFavourite); // react has not yet updated the state here, so we need to use the opposite of isFavouriteUIState
+    const { success, errorMessage } = await setFavourite(id, !isFavourite);
 
     if (success) {
       toast({
@@ -46,11 +47,7 @@ export default function BookmarkListItem({
         description: `The bookmark has been marked as  ${isFavourite ? 'no' : 'a'} favourite.`,
       });
     } else {
-      toast({
-        title: 'Error',
-        description: errorMessage ?? 'Something went wrong. Please try again.',
-        variant: 'destructive',
-      });
+      showErrorToast(errorMessage);
     }
 
     setExpandedBookmarkId(null);
@@ -65,11 +62,7 @@ export default function BookmarkListItem({
         description: 'The bookmark has been deleted.',
       });
     } else {
-      toast({
-        title: 'Error',
-        description: errorMessage ?? 'Something went wrong. Please try again.',
-        variant: 'destructive',
-      });
+      showErrorToast(errorMessage);
     }
 
     setExpandedBookmarkId(null);

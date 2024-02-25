@@ -16,6 +16,7 @@ import { deleteCategory } from '../lib/actions/categories/delete';
 import { useToast } from './ui/toast/use-toast';
 import { useRouter } from 'next/navigation';
 import CategoryFormDialog from './category-form-dialog';
+import showErrorToast from '@/lib/utils/show-error-toast';
 
 const ROOT_CATEGORY_TITLE = '__ROOT__';
 
@@ -39,11 +40,7 @@ export default function CategoryListItem({ category }: CategoryListItemProps) {
         description: 'The category has been deleted.',
       });
     } else {
-      toast({
-        title: 'Error',
-        description: errorMessage ?? 'Something went wrong. Please try again.',
-        variant: 'destructive',
-      });
+      showErrorToast(errorMessage);
     }
 
     router.refresh();

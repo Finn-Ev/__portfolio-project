@@ -12,6 +12,7 @@ import { createBookmark } from '../lib/actions/bookmarks/create';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { updateBookmark } from '../lib/actions/bookmarks/update';
+import showErrorToast from '@/lib/utils/show-error-toast';
 
 interface BookmarkFormDialogProps {
   triggerElement: React.ReactNode;
@@ -54,17 +55,15 @@ export default function BookmarkFormDialog({
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = isEditing ? await updateBookmark(bookmarkId!, values) : await createBookmark(values);
+    const { success, errorMessage } = isEditing
+      ? await updateBookmark(bookmarkId!, values)
+      : await createBookmark(values);
 
-    if (response.success) {
+    if (success) {
       router.refresh();
       if (!isEditing) form.reset(); // only reset the form if we're creating a new bookmark; otherwise the form would have the original values from before editing the bookmark
     } else {
-      toast({
-        title: 'Error',
-        description: response.errorMessage ?? 'Something went wrong. Please try again.',
-        variant: 'destructive',
-      });
+      showErrorToast(errorMessage);
     }
 
     setOpen(false);

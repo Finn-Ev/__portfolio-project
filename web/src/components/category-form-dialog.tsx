@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { createCategory } from '../lib/actions/categories/create';
 import { updateCategory } from '../lib/actions/categories/update';
+import showErrorToast from '@/lib/utils/show-error-toast';
 
 interface CategoryFormDialogProps {
   triggerElement: React.ReactNode;
@@ -51,17 +52,15 @@ export default function CategoryFormDialog({
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = isEditing ? await updateCategory(categoryId!, values) : await createCategory(values);
+    const { success, errorMessage } = isEditing
+      ? await updateCategory(categoryId!, values)
+      : await createCategory(values);
 
-    if (response.success) {
+    if (success) {
       router.refresh();
       if (!isEditing) form.reset(); // only reset the form if we're creating a new category; otherwise the form would have the original values from before editing the category
     } else {
-      toast({
-        title: 'Error',
-        description: response.errorMessage ?? 'Something went wrong. Please try again.',
-        variant: 'destructive',
-      });
+      showErrorToast(errorMessage);
     }
 
     setOpen(false);

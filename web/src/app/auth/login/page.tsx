@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import showErrorToast from '@/lib/utils/show-error-toast';
 
 const formSchema = z.object({
   email: z
@@ -37,11 +38,7 @@ export default function AuthForm() {
       });
       router.push('/bookmarks');
     } else {
-      toast({
-        title: 'Error',
-        description: errorMessage ?? 'Something went wrong. Please try again.',
-        variant: 'destructive',
-      });
+      showErrorToast(errorMessage);
     }
   };
 

@@ -7,6 +7,7 @@
 // import { zodResolver } from '@hookform/resolvers/zod';
 // import { Button } from '@/components/ui/button';
 // import { Input } from '@/components/ui/input';
+// import showErrorToast from '@/lib/utils/show-error-toast';
 
 // import { z } from 'zod';
 // import { useForm } from 'react-hook-form';
@@ -68,11 +69,7 @@
 //       });
 //       router.push('/bookmarks');
 //     } else {
-//       toast({
-//         title: 'Error',
-//         description: 'Something went wrong. Please try again.',
-//         variant: 'destructive',
-//       });
+//       showErrorToast(errorMessage);
 //     }
 //   };
 
