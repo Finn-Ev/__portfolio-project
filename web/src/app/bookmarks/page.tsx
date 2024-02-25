@@ -2,8 +2,8 @@ import BookmarkFormDialog from '@/components/bookmark-form-dialog';
 import BookmarkList from '@/components/bookmark-list';
 import ErrorMessage from '@/components/error-message';
 import { getAllBookmarks } from '@/lib/actions/bookmarks/get-all';
-import PageHeader from '../../components/page-header';
-import { Button } from '../../components/ui/button';
+import PageHeader from '@/components/page-header';
+import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
 
 export default async function BookmarksPage() {

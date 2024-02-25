@@ -1,5 +1,5 @@
-import LogoutBtn from '../../../components/logout-btn';
-import { getCurrentUser } from '../../../lib/actions/auth';
+import LogoutBtn from '@/components/logout-btn';
+import { getCurrentUser } from '@/lib/actions/auth';
 
 export default async function page() {
   const user = await getCurrentUser();

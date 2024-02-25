@@ -1,8 +1,8 @@
 'use server';
 
-type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PATCH';
-
 import { cookies } from 'next/headers';
+
+type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PATCH';
 
 export async function fetchBackend<T>(
   method: HttpMethod,

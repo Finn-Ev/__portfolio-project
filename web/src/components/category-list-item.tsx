@@ -1,6 +1,6 @@
 import { Edit, Trash2 } from 'lucide-react';
-import { Category } from '../lib/types/category';
-import BookmarkList from './bookmark-list';
+import { Category } from '@/lib/types/category';
+import BookmarkList from '@/components/bookmark-list';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,11 +11,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from './ui/alert-dialog';
-import { deleteCategory } from '../lib/actions/categories/delete';
-import { useToast } from './ui/toast/use-toast';
+} from '@/components/ui/alert-dialog';
+import { deleteCategory } from '@/lib/actions/categories/delete';
+import { useToast } from '@/components/ui/toast/use-toast';
 import { useRouter } from 'next/navigation';
-import CategoryFormDialog from './category-form-dialog';
+import CategoryFormDialog from '@/components/category-form-dialog';
 import showErrorToast from '@/lib/utils/show-error-toast';
 
 const ROOT_CATEGORY_TITLE = '__ROOT__';

@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { USER_TOKEN_COOKIE_NAME } from './constants';
+import { USER_TOKEN_COOKIE_NAME } from '@/constants';
 
 export async function middleware(request: NextRequest) {
   const userToken = cookies().get(USER_TOKEN_COOKIE_NAME)?.value;

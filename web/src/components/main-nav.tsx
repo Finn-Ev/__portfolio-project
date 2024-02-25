@@ -1,11 +1,10 @@
 'use client';
 
 import { AlignLeft, Book, PanelTopClose, Star, User } from 'lucide-react';
-import ThemeToggle from './theme-toggle';
+import ThemeToggle from '@/components/theme-toggle';
 import { useState } from 'react';
-import { cn } from '../lib/utils/cn';
+import { cn } from '@/lib/utils/cn';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 export default function MainNav() {
   const [expanded, setExpanded] = useState(false);

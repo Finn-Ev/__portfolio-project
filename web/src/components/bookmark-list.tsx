@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Bookmark } from '../lib/types';
-import useWindowResize from '../lib/utils/use-window-resize';
-import BookmarkListColumn from './bookmark-list-column';
+import { Bookmark } from '@/lib/types';
+import useWindowResize from '@/lib/utils/use-window-resize';
+import BookmarkListColumn from '@/components/bookmark-list-column';
 
 interface BookmarkListProps {
   bookmarks: Bookmark[];

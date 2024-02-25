@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronDown, Edit, Star, Trash2 } from 'lucide-react';
-import { Bookmark } from '../lib/types';
+import { Bookmark } from '@/lib/types';
 
 import {
   AlertDialog,

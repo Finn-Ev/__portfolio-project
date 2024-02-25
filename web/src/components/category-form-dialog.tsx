@@ -1,17 +1,17 @@
 'use client';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
-import { useToast } from './ui/toast/use-toast';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useToast } from '@/components/ui/toast/use-toast';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { createCategory } from '../lib/actions/categories/create';
-import { updateCategory } from '../lib/actions/categories/update';
+import { createCategory } from '@/lib/actions/categories/create';
+import { updateCategory } from '@/lib/actions/categories/update';
 import showErrorToast from '@/lib/utils/show-error-toast';
 
 interface CategoryFormDialogProps {

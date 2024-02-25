@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { fetchBackend } from '../fetch-backend';
+import { fetchBackend } from '@/lib/actions/fetch-backend';
 import { USER_ROOT_CATEGORY_ID_COOKIE_NAME } from '../../../constants';
 
 export async function createBookmark(data: {

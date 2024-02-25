@@ -1,7 +1,7 @@
 import BookmarkList from '@/components/bookmark-list';
 import ErrorMessage from '@/components/error-message';
-import { getAllFavourites } from '../../../lib/actions/bookmarks/favourites/get-all';
-import PageHeader from '../../../components/page-header';
+import { getAllFavourites } from '@/lib/actions/bookmarks/favourites/get-all';
+import PageHeader from '@/components/page-header';
 
 export default async function BookmarksPage() {
   const { value: bookmarks, errorMessage, success } = await getAllFavourites();

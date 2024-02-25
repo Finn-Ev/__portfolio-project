@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useToast } from '../../../components/ui/toast/use-toast';
-import { authenticateUser } from '../../../lib/actions/auth';
+import { useToast } from '@/components/ui/toast/use-toast';
+import { authenticateUser } from '@/lib/actions/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '../../../components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 import { z } from 'zod';

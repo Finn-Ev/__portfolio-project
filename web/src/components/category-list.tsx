@@ -1,7 +1,7 @@
 'use client';
 
-import { Category } from '../lib/types/category';
-import CategoryListItem from './category-list-item';
+import { Category } from '@/lib/types/category';
+import CategoryListItem from '@/components/category-list-item';
 
 interface CategoryListProps {
   categories: Category[];
