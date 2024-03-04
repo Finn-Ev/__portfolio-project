@@ -20,23 +20,15 @@ import { deleteBookmark } from '../lib/actions/bookmarks/delete';
 import { useRouter } from 'next/navigation';
 import BookmarkFormDialog from './bookmark-form-dialog';
 import showErrorToast from '../lib/utils/show-error-toast';
+import { useBookmarkListContext } from '../providers';
 
-interface BookmarkListItemProps extends Bookmark {
-  isExpanded: boolean;
-  setExpandedBookmarkId: (id: number | null) => void;
-}
-
-export default function BookmarkListItem({
-  id,
-  link,
-  title,
-  isFavourite,
-  description,
-  isExpanded,
-  setExpandedBookmarkId,
-}: BookmarkListItemProps) {
+export default function BookmarkListItem({ id, link, title, isFavourite, description }: Bookmark) {
   const router = useRouter();
   const { toast } = useToast();
+
+  const { expandedBookmarkId, setExpandedBookmarkId } = useBookmarkListContext();
+
+  const isExpanded = expandedBookmarkId === id;
 
   async function handleToggleFavourite() {
     const { success, errorMessage } = await setFavourite(id, !isFavourite);

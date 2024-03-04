@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 
 function useWindowResize() {
-  const [windowSize, setWindowSize] = useState({
-    width: 0,
-    height: 0,
+  const [windowSize, setWindowSize] = useState<{ width: number | null; height: number | null }>({
+    width: null,
+    height: null,
   });
 
   useEffect(() => {
@@ -15,6 +15,8 @@ function useWindowResize() {
         height: window.innerHeight,
       });
     };
+
+    handleResize(); // Set initial window size
 
     window.addEventListener('resize', handleResize);
 
