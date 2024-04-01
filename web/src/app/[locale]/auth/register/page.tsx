@@ -18,8 +18,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { authenticateUser } from '../../../lib/actions/auth';
+import { authenticateUser } from '../../../../lib/actions/auth';
 import showErrorToast from '@/lib/utils/show-error-toast';
+import { useTranslations } from 'next-intl';
 
 const formSchema = z
   .object({
@@ -36,6 +37,8 @@ const formSchema = z
   });
 
 export default function AuthForm() {
+  const t = useTranslations('Auth');
+
   const router = useRouter();
   const { toast } = useToast();
 
@@ -58,7 +61,7 @@ export default function AuthForm() {
 
   return (
     <>
-      <h1 className="text-2xl mb-6">Register a new account.</h1>
+      <h1 className="text-2xl mb-6">{t('registerTitle')}</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
           <FormField

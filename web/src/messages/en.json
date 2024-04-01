@@ -1,0 +1,9 @@
+{
+    "Index": {
+        "title": "Hello world!"
+    },
+    "Auth": {
+        "registerTitle": "Register a new account.",
+        "loginTitle": "Login to my account."
+    }
+}

@@ -5,6 +5,7 @@ import ThemeToggle from '@/components/theme-toggle';
 import { useState } from 'react';
 import { cn } from '@/lib/utils/cn';
 import Link from 'next/link';
+import LanguageSelect from './language-select';
 
 export default function MainNav() {
   const [expanded, setExpanded] = useState(false);
@@ -91,6 +92,8 @@ export default function MainNav() {
             Favourites
           </span>
         </Link>
+
+        <LanguageSelect />
       </div>
     </div>
   );
