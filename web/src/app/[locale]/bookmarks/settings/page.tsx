@@ -1,7 +1,9 @@
 import LogoutBtn from '@/components/logout-btn';
 import { getCurrentUser } from '@/lib/actions/auth';
+import { getTranslations } from 'next-intl/server';
 
-export default async function page() {
+export default async function Page() {
+  const t = await getTranslations('Auth');
   const user = await getCurrentUser();
 
   if (!user) {
@@ -10,7 +12,7 @@ export default async function page() {
 
   return (
     <div className=" p-4 flex flex-col gap-4">
-      Logged in as {user!.email}
+      {t('loggedInAsText')} {user!.email}
       <LogoutBtn className="max-w-64" />
     </div>
   );

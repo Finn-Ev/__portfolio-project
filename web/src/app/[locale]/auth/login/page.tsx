@@ -12,18 +12,21 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import showErrorToast from '@/lib/utils/show-error-toast';
-
-const formSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: 'Enter an e-mail address' })
-    .email({ message: 'Invalid e-mail address' }),
-  password: z.string().min(8, { message: 'Your password is at least 8 characters long' }),
-});
+import { useTranslations } from 'next-intl';
 
 export default function AuthForm() {
+  const t = useTranslations('Auth');
+
   const router = useRouter();
   const { toast } = useToast();
+
+  const formSchema = z.object({
+    email: z
+      .string()
+      .min(1, { message: t('emailEmpty') })
+      .email({ message: t('emailInvalid') }),
+    password: z.string().min(8, { message: t('loginPasswordTooShort') }),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,7 +37,7 @@ export default function AuthForm() {
 
     if (success) {
       toast({
-        title: "You're logged in",
+        title: t('loginSuccessMessage'),
       });
       router.push('/bookmarks');
     } else {
@@ -44,7 +47,7 @@ export default function AuthForm() {
 
   return (
     <>
-      <h1 className="text-2xl mb-6">Login to your account.</h1>
+      <h1 className="text-2xl mb-6">{t('loginTitle')}</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
           <FormField
@@ -52,7 +55,7 @@ export default function AuthForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-foreground">E-mail address</FormLabel>
+                <FormLabel className="text-foreground">{t('emailLabel')}</FormLabel>
                 <FormControl>
                   <Input type="email" placeholder="" {...field} />
                 </FormControl>
@@ -65,7 +68,7 @@ export default function AuthForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-foreground">Password</FormLabel>
+                <FormLabel className="text-foreground">{t('passwordLabel')}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -74,13 +77,15 @@ export default function AuthForm() {
             )}
           />
           <Button type="submit" className="mt-3 w-full">
-            Login.
+            {t('loginButtonLabel')}
           </Button>
         </form>
       </Form>
 
-      <Link href="/auth/register" className="flex justify-center">
-        <Button variant={'link'}>Don't have an account?</Button>
+      <Link href="/auth/register" className="flex justify-center mt-3">
+        <Button variant={'link'} className="underline">
+          {t('doNotHaveAccountText')}
+        </Button>
       </Link>
     </>
   );

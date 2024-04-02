@@ -4,12 +4,14 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { logout } from '@/lib/actions/auth';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 interface LogoutBtnProps {
   className?: string;
 }
 
 export default function LogoutBtn({ className }: LogoutBtnProps) {
+  const t = useTranslations('Auth');
   const router = useRouter();
 
   async function handleLogout() {
@@ -20,7 +22,7 @@ export default function LogoutBtn({ className }: LogoutBtnProps) {
 
   return (
     <Button className={className} onClick={handleLogout}>
-      Logout
+      {t('logoutButtonLabel')}
     </Button>
   );
 }

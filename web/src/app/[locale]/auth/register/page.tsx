@@ -22,25 +22,25 @@ import { authenticateUser } from '../../../../lib/actions/auth';
 import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
 
-const formSchema = z
-  .object({
-    email: z
-      .string()
-      .min(1, { message: 'Enter an e-mail address' })
-      .email({ message: 'Invalid e-mail address' }),
-    password: z.string().min(8, { message: 'Password is too short' }),
-    passwordConfirmation: z.string().min(8, { message: 'Password is too short' }),
-  })
-  .refine((data) => data.password === data.passwordConfirmation, {
-    message: "Passwords don't match",
-    path: ['passwordConfirmation'],
-  });
-
 export default function AuthForm() {
   const t = useTranslations('Auth');
 
   const router = useRouter();
   const { toast } = useToast();
+
+  const formSchema = z
+    .object({
+      email: z
+        .string()
+        .min(1, { message: t('emailEmpty') })
+        .email({ message: t('emailInvalid') }),
+      password: z.string().min(8, { message: t('registrationPasswordTooShort') }),
+      passwordConfirmation: z.string().min(8, { message: t('registrationPasswordTooShort') }),
+    })
+    .refine((data) => data.password === data.passwordConfirmation, {
+      message: t('passwordsDoNotMatch'),
+      path: ['passwordConfirmation'],
+    });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,7 +51,7 @@ export default function AuthForm() {
 
     if (success) {
       toast({
-        title: "You're registered!",
+        title: t('registerSuccessMessage'),
       });
       router.push('/bookmarks');
     } else {
@@ -69,7 +69,7 @@ export default function AuthForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-foreground">E-mail address</FormLabel>
+                <FormLabel className="text-foreground">{t('emailLabel')}</FormLabel>
                 <FormControl>
                   <Input placeholder="" {...field} />
                 </FormControl>
@@ -82,12 +82,12 @@ export default function AuthForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-foreground">Password</FormLabel>
+                <FormLabel className="text-foreground">{t('passwordLabel')}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
                 <FormMessage />
-                <FormDescription>Must be at least 8 characters long</FormDescription>
+                <FormDescription>{t('passwordHint')}</FormDescription>
               </FormItem>
             )}
           />
@@ -96,7 +96,7 @@ export default function AuthForm() {
             name="passwordConfirmation"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-foreground">Confirm Password</FormLabel>
+                <FormLabel className="text-foreground">{t('passwordConfirmationLabel')}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -105,13 +105,15 @@ export default function AuthForm() {
             )}
           />
           <Button type="submit" className="mt-3 w-full">
-            Register.
+            {t('registerButtonLabel')}
           </Button>
         </form>
       </Form>
 
-      <Link href="/auth/login" className="flex justify-center">
-        <Button variant={'link'}>Already have an account?</Button>
+      <Link href="/auth/login" className="flex justify-center mt-3">
+        <Button variant={'link'} className="underline">
+          {t('alreadyHaveAccountText')}
+        </Button>
       </Link>
     </>
   );

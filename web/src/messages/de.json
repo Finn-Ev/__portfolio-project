@@ -1,9 +1,25 @@
 {
-    "Index": {
-        "title": "Hallo Welt!"
-    },
     "Auth": {
+        "welcomeText": "Willkommen zu dieser App.",
+        "welcomeInstruction": "Bitte melde dich zunächst an.",
         "registerTitle": "Neuen Account erstellen.",
-        "loginTitle": "In meinen Account einloggen."
+        "registerButtonLabel": "Registrieren.",
+        "loginTitle": "Bei meinem Account anmelden.",
+        "loginButtonLabel": "Anmelden.",
+        "emailLabel": "E-Mail-Adresse",
+        "passwordLabel": "Passwort",
+        "passwordConfirmationLabel": "Passwort bestätigen",
+        "passwordHint": "Mindestens 8 Zeichen",
+        "emailEmpty": "Gib eine E-Mail-Adresse ein",
+        "emailInvalid": "Gib eine gültige E-Mail-Adresse ein",
+        "registrationPasswordTooShort": "Das Passwort ist zu kurz",
+        "loginPasswordTooShort": "Dein Passwort ist min. 8 Zeichen lang",
+        "passwordsDoNotMatch": "Die Passwörter stimmen nicht überein",
+        "registerSuccessMessage": "Account erfolgreich erstellt.",
+        "loginSuccessMessage": "Du bist nun angemeldet.",
+        "alreadyHaveAccountText": "Ich habe bereits einen Account",
+        "doNotHaveAccountText": "Ich habe  noch keinen Account",
+        "logoutButtonLabel": "Abmelden",
+        "loggedInAsText": "Angemeldet als"
     }
 }

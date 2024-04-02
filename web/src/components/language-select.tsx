@@ -1,3 +1,5 @@
+'use client';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +20,12 @@ export default function LanguageSelect(props: LanguageSelectProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem>
-            <Link locale="en" href="" className="flex items-center gap-1">
+            <Link
+              locale="en"
+              href=""
+              className="flex items-center gap-1"
+              onClick={() => window.location.reload()}
+            >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 30" width="20" height="15">
                 <clipPath id="t">
                   <path d="M25,15h25v15zv15h-25zh-25v-15zv-15h25z" />
@@ -37,7 +44,12 @@ export default function LanguageSelect(props: LanguageSelectProps) {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link locale="de" href="" className="flex items-center gap-1">
+            <Link
+              locale="de"
+              href=""
+              className="flex items-center gap-1"
+              onClick={() => window.location.reload()}
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 5 3">
                 <desc>Flag of Germany</desc>
                 <rect id="black_stripe" width="5" height="3" y="0" x="0" fill="#000" />
