@@ -27,11 +27,11 @@ export default function BookmarkListSortSelect() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>Sort order</DropdownMenuLabel>
-        <DropdownMenuItem onClick={() => changeSortConfig({ ...sortConfig, direction: SORT_DIRECTION.ASC })}>
-          Ascending {sortConfig.direction === SORT_DIRECTION.ASC && <Check className="ml-1" />}
-        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => changeSortConfig({ ...sortConfig, direction: SORT_DIRECTION.DESC })}>
-          Descending {sortConfig.direction === SORT_DIRECTION.DESC && <Check className="ml-1" />}
+          Newest first {sortConfig.direction === SORT_DIRECTION.DESC && <Check className="ml-1" />}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => changeSortConfig({ ...sortConfig, direction: SORT_DIRECTION.ASC })}>
+          Oldest first {sortConfig.direction === SORT_DIRECTION.ASC && <Check className="ml-1" />}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
