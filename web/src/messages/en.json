@@ -21,5 +21,49 @@
         "doNotHaveAccountText": "Already have an account?",
         "logoutButtonLabel": "Logout",
         "loggedInAsText": "Logged in as"
+    },
+    "Navbar": {
+        "bookmarksLinkLabel": "Bookmarks",
+        "categoriesLinkLabel": "Categories",
+        "favouritesLinkLabel": "Favourites"
+    },
+    "Bookmark": {
+        "bookmarkPageTitle": "All bookmarks.",
+        "createModalTitle": "Create a new bookmark.",
+        "createButtonLabel": "Create bookmark",
+        "editModalTitle": "Update bookmark.",
+        "favouriteButtonLabel": "Favourite",
+        "unfavouriteButtonLabel": "Unfavorite",
+        "editButtonLabel": "Edit",
+        "deleteButtonLabel": "Delete",
+        "noBookmarksText": "You haven't created any bookmarks yet.",
+        "createFormLinkLabel": "Link",
+        "createFormLinkPlaceholder": "https://example.com",
+        "formSubmitButtonLabel": "Submit",
+        "formTitleLabel": "Title",
+        "formDescriptionLabel": "Description (optional)"
+    },
+    "Category": {
+        "categoryPageTitle": "All categories.",
+        "createCategoryModalTitle": "Create a new category.",
+        "createCategoryButtonLabel": "Create category",
+        "noCategoriesText": "You haven't created any categories yet.",
+        "emptyCategoryText": "This category is empty.",
+        "uncategorisedCategoryText": "Uncategorised bookmarks:",
+        "formSubmitButtonLabel": "Submit",
+        "formTitleLabel": "Title",
+        "formDescriptionLabel": "Description (optional)"
+    },
+    "Favourites": {
+        "categoryPageTitle": "Your favourite bookmarks.",
+        "noFavouritesText": "You haven't marked any bookmarks as a favourite yet."
+    },
+    "SortDropdown": {
+        "sortByLabel": "Sort by",
+        "updatedAtLabel": "Updated at",
+        "createdAtLabel": "Created at",
+        "sortOrderLabel": "Sort order",
+        "descendingLabel": "Newest first",
+        "ascendingLabel": "Oldest first"
     }
 }
