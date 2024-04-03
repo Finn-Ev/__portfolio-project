@@ -1,9 +1,16 @@
-// export default function Home() {
-//   return <div>Welcome to this application!</div>;
-// }
-
-import { useTranslations } from 'next-intl';
+import { redirect } from '@/navigation';
+import { cookies } from 'next/headers';
+import { USER_TOKEN_COOKIE_NAME } from '../../constants';
 
 export default function Index() {
-  return <h1>Index</h1>;
+  if (cookies().get(USER_TOKEN_COOKIE_NAME)?.value) {
+    redirect('/bookmarks');
+  } else {
+    redirect('/auth');
+  }
+  //   useEffect(() => {
+  //     redirect('/bookmarks');
+  //   }, []);
+
+  return null;
 }
