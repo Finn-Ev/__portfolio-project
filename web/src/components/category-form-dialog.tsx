@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { createCategory } from '@/lib/actions/categories/create';
 import { updateCategory } from '@/lib/actions/categories/update';
 import showErrorToast from '@/lib/utils/show-error-toast';
+import { useTranslations } from 'next-intl';
 
 interface CategoryFormDialogProps {
   triggerElement: React.ReactNode;
@@ -24,23 +25,24 @@ interface CategoryFormDialogProps {
   onClose?: () => void; // optional callback to be called when the dialog gets closed
 }
 
-const formSchema = z.object({
-  title: z.string().min(1, { message: 'Enter a title' }),
-  description: z.string().optional(),
-});
-
 export default function CategoryFormDialog({
   categoryId,
   defaultValues,
   triggerElement,
   onClose,
 }: CategoryFormDialogProps) {
+  const t = useTranslations();
+
+  const formSchema = z.object({
+    title: z.string().min(1, { message: t('Category.Form.Error.titleEmpty') }),
+    description: z.string().optional(),
+  });
+
   const [open, setOpen] = useState(false);
 
   const isEditing = !!categoryId;
 
   const router = useRouter();
-  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -72,7 +74,9 @@ export default function CategoryFormDialog({
       <DialogTrigger asChild>{triggerElement}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{isEditing ? 'Update category.' : 'Create a new category.'}</DialogTitle>
+          <DialogTitle>
+            {isEditing ? t('Category.editModalTitle') : t('Category.createModalTitle')}
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
@@ -103,7 +107,7 @@ export default function CategoryFormDialog({
               )}
             />
             <Button type="submit" className="mt-3 w-full">
-              {isEditing ? 'Save.' : 'Submit.'}
+              {isEditing ? t('Category.Form.saveLabel') : t('Category.Form.submitLabel')}
             </Button>
           </form>
         </Form>

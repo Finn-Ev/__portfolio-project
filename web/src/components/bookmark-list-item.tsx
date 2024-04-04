@@ -21,8 +21,10 @@ import { useRouter } from 'next/navigation';
 import BookmarkFormDialog from './bookmark-form-dialog';
 import showErrorToast from '../lib/utils/show-error-toast';
 import { useBookmarkListContext } from '../providers';
+import { useTranslations } from 'next-intl';
 
 export default function BookmarkListItem({ id, link, title, isFavourite, description }: Bookmark) {
+  const t = useTranslations();
   const router = useRouter();
   const { toast } = useToast();
 
@@ -33,16 +35,10 @@ export default function BookmarkListItem({ id, link, title, isFavourite, descrip
   async function handleToggleFavourite() {
     const { success, errorMessage } = await setFavourite(id, !isFavourite);
 
-    if (success) {
-      toast({
-        title: 'Bookmark updated',
-        description: `The bookmark has been marked as  ${isFavourite ? 'no' : 'a'} favourite.`,
-      });
-    } else {
+    if (!success) {
       showErrorToast(errorMessage);
     }
 
-    setExpandedBookmarkId(null);
     router.refresh();
   }
 
@@ -50,8 +46,7 @@ export default function BookmarkListItem({ id, link, title, isFavourite, descrip
     const { success, errorMessage } = await deleteBookmark(id);
     if (success) {
       toast({
-        title: 'Bookmark deleted',
-        description: 'The bookmark has been deleted.',
+        title: t('Bookmark.Toast.deleteSuccessMessage'),
       });
     } else {
       showErrorToast(errorMessage);
@@ -97,17 +92,16 @@ export default function BookmarkListItem({ id, link, title, isFavourite, descrip
           <div className="w-full flex justify-between gap-2 ">
             <div className="flex items-center cursor-pointer gap-1" onClick={handleToggleFavourite}>
               <Star fill={isFavourite ? '#FFD700' : 'none'} color={isFavourite ? '#FFD700' : 'black'} />
-              {isFavourite ? 'Unfavourite' : 'Favourite'}
+              {isFavourite ? t('Bookmark.unfavouriteButtonLabel') : t('Bookmark.favouriteButtonLabel')}
             </div>
             <div>
               <BookmarkFormDialog
-                // onClose={() => setExpandedBookmarkId(null)}
                 bookmarkId={id}
                 defaultValues={{ title, link, description }}
                 triggerElement={
                   <div className="flex items-center cursor-pointer gap-1">
                     <Edit />
-                    Edit
+                    {t('Bookmark.editButtonLabel')}
                   </div>
                 }
               />
@@ -116,7 +110,7 @@ export default function BookmarkListItem({ id, link, title, isFavourite, descrip
               <AlertDialog>
                 <AlertDialogTrigger className="flex items-center gap-1">
                   <Trash2 />
-                  Delete
+                  {t('Bookmark.deleteButtonLabel')}
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>

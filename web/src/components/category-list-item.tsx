@@ -17,6 +17,7 @@ import { useToast } from '@/components/ui/toast/use-toast';
 import { useRouter } from 'next/navigation';
 import CategoryFormDialog from '@/components/category-form-dialog';
 import showErrorToast from '@/lib/utils/show-error-toast';
+import { useTranslations } from 'next-intl';
 
 const ROOT_CATEGORY_TITLE = '__ROOT__';
 
@@ -25,6 +26,7 @@ interface CategoryListItemProps {
 }
 
 export default function CategoryListItem({ category }: CategoryListItemProps) {
+  const t = useTranslations();
   const { toast } = useToast();
   const router = useRouter();
 
@@ -36,8 +38,7 @@ export default function CategoryListItem({ category }: CategoryListItemProps) {
 
     if (success) {
       toast({
-        title: 'Category deleted',
-        description: 'The category has been deleted.',
+        title: t('Category.Toast.deleteSuccessMessage'),
       });
     } else {
       showErrorToast(errorMessage);
@@ -56,7 +57,7 @@ export default function CategoryListItem({ category }: CategoryListItemProps) {
         <hr className="mt-6" />
         <div className="mt-3">
           <div>
-            <h2 className="mb-2">Uncategorised bookmarks:</h2>
+            <h2 className="mb-2">{t('Category.uncategorisedBookmarksText')}</h2>
           </div>
           <div>
             <BookmarkList bookmarks={category.bookmarks} />
@@ -83,26 +84,27 @@ export default function CategoryListItem({ category }: CategoryListItemProps) {
                   triggerElement={
                     <div className="flex items-center cursor-pointer gap-1">
                       <Edit />
-                      Edit
+                      {t('Category.editButtonLabel')}
                     </div>
                   }
                 />
                 <AlertDialog>
                   <AlertDialogTrigger className="flex items-center gap-1">
                     <Trash2 />
-                    Delete
+                    {t('Category.deleteButtonLabel')}
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the category. <br />
-                        The bookmarks in this category wont be deleted.
-                      </AlertDialogDescription>
+                      <AlertDialogTitle>{t('Category.DeleteConfirmation.title')}</AlertDialogTitle>
+                      <AlertDialogDescription>{t('Category.DeleteConfirmation.text')}</AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleDeleteCategory}>Delete category</AlertDialogAction>
+                      <AlertDialogCancel>
+                        {t('Category.DeleteConfirmation.cancelButtonLabel')}
+                      </AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDeleteCategory}>
+                        {t('Category.DeleteConfirmation.confirmButtonLabel')}
+                      </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
@@ -112,7 +114,7 @@ export default function CategoryListItem({ category }: CategoryListItemProps) {
         </div>
         <div>
           {categoryIsEmpty ? (
-            <p className="p-4">This category is empty</p>
+            <p className="p-4">{t('Category.emptyCategoryText')}</p>
           ) : (
             <BookmarkList bookmarks={category.bookmarks} />
           )}

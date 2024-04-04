@@ -2,8 +2,11 @@ import BookmarkList from '@/components/bookmark-list';
 import ErrorMessage from '@/components/error-message';
 import { getAllFavourites } from '@/lib/actions/bookmarks/favourites/get-all';
 import PageHeader from '@/components/page-header';
+import { getTranslations } from 'next-intl/server';
 
 export default async function BookmarksPage() {
+  const t = await getTranslations();
+
   const { value: bookmarks, errorMessage, success } = await getAllFavourites();
 
   if (!success) {
@@ -12,11 +15,8 @@ export default async function BookmarksPage() {
 
   return (
     <div>
-      <PageHeader title="Your favourite bookmarks." />
-      <BookmarkList
-        emptyListText="You haven't marked any bookmarks as a favourite yet."
-        bookmarks={bookmarks!}
-      />
+      <PageHeader title={t('Favourite.pageTitle')} />
+      <BookmarkList emptyListText={t('Favourite.emptyListText')} bookmarks={bookmarks!} />
     </div>
   );
 }

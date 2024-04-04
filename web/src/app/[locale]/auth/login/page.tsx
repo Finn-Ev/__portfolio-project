@@ -15,7 +15,7 @@ import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
 
 export default function AuthForm() {
-  const t = useTranslations('Auth');
+  const t = useTranslations();
 
   const router = useRouter();
   const { toast } = useToast();
@@ -23,9 +23,9 @@ export default function AuthForm() {
   const formSchema = z.object({
     email: z
       .string()
-      .min(1, { message: t('emailEmpty') })
-      .email({ message: t('emailInvalid') }),
-    password: z.string().min(8, { message: t('loginPasswordTooShort') }),
+      .min(1, { message: t('Auth.Form.Error.emailEmpty') })
+      .email({ message: t('Auth.Form.Error.emailInvalid') }),
+    password: z.string().min(8, { message: t('Auth.Form.Error.loginPasswordTooShort') }),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,7 +37,7 @@ export default function AuthForm() {
 
     if (success) {
       toast({
-        title: t('loginSuccessMessage'),
+        title: t('Auth.Toast.loginSuccessMessage'),
       });
       router.push('/bookmarks');
     } else {
@@ -47,7 +47,7 @@ export default function AuthForm() {
 
   return (
     <>
-      <h1 className="text-2xl mb-6">{t('loginTitle')}</h1>
+      <h1 className="text-2xl mb-6">{t('Auth.loginTitle')}</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
           <FormField
@@ -55,7 +55,7 @@ export default function AuthForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-foreground">{t('emailLabel')}</FormLabel>
+                <FormLabel className="text-foreground">{t('Auth.Form.emailLabel')}</FormLabel>
                 <FormControl>
                   <Input type="email" placeholder="" {...field} />
                 </FormControl>
@@ -68,7 +68,7 @@ export default function AuthForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-foreground">{t('passwordLabel')}</FormLabel>
+                <FormLabel className="text-foreground">{t('Auth.Form.passwordLabel')}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -77,14 +77,14 @@ export default function AuthForm() {
             )}
           />
           <Button type="submit" className="mt-3 w-full">
-            {t('loginButtonLabel')}
+            {t('Auth.Form.loginButtonLabel')}
           </Button>
         </form>
       </Form>
 
       <Link href="/auth/register" className="flex justify-center mt-3">
         <Button variant={'link'} className="underline">
-          {t('doNotHaveAccountText')}
+          {t('Auth.doNotHaveAccountText')}
         </Button>
       </Link>
     </>

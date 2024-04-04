@@ -5,8 +5,12 @@ import { getAllBookmarks } from '@/lib/actions/bookmarks/get-all';
 import PageHeader from '@/components/page-header';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 export default async function BookmarksPage() {
+  const t = await getTranslations();
+
   const { value: bookmarks, errorMessage, success } = await getAllBookmarks();
 
   if (!success) {
@@ -16,18 +20,18 @@ export default async function BookmarksPage() {
   return (
     <div>
       <PageHeader
-        title="All bookmarks."
+        title={t('Bookmark.pageTitle')}
         actionButton={
           <BookmarkFormDialog
             triggerElement={
               <Button variant="outline">
-                Create bookmark <PlusCircle className="ml-2" />
+                {t('Bookmark.createButtonLabel')} <PlusCircle className="ml-2" />
               </Button>
             }
           />
         }
       />
-      <BookmarkList emptyListText="Create your first bookmark." bookmarks={bookmarks!} />
+      <BookmarkList emptyListText={t('Bookmark.emptyListText')} bookmarks={bookmarks!} />
     </div>
   );
 }

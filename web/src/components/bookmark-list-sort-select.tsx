@@ -8,8 +8,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useTranslations } from 'next-intl';
 
 export default function BookmarkListSortSelect() {
+  const t = useTranslations();
   const { sortConfig, changeSortConfig } = useBookmarkListContext();
 
   return (
@@ -18,20 +20,24 @@ export default function BookmarkListSortSelect() {
         {sortConfig.direction === SORT_DIRECTION.ASC ? <SortAscIcon /> : <SortDescIcon />}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="mb-2">
-        <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+        <DropdownMenuLabel>{t('SortDropdown.sortByLabel')}</DropdownMenuLabel>
         <DropdownMenuItem onClick={() => changeSortConfig({ ...sortConfig, field: SORT_FIELD.UPDATED_AT })}>
-          Updated at {sortConfig.field === SORT_FIELD.UPDATED_AT && <Check className="ml-1" />}
+          {t('SortDropdown.updatedAtLabel')}
+          {sortConfig.field === SORT_FIELD.UPDATED_AT && <Check className="ml-1" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => changeSortConfig({ ...sortConfig, field: SORT_FIELD.CREATED_AT })}>
-          Created at {sortConfig.field === SORT_FIELD.CREATED_AT && <Check className="ml-1" />}
+          {t('SortDropdown.createdAtLabel')}
+          {sortConfig.field === SORT_FIELD.CREATED_AT && <Check className="ml-1" />}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>Sort order</DropdownMenuLabel>
+        <DropdownMenuLabel>{t('SortDropdown.sortByLabel')}</DropdownMenuLabel>
         <DropdownMenuItem onClick={() => changeSortConfig({ ...sortConfig, direction: SORT_DIRECTION.DESC })}>
-          Newest first {sortConfig.direction === SORT_DIRECTION.DESC && <Check className="ml-1" />}
+          {t('SortDropdown.descendingLabel')}
+          {sortConfig.direction === SORT_DIRECTION.DESC && <Check className="ml-1" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => changeSortConfig({ ...sortConfig, direction: SORT_DIRECTION.ASC })}>
-          Oldest first {sortConfig.direction === SORT_DIRECTION.ASC && <Check className="ml-1" />}
+          {t('SortDropdown.ascendingLabel')}
+          {sortConfig.direction === SORT_DIRECTION.ASC && <Check className="ml-1" />}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

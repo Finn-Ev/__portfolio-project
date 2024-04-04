@@ -23,7 +23,7 @@ import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
 
 export default function AuthForm() {
-  const t = useTranslations('Auth');
+  const t = useTranslations();
 
   const router = useRouter();
   const { toast } = useToast();
@@ -32,13 +32,13 @@ export default function AuthForm() {
     .object({
       email: z
         .string()
-        .min(1, { message: t('emailEmpty') })
-        .email({ message: t('emailInvalid') }),
-      password: z.string().min(8, { message: t('registrationPasswordTooShort') }),
-      passwordConfirmation: z.string().min(8, { message: t('registrationPasswordTooShort') }),
+        .min(1, { message: t('Auth.Form.Error.emailEmpty') })
+        .email({ message: t('Auth.Form.Error.emailInvalid') }),
+      password: z.string().min(8, { message: t('Auth.Form.Error.registrationPasswordTooShort') }),
+      passwordConfirmation: z.string().min(8, { message: t('Auth.Form.Error.registrationPasswordTooShort') }),
     })
     .refine((data) => data.password === data.passwordConfirmation, {
-      message: t('passwordsDoNotMatch'),
+      message: t('Auth.Form.Error.passwordsDoNotMatch'),
       path: ['passwordConfirmation'],
     });
 
@@ -51,7 +51,7 @@ export default function AuthForm() {
 
     if (success) {
       toast({
-        title: t('registerSuccessMessage'),
+        title: t('Auth.Toast.registerSuccessMessage'),
       });
       router.push('/bookmarks');
     } else {
@@ -61,7 +61,7 @@ export default function AuthForm() {
 
   return (
     <>
-      <h1 className="text-2xl mb-6">{t('registerTitle')}</h1>
+      <h1 className="text-2xl mb-6">{t('Auth.registerTitle')}</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
           <FormField
@@ -69,7 +69,7 @@ export default function AuthForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-foreground">{t('emailLabel')}</FormLabel>
+                <FormLabel className="text-foreground">{t('Auth.Form.emailLabel')}</FormLabel>
                 <FormControl>
                   <Input placeholder="" {...field} />
                 </FormControl>
@@ -82,12 +82,12 @@ export default function AuthForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-foreground">{t('passwordLabel')}</FormLabel>
+                <FormLabel className="text-foreground">{t('Auth.Form.passwordLabel')}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
                 <FormMessage />
-                <FormDescription>{t('passwordHint')}</FormDescription>
+                <FormDescription>{t('Auth.Form.Error.passwordHint')}</FormDescription>
               </FormItem>
             )}
           />
@@ -96,7 +96,9 @@ export default function AuthForm() {
             name="passwordConfirmation"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-foreground">{t('passwordConfirmationLabel')}</FormLabel>
+                <FormLabel className="text-foreground">
+                  {t('Auth.Form.Error.passwordConfirmationLabel')}
+                </FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -105,14 +107,14 @@ export default function AuthForm() {
             )}
           />
           <Button type="submit" className="mt-3 w-full">
-            {t('registerButtonLabel')}
+            {t('Auth.Form.registerButtonLabel')}
           </Button>
         </form>
       </Form>
 
       <Link href="/auth/login" className="flex justify-center mt-3">
         <Button variant={'link'} className="underline">
-          {t('alreadyHaveAccountText')}
+          {t('Auth.alreadyHaveAccountText')}
         </Button>
       </Link>
     </>

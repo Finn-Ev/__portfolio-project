@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { updateBookmark } from '@/lib/actions/bookmarks/update';
 import showErrorToast from '@/lib/utils/show-error-toast';
+import { useTranslations } from 'next-intl';
 
 interface BookmarkFormDialogProps {
   triggerElement: React.ReactNode;
@@ -25,11 +26,8 @@ interface BookmarkFormDialogProps {
   onClose?: () => void; // optional callback to be called when the dialog gets closed
 }
 
-const formSchema = z.object({
-  title: z.string().min(1, { message: 'Enter a title' }),
-  link: z.string().url({ message: 'Invalid URL' }),
-  description: z.string().optional(),
-});
+// TODO add functionality to set the category of a bookmark when creating/editing a bookmark if the user has created at least one category
+// TODO => add a select input to the form that lists all categories
 
 export default function BookmarkFormDialog({
   bookmarkId,
@@ -37,6 +35,14 @@ export default function BookmarkFormDialog({
   triggerElement,
   onClose,
 }: BookmarkFormDialogProps) {
+  const t = useTranslations();
+
+  const formSchema = z.object({
+    title: z.string().min(1, { message: t('Bookmark.Form.Error.titleEmpty') }),
+    link: z.string().url({ message: t('Bookmark.Form.Error.linkInvalid') }),
+    description: z.string().optional(),
+  });
+
   const [open, setOpen] = useState(false);
 
   const isEditing = !!bookmarkId;
@@ -75,7 +81,9 @@ export default function BookmarkFormDialog({
       <DialogTrigger asChild>{triggerElement}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{isEditing ? 'Update bookmark.' : 'Create a new bookmark.'}</DialogTitle>
+          <DialogTitle>
+            {isEditing ? t('Bookmark.editModalTitle') : t('Bookmark.createModalTitle')}
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
@@ -84,9 +92,9 @@ export default function BookmarkFormDialog({
               name="link"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Link</FormLabel>
+                  <FormLabel className="text-foreground">{t('Bookmark.Form.linkLabel')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="URL" {...field} />
+                    <Input placeholder={t('Bookmark.Form.linkPlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -97,7 +105,7 @@ export default function BookmarkFormDialog({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Title</FormLabel>
+                  <FormLabel className="text-foreground">{t('Bookmark.Form.titleLabel')}</FormLabel>
                   <FormControl>
                     <Input placeholder="" {...field} />
                   </FormControl>
@@ -110,7 +118,7 @@ export default function BookmarkFormDialog({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Description (optional)</FormLabel>
+                  <FormLabel className="text-foreground">{t('Bookmark.Form.descriptionLabel')}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -119,7 +127,7 @@ export default function BookmarkFormDialog({
               )}
             />
             <Button type="submit" className="mt-3 w-full">
-              {isEditing ? 'Save.' : 'Submit.'}
+              {isEditing ? t('Bookmark.Form.saveLabel') : t('Bookmark.Form.submitLabel')}
             </Button>
           </form>
         </Form>
