@@ -8,9 +8,6 @@ export default function Index() {
   } else {
     redirect('/auth');
   }
-  //   useEffect(() => {
-  //     redirect('/bookmarks');
-  //   }, []);
 
   return null;
 }
