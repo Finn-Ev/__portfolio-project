@@ -92,7 +92,6 @@
         "categoriesLinkLabel": "Categories",
         "favouritesLinkLabel": "Favourites"
     },
-    "Form": {},
     "SortDropdown": {
         "sortByLabel": "Sort by",
         "createdAtLabel": "Created at",
@@ -100,5 +99,8 @@
         "updatedAtLabel": "Updated at",
         "descendingLabel": "Newest first",
         "ascendingLabel": "Oldest first"
+    },
+    "Miscellaneous": {
+        "genericErrorMessage": "Please try again later."
     }
 }
