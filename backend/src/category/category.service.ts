@@ -8,6 +8,9 @@ export class CategoryService {
   constructor(private prismaService: PrismaService) {}
 
   async create(userId: number, dto: CreateCategoryDto) {
+    if (dto.title === '__ROOT__') {
+      throw new ForbiddenException('The category title "__ROOT__" is reserved.');
+    }
     return this.prismaService.category.create({
       data: {
         userId,

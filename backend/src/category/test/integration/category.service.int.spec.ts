@@ -107,6 +107,15 @@ describe('CategoryService', () => {
       expect(newCategory.description).toBe(categoryDto.description);
       expect(newCategory.bookmarks).toBeInstanceOf(Array);
     });
+
+    it('should throw ForbiddenException if the category title is "__ROOT__"', async () => {
+      const categoryDto: CreateCategoryDto = {
+        title: '__ROOT__',
+        description: 'A new category',
+      };
+
+      await expect(categoryService.create(mainUserId, categoryDto)).rejects.toThrowError(ForbiddenException);
+    });
   });
 
   describe('findAll', () => {
