@@ -6,8 +6,10 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils/cn';
 import Link from 'next/link';
 import LanguageSelect from './language-select';
+import { useTranslations } from 'next-intl';
 
 export default function MainNav() {
+  const t = useTranslations();
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -65,7 +67,7 @@ export default function MainNav() {
               expanded ? 'opacity-100 duration-500' : 'opacity-0  duration-100 pointer-events-none',
             )}
           >
-            Bookmarks
+            {t('Navbar.bookmarksLinkLabel')}
           </span>
         </Link>
 
@@ -77,7 +79,7 @@ export default function MainNav() {
               expanded ? 'opacity-100 duration-500' : 'opacity-0 duration-100 pointer-events-none',
             )}
           >
-            Categories
+            {t('Navbar.categoriesLinkLabel')}
           </span>
         </Link>
 
@@ -89,7 +91,7 @@ export default function MainNav() {
               expanded ? 'opacity-100 duration-500' : 'opacity-0 duration-100 pointer-events-none',
             )}
           >
-            Favourites
+            {t('Navbar.favouritesLinkLabel')}
           </span>
         </Link>
 

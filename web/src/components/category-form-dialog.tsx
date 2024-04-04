@@ -85,7 +85,7 @@ export default function CategoryFormDialog({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Title</FormLabel>
+                  <FormLabel className="text-foreground">{t('Category.Form.titleLabel')}</FormLabel>
                   <FormControl>
                     <Input placeholder="" {...field} />
                   </FormControl>
@@ -98,7 +98,7 @@ export default function CategoryFormDialog({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">Description (optional)</FormLabel>
+                  <FormLabel className="text-foreground">{t('Category.Form.descriptionLabel')}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
