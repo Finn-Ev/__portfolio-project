@@ -3,66 +3,101 @@
         "welcomeText": "Welcome to this app.",
         "welcomeInstruction": "To continue, please login or register",
         "registerTitle": "Register a new account.",
-        "registerButtonLabel": "Register.",
         "loginTitle": "Login to my account.",
-        "loginButtonLabel": "Login.",
-        "emailLabel": "Email address",
-        "passwordLabel": "Password",
-        "passwordConfirmationLabel": "Confirm Password",
-        "passwordHint": "At least 8 characters",
-        "emailEmpty": "Enter an email address.",
-        "emailInvalid": "Enter a valid email address.",
-        "registrationPasswordTooShort": "Password is too short.",
-        "loginPasswordTooShort": "Your password is at least 8 characters long",
-        "passwordsDoNotMatch": "Passwords don't match",
-        "registerSuccessMessage": "Account created successfully.",
-        "loginSuccessMessage": "Logged in successfully.",
         "alreadyHaveAccountText": "Already have an account?",
-        "doNotHaveAccountText": "Already have an account?",
+        "doNotHaveAccountText": "Don't have an account?",
         "logoutButtonLabel": "Logout",
-        "loggedInAsText": "Logged in as"
+        "loggedInAsText": "Logged in as",
+        "Form": {
+            "emailLabel": "Email address",
+            "passwordLabel": "Password",
+            "registerButtonLabel": "Register.",
+            "loginButtonLabel": "Login.",
+            "Error": {
+                "passwordConfirmationLabel": "Confirm Password",
+                "passwordHint": "At least 8 characters",
+                "emailEmpty": "Enter an email address.",
+                "emailInvalid": "Enter a valid email address.",
+                "registrationPasswordTooShort": "Password is too short.",
+                "loginPasswordTooShort": "Your password is at least 8 characters long",
+                "passwordsDoNotMatch": "Passwords don't match"
+            }
+        },
+        "Toast": {
+            "registerSuccessMessage": "Account created successfully.",
+            "loginSuccessMessage": "Logged in successfully."
+        }
+    },
+    "Bookmark": {
+        "pageTitle": "All bookmarks.",
+        "createButtonLabel": "Create bookmark",
+        "createModalTitle": "Create a new bookmark.",
+        "editModalTitle": "Update bookmark.",
+        "favouriteButtonLabel": "Favourite",
+        "unfavouriteButtonLabel": "Unfavourite",
+        "editButtonLabel": "Edit",
+        "deleteButtonLabel": "Delete",
+        "emptyListText": "You haven't created any bookmarks yet.",
+        "Form": {
+            "linkLabel": "Link",
+            "linkPlaceholder": "https://example.com",
+            "titleLabel": "Title",
+            "descriptionLabel": "Description (optional)",
+            "submitLabel": "Submit.",
+            "saveLabel": "Save.",
+            "Error": {
+                "titleEmpty": "Enter a title.",
+                "linkInvalid": "Enter a valid URL."
+            }
+        },
+        "Toast": {
+            "deleteSuccessMessage": "Bookmark deleted successfully."
+        }
+    },
+    "Category": {
+        "pageTitle": "All categories.",
+        "createButtonLabel": "Create category",
+        "createModalTitle": "Create a new category.",
+        "editModalTitle": "Update category.",
+        "emptyListText": "You haven't created any categories yet.",
+        "emptyCategoryText": "This category is empty.",
+        "uncategorisedBookmarksText": "Uncategorised bookmarks:",
+        "editButtonLabel": "Edit",
+        "deleteButtonLabel": "Delete",
+        "Form": {
+            "titleLabel": "Title",
+            "descriptionLabel": "Description (optional)",
+            "submitLabel": "Submit.",
+            "saveLabel": "Save.",
+            "Error": {
+                "titleEmpty": "Enter a title."
+            }
+        },
+        "DeleteConfirmation": {
+            "title": "Are you sure?",
+            "text": " This action cannot be undone. This will permanently delete the category. The bookmarks in this category wont be deleted.",
+            "confirmButtonLabel": "Delete category",
+            "cancelButtonLabel": "Cancel"
+        },
+        "Toast": {
+            "deleteSuccessMessage": "Bookmark deleted successfully."
+        }
+    },
+    "Favourite": {
+        "pageTitle": "Your favourite bookmarks.",
+        "emptyListText": "You haven't marked any bookmarks as a favourite yet."
     },
     "Navbar": {
         "bookmarksLinkLabel": "Bookmarks",
         "categoriesLinkLabel": "Categories",
         "favouritesLinkLabel": "Favourites"
     },
-    "Bookmark": {
-        "bookmarkPageTitle": "All bookmarks.",
-        "createModalTitle": "Create a new bookmark.",
-        "createButtonLabel": "Create bookmark",
-        "editModalTitle": "Update bookmark.",
-        "favouriteButtonLabel": "Favourite",
-        "unfavouriteButtonLabel": "Unfavorite",
-        "editButtonLabel": "Edit",
-        "deleteButtonLabel": "Delete",
-        "noBookmarksText": "You haven't created any bookmarks yet.",
-        "createFormLinkLabel": "Link",
-        "createFormLinkPlaceholder": "https://example.com",
-        "formSubmitButtonLabel": "Submit",
-        "formTitleLabel": "Title",
-        "formDescriptionLabel": "Description (optional)"
-    },
-    "Category": {
-        "categoryPageTitle": "All categories.",
-        "createCategoryModalTitle": "Create a new category.",
-        "createCategoryButtonLabel": "Create category",
-        "noCategoriesText": "You haven't created any categories yet.",
-        "emptyCategoryText": "This category is empty.",
-        "uncategorisedCategoryText": "Uncategorised bookmarks:",
-        "formSubmitButtonLabel": "Submit",
-        "formTitleLabel": "Title",
-        "formDescriptionLabel": "Description (optional)"
-    },
-    "Favourites": {
-        "categoryPageTitle": "Your favourite bookmarks.",
-        "noFavouritesText": "You haven't marked any bookmarks as a favourite yet."
-    },
+    "Form": {},
     "SortDropdown": {
         "sortByLabel": "Sort by",
-        "updatedAtLabel": "Updated at",
         "createdAtLabel": "Created at",
         "sortOrderLabel": "Sort order",
+        "updatedAtLabel": "Updated at",
         "descendingLabel": "Newest first",
         "ascendingLabel": "Oldest first"
     }
