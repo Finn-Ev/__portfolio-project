@@ -2,7 +2,7 @@
 
 import LanguageSelect from '@/components/language-select';
 import { USER_TOKEN_COOKIE_NAME } from '@/constants';
-import { redirect } from '@/navigation';
+import { redirect } from '@/lib/navigation';
 import { cookies } from 'next/headers';
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {

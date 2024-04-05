@@ -1,4 +1,4 @@
-import { redirect } from '@/navigation';
+import { redirect } from '@/lib/navigation';
 import { cookies } from 'next/headers';
 import { USER_TOKEN_COOKIE_NAME } from '../../constants';
 

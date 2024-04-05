@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { LanguagesIcon } from 'lucide-react';
-import { Link } from '@/navigation';
+import { Link } from '@/lib/navigation';
 
 interface LanguageSelectProps extends React.HTMLAttributes<HTMLDivElement> {}
 

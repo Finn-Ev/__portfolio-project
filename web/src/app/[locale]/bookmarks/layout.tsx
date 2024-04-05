@@ -2,7 +2,7 @@
 
 import MainNav from '@/components/main-nav';
 import { cookies } from 'next/headers';
-import { redirect } from '@/navigation';
+import { redirect } from '@/lib/navigation';
 import { USER_TOKEN_COOKIE_NAME } from '@/constants';
 
 export default async function BookmarksLayout({ children }: { children: React.ReactNode }) {
