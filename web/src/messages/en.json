@@ -52,6 +52,12 @@
                 "linkInvalid": "Enter a valid URL."
             }
         },
+        "DeleteConfirmation": {
+            "title": "Are you sure?",
+            "text": "This action cannot be undone. This will permanently delete the bookmark.",
+            "confirmButtonLabel": "Delete category",
+            "cancelButtonLabel": "Cancel"
+        },
         "Toast": {
             "deleteSuccessMessage": "Bookmark deleted successfully."
         },
@@ -78,7 +84,7 @@
         },
         "DeleteConfirmation": {
             "title": "Are you sure?",
-            "text": " This action cannot be undone. This will permanently delete the category. The bookmarks in this category wont be deleted.",
+            "text": "This action cannot be undone. This will permanently delete the category. The bookmarks in this category wont be deleted.",
             "confirmButtonLabel": "Delete category",
             "cancelButtonLabel": "Cancel"
         },

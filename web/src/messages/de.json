@@ -52,6 +52,12 @@
                 "linkInvalid": "Gib eine gültige URL ein."
             }
         },
+        "DeleteConfirmation": {
+            "title": "Bist du sicher?",
+            "text": "Dieses Lesezeichen wird endgültig gelöscht",
+            "confirmButtonLabel": "Lesezeichen löschen",
+            "cancelButtonLabel": "Abbrechen"
+        },
         "Toast": {
             "deleteSuccessMessage": "Lesezeichen erfolgreich gelöscht."
         },

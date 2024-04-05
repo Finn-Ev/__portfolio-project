@@ -121,14 +121,16 @@ export default function BookmarkListItem({
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete the bookmark.
-                    </AlertDialogDescription>
+                    <AlertDialogTitle>{t('Bookmark.DeleteConfirmation.title')}</AlertDialogTitle>
+                    <AlertDialogDescription>{t('Bookmark.DeleteConfirmation.text')}</AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDeleteBookmark}>Delete bookmark</AlertDialogAction>
+                    <AlertDialogCancel>
+                      {t('Bookmark.DeleteConfirmation.cancelButtonLabel')}
+                    </AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDeleteBookmark}>
+                      {t('Bookmark.DeleteConfirmation.confirmButtonLabel')}
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
