@@ -11,6 +11,7 @@ export class UserController {
   constructor(private userService: UserService) {}
   @Get('me')
   getMe(@GetUser() user: User) {
+    delete user.pwHash;
     return user;
   }
 
