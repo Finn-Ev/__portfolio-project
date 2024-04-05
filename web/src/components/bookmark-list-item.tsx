@@ -23,7 +23,14 @@ import showErrorToast from '../lib/utils/show-error-toast';
 import { useBookmarkListContext } from '../providers';
 import { useTranslations } from 'next-intl';
 
-export default function BookmarkListItem({ id, link, title, isFavourite, description }: Bookmark) {
+export default function BookmarkListItem({
+  id,
+  link,
+  title,
+  isFavourite,
+  description,
+  categoryId,
+}: Bookmark) {
   const t = useTranslations();
   const router = useRouter();
   const { toast } = useToast();
@@ -94,10 +101,10 @@ export default function BookmarkListItem({ id, link, title, isFavourite, descrip
               <Star fill={isFavourite ? '#FFD700' : 'none'} color={isFavourite ? '#FFD700' : 'black'} />
               {isFavourite ? t('Bookmark.unfavouriteButtonLabel') : t('Bookmark.favouriteButtonLabel')}
             </div>
-            <div>
+            <div className="flex items-center">
               <BookmarkFormDialog
                 bookmarkId={id}
-                defaultValues={{ title, link, description }}
+                defaultValues={{ title, link, description, categoryId: categoryId.toString() }}
                 triggerElement={
                   <div className="flex items-center cursor-pointer gap-1">
                     <Edit />

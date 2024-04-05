@@ -34,7 +34,7 @@
         "createModalTitle": "Neues Lesezeichen erstellen.",
         "editModalTitle": "Lesezeichen aktualisieren.",
         "favouriteButtonLabel": "Favorit",
-        "unfavouriteButtonLabel": "Favorit entfernen",
+        "unfavouriteButtonLabel": "Kein Favorit",
         "editButtonLabel": "Bearbeiten",
         "deleteButtonLabel": "Löschen",
         "emptyListText": "Du hast noch keine Lesezeichen erstellt.",
@@ -43,6 +43,8 @@
             "linkPlaceholder": "https://beispiel.de",
             "titleLabel": "Titel",
             "descriptionLabel": "Beschreibung (optional)",
+            "categoryLabel": "Kategorie",
+            "categoryPlaceholder": "Keine Kategorie ausgewählt",
             "submitLabel": "Absenden.",
             "saveLabel": "Speichern.",
             "Error": {
@@ -52,7 +54,8 @@
         },
         "Toast": {
             "deleteSuccessMessage": "Lesezeichen erfolgreich gelöscht."
-        }
+        },
+        "categorySelect__RootCategoryName": "Keine Kategorie"
     },
     "Category": {
         "pageTitle": "Alle Kategorien.",

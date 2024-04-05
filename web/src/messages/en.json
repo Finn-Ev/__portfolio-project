@@ -43,6 +43,8 @@
             "linkPlaceholder": "https://example.com",
             "titleLabel": "Title",
             "descriptionLabel": "Description (optional)",
+            "categoryLabel": "Category",
+            "categoryPlaceholder": "No category selected",
             "submitLabel": "Submit.",
             "saveLabel": "Save.",
             "Error": {
@@ -52,7 +54,8 @@
         },
         "Toast": {
             "deleteSuccessMessage": "Bookmark deleted successfully."
-        }
+        },
+        "categorySelect__RootCategoryName": "No category"
     },
     "Category": {
         "pageTitle": "All categories.",

@@ -4,16 +4,18 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useToast } from '@/components/ui/toast/use-toast';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createBookmark } from '@/lib/actions/bookmarks/create';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { updateBookmark } from '@/lib/actions/bookmarks/update';
 import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Category } from '../lib/types/category';
+import { getAllCategories } from '../lib/actions/categories/get-all';
 
 interface BookmarkFormDialogProps {
   triggerElement: React.ReactNode;
@@ -22,12 +24,10 @@ interface BookmarkFormDialogProps {
     title?: string;
     link?: string;
     description?: string | undefined;
+    categoryId?: string | undefined;
   };
   onClose?: () => void; // optional callback to be called when the dialog gets closed
 }
-
-// TODO add functionality to set the category of a bookmark when creating/editing a bookmark if the user has created at least one category
-// TODO => add a select input to the form that lists all categories
 
 export default function BookmarkFormDialog({
   bookmarkId,
@@ -41,6 +41,7 @@ export default function BookmarkFormDialog({
     title: z.string().min(1, { message: t('Bookmark.Form.Error.titleEmpty') }),
     link: z.string().url({ message: t('Bookmark.Form.Error.linkInvalid') }),
     description: z.string().optional(),
+    categoryId: z.string().optional(),
   });
 
   const [open, setOpen] = useState(false);
@@ -48,7 +49,6 @@ export default function BookmarkFormDialog({
   const isEditing = !!bookmarkId;
 
   const router = useRouter();
-  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,8 +62,8 @@ export default function BookmarkFormDialog({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { success, errorMessage } = isEditing
-      ? await updateBookmark(bookmarkId!, values)
-      : await createBookmark(values);
+      ? await updateBookmark(bookmarkId!, { ...values, categoryId: parseInt(values.categoryId!) })
+      : await createBookmark({ ...values, categoryId: parseInt(values.categoryId!) });
 
     if (success) {
       router.refresh();
@@ -75,6 +75,15 @@ export default function BookmarkFormDialog({
     setOpen(false);
     onClose?.();
   };
+
+  // maybe find a better way to solve this...
+  const [categories, setCategories] = useState<Category[]>([]);
+  useEffect(() => {
+    (async () => {
+      const { value: categories } = await getAllCategories();
+      setCategories(categories!);
+    })();
+  }, []);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -126,6 +135,34 @@ export default function BookmarkFormDialog({
                 </FormItem>
               )}
             />
+            {categories.length > 1 && ( // only show the category select if the user has created at least one category (in addition to the root category)}
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('Bookmark.Form.categoryLabel')}</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('Bookmark.Form.categoryPlaceholder')} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {/* TODO iterate over user categories */}
+                        {categories.map((category) => (
+                          <SelectItem key={category.id} value={category.id.toString()}>
+                            {category.title === '__ROOT__'
+                              ? t('Bookmark.categorySelect__RootCategoryName')
+                              : category.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            )}
             <Button type="submit" className="mt-3 w-full">
               {isEditing ? t('Bookmark.Form.saveLabel') : t('Bookmark.Form.submitLabel')}
             </Button>
