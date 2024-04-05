@@ -1,25 +1,106 @@
 {
     "Auth": {
         "welcomeText": "Willkommen zu dieser App.",
-        "welcomeInstruction": "Bitte melde dich zunächst an.",
-        "registerTitle": "Neuen Account erstellen.",
-        "registerButtonLabel": "Registrieren.",
+        "welcomeInstruction": "Bitte melde dich an oder registriere dich",
+        "registerTitle": "Neuen Account registrieren.",
         "loginTitle": "Bei meinem Account anmelden.",
-        "loginButtonLabel": "Anmelden.",
-        "emailLabel": "E-Mail-Adresse",
-        "passwordLabel": "Passwort",
-        "passwordConfirmationLabel": "Passwort bestätigen",
-        "passwordHint": "Mindestens 8 Zeichen",
-        "emailEmpty": "Gib eine E-Mail-Adresse ein",
-        "emailInvalid": "Gib eine gültige E-Mail-Adresse ein",
-        "registrationPasswordTooShort": "Das Passwort ist zu kurz",
-        "loginPasswordTooShort": "Dein Passwort ist min. 8 Zeichen lang",
-        "passwordsDoNotMatch": "Die Passwörter stimmen nicht überein",
-        "registerSuccessMessage": "Account erfolgreich erstellt.",
-        "loginSuccessMessage": "Du bist nun angemeldet.",
-        "alreadyHaveAccountText": "Ich habe bereits einen Account",
-        "doNotHaveAccountText": "Ich habe  noch keinen Account",
+        "alreadyHaveAccountText": "Ich habe bereits einen Account.",
+        "doNotHaveAccountText": "Ich habe noch keinen Account.",
         "logoutButtonLabel": "Abmelden",
-        "loggedInAsText": "Angemeldet als"
+        "loggedInAsText": "Angemeldet als",
+        "Form": {
+            "emailLabel": "E-Mail-Adresse",
+            "passwordLabel": "Passwort",
+            "registerButtonLabel": "Registrieren.",
+            "loginButtonLabel": "Anmelden.",
+            "Error": {
+                "passwordConfirmationLabel": "Passwort bestätigen",
+                "passwordHint": "Mindestens 8 Zeichen",
+                "emailEmpty": "Gib eine E-Mail-Adresse ein.",
+                "emailInvalid": "Gib eine gültige E-Mail-Adresse ein.",
+                "registrationPasswordTooShort": "Das Passwort ist zu kurz.",
+                "loginPasswordTooShort": "Ihr Passwort ist mindestens 8 Zeichen lang",
+                "passwordsDoNotMatch": "Passwörter stimmen nicht überein"
+            }
+        },
+        "Toast": {
+            "registerSuccessMessage": "Account erfolgreich erstellt.",
+            "loginSuccessMessage": "Erfolgreich angemeldet."
+        }
+    },
+    "Bookmark": {
+        "pageTitle": "Alle Lesezeichen.",
+        "createButtonLabel": "Lesezeichen erstellen",
+        "createModalTitle": "Neues Lesezeichen erstellen.",
+        "editModalTitle": "Lesezeichen aktualisieren.",
+        "favouriteButtonLabel": "Favorit",
+        "unfavouriteButtonLabel": "Favorit entfernen",
+        "editButtonLabel": "Bearbeiten",
+        "deleteButtonLabel": "Löschen",
+        "emptyListText": "Du hast noch keine Lesezeichen erstellt.",
+        "Form": {
+            "linkLabel": "Link",
+            "linkPlaceholder": "https://beispiel.de",
+            "titleLabel": "Titel",
+            "descriptionLabel": "Beschreibung (optional)",
+            "submitLabel": "Absenden.",
+            "saveLabel": "Speichern.",
+            "Error": {
+                "titleEmpty": "Gib einen Titel ein.",
+                "linkInvalid": "Gib eine gültige URL ein."
+            }
+        },
+        "Toast": {
+            "deleteSuccessMessage": "Lesezeichen erfolgreich gelöscht."
+        }
+    },
+    "Category": {
+        "pageTitle": "Alle Kategorien.",
+        "createButtonLabel": "Kategorie erstellen",
+        "createModalTitle": "Neue Kategorie erstellen.",
+        "editModalTitle": "Kategorie aktualisieren.",
+        "emptyListText": "Du hast noch keine Kategorien erstellt.",
+        "emptyCategoryText": "Diese Kategorie ist leer.",
+        "uncategorisedBookmarksText": "Nicht kategorisierte Lesezeichen:",
+        "editButtonLabel": "Bearbeiten",
+        "deleteButtonLabel": "Löschen",
+        "Form": {
+            "titleLabel": "Titel",
+            "descriptionLabel": "Beschreibung (optional)",
+            "submitLabel": "Absenden.",
+            "saveLabel": "Speichern.",
+            "Error": {
+                "titleEmpty": "Gib einen Titel ein."
+            }
+        },
+        "DeleteConfirmation": {
+            "title": "Bist du sicher?",
+            "text": "Die Kategorie wird gelöscht. Die Lesezeichen in dieser Kategorie werden nicht gelöscht.",
+            "confirmButtonLabel": "Kategorie löschen",
+            "cancelButtonLabel": "Abbrechen"
+        },
+        "Toast": {
+            "deleteSuccessMessage": "Lesezeichen erfolgreich gelöscht."
+        }
+    },
+    "Favourite": {
+        "pageTitle": "Ihre favorisierten Lesezeichen.",
+        "emptyListText": "Du hast noch keine Lesezeichen als Favoriten markiert."
+    },
+    "Navbar": {
+        "bookmarksLinkLabel": "Lesezeichen",
+        "categoriesLinkLabel": "Kategorien",
+        "favouritesLinkLabel": "Favoriten"
+    },
+    "SortDropdown": {
+        "sortByLabel": "Sortieren nach",
+        "createdAtLabel": "Erstellt am",
+        "sortOrderLabel": "Sortierreihenfolge",
+        "updatedAtLabel": "Aktualisiert am",
+        "descendingLabel": "Neueste zuerst",
+        "ascendingLabel": "Älteste zuerst"
+    },
+    "Miscellaneous": {
+        "genericErrorMessage": "Bitte versuche es später erneut."
     }
 }
