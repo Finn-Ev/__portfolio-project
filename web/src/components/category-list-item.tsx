@@ -73,7 +73,7 @@ export default function CategoryListItem({ category }: CategoryListItemProps) {
         <div className="bg-background rounded-lg p-4">
           <div className="flex justify-between">
             <div>
-              <h2>{category.title}</h2>
+              <h2 className="font-semibold">{category.title}</h2>
               {category.description && <p className="mt-3 mb-2">{category.description}</p>}
             </div>
             <div>
