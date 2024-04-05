@@ -16,9 +16,10 @@
             "Error": {
                 "passwordConfirmationLabel": "Confirm Password",
                 "passwordHint": "At least 8 characters",
-                "emailEmpty": "Enter an email address.",
-                "emailInvalid": "Enter a valid email address.",
-                "registrationPasswordTooShort": "Password is too short.",
+                "emailEmpty": "Enter an email address",
+                "emailInvalid": "Enter a valid email address",
+                "passwordEmpty": "Enter a password",
+                "registrationPasswordTooShort": "Password is too short",
                 "loginPasswordTooShort": "Your password is at least 8 characters long",
                 "passwordsDoNotMatch": "Passwords don't match"
             }
@@ -48,8 +49,9 @@
             "submitLabel": "Submit.",
             "saveLabel": "Save.",
             "Error": {
-                "titleEmpty": "Enter a title.",
-                "linkInvalid": "Enter a valid URL."
+                "titleEmpty": "Enter a title",
+                "linkEmpty": "Enter a link",
+                "linkInvalid": "Enter a valid URL"
             }
         },
         "DeleteConfirmation": {

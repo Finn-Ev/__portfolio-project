@@ -16,10 +16,11 @@
             "Error": {
                 "passwordConfirmationLabel": "Passwort bestätigen",
                 "passwordHint": "Mindestens 8 Zeichen",
-                "emailEmpty": "Gib eine E-Mail-Adresse ein.",
-                "emailInvalid": "Gib eine gültige E-Mail-Adresse ein.",
-                "registrationPasswordTooShort": "Das Passwort ist zu kurz.",
-                "loginPasswordTooShort": "Ihr Passwort ist mindestens 8 Zeichen lang",
+                "emailEmpty": "Gib eine E-Mail-Adresse ein",
+                "emailInvalid": "Gib eine gültige E-Mail-Adresse ein",
+                "passwordEmpty": "Gib ein Passwort ein",
+                "registrationPasswordTooShort": "Das Passwort ist zu kurz",
+                "loginPasswordTooShort": "Dein Passwort ist mindestens 8 Zeichen lang",
                 "passwordsDoNotMatch": "Passwörter stimmen nicht überein"
             }
         },
@@ -48,8 +49,9 @@
             "submitLabel": "Absenden.",
             "saveLabel": "Speichern.",
             "Error": {
-                "titleEmpty": "Gib einen Titel ein.",
-                "linkInvalid": "Gib eine gültige URL ein."
+                "titleEmpty": "Gib einen Titel ein",
+                "linkEmpty": "Gib einen Link ein",
+                "linkInvalid": "Gib eine gültige URL ein"
             }
         },
         "DeleteConfirmation": {
@@ -79,7 +81,7 @@
             "submitLabel": "Absenden.",
             "saveLabel": "Speichern.",
             "Error": {
-                "titleEmpty": "Gib einen Titel ein."
+                "titleEmpty": "Gib einen Titel ein"
             }
         },
         "DeleteConfirmation": {
@@ -93,7 +95,7 @@
         }
     },
     "Favourite": {
-        "pageTitle": "Ihre favorisierten Lesezeichen.",
+        "pageTitle": "Deine favorisierten Lesezeichen.",
         "emptyListText": "Du hast noch keine Lesezeichen als Favoriten markiert."
     },
     "Navbar": {

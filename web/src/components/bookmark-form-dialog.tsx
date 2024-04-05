@@ -38,8 +38,10 @@ export default function BookmarkFormDialog({
   const t = useTranslations();
 
   const formSchema = z.object({
-    title: z.string().min(1, { message: t('Bookmark.Form.Error.titleEmpty') }),
-    link: z.string().url({ message: t('Bookmark.Form.Error.linkInvalid') }),
+    title: z.string({ required_error: t('Bookmark.Form.Error.titleEmpty') }),
+    link: z
+      .string({ required_error: t('Bookmark.Form.Error.linkEmpty') })
+      .url({ message: t('Bookmark.Form.Error.linkInvalid') }),
     description: z.string().optional(),
     categoryId: z.string().optional(),
   });
@@ -53,9 +55,6 @@ export default function BookmarkFormDialog({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      link: '',
-      description: '',
       ...defaultValues,
     },
   });

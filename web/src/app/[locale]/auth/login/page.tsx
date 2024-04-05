@@ -22,10 +22,11 @@ export default function AuthForm() {
 
   const formSchema = z.object({
     email: z
-      .string()
-      .min(1, { message: t('Auth.Form.Error.emailEmpty') })
+      .string({ required_error: t('Auth.Form.Error.emailEmpty') })
       .email({ message: t('Auth.Form.Error.emailInvalid') }),
-    password: z.string().min(8, { message: t('Auth.Form.Error.loginPasswordTooShort') }),
+    password: z
+      .string({ required_error: t('Auth.Form.Error.passwordEmpty') })
+      .min(8, { message: t('Auth.Form.Error.loginPasswordTooShort') }),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
