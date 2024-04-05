@@ -23,7 +23,7 @@ export default function LanguageSelect(props: LanguageSelectProps) {
             <Link
               locale="en"
               href=""
-              className="flex items-center gap-1"
+              className="flex items-center gap-1 w-full"
               onClick={() => window.location.reload()}
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 30" width="20" height="15">
@@ -47,7 +47,7 @@ export default function LanguageSelect(props: LanguageSelectProps) {
             <Link
               locale="de"
               href=""
-              className="flex items-center gap-1"
+              className="flex items-center gap-1 w-full"
               onClick={() => window.location.reload()}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 5 3">
