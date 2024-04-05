@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { fetchBackend } from '../fetch-backend';
-import { USER_ROOT_CATEGORY_ID_COOKIE_NAME, USER_TOKEN_COOKIE_NAME } from '../../../constants';
+import { USER_TOKEN_COOKIE_NAME } from '../../../constants';
 
 type AuthResponse = { access_token: string; root_category_id: number };
 
@@ -27,11 +27,6 @@ export async function authenticateUser(
     cookies().set(USER_TOKEN_COOKIE_NAME, access_token, {
       maxAge: 60 * 60 * 24 * 7,
       path: '/',
-      httpOnly: true,
-    });
-
-    cookies().set(USER_ROOT_CATEGORY_ID_COOKIE_NAME, root_category_id.toString(), {
-      maxAge: 60 * 60 * 24 * 7,
       httpOnly: true,
     });
 

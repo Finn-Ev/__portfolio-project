@@ -1,8 +1,7 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import { fetchBackend } from '@/lib/actions/fetch-backend';
-import { USER_ROOT_CATEGORY_ID_COOKIE_NAME } from '../../../constants';
+import { getCurrentUser } from '../auth';
 
 export async function createBookmark(data: {
   title: string;
@@ -11,7 +10,11 @@ export async function createBookmark(data: {
   description?: string;
 }) {
   if (!data.categoryId) {
-    data.categoryId = parseInt(cookies().get(USER_ROOT_CATEGORY_ID_COOKIE_NAME)!.value);
+    const user = await getCurrentUser();
+
+    if (user) {
+      data.categoryId = user.rootCategoryId;
+    }
   }
 
   return fetchBackend('POST', '/bookmarks', data);

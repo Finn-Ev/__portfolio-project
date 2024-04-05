@@ -1,4 +1,5 @@
 export type User = {
-  email: string;
   id: number;
+  email: string;
+  rootCategoryId: number;
 };
