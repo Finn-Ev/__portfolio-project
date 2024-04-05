@@ -116,7 +116,9 @@ export default function CategoryListItem({ category }: CategoryListItemProps) {
           {categoryIsEmpty ? (
             <p className="p-4">{t('Category.emptyCategoryText')}</p>
           ) : (
-            <BookmarkList bookmarks={category.bookmarks} />
+            <div className="mt-3">
+              <BookmarkList bookmarks={category.bookmarks} />
+            </div>
           )}
         </div>
       </div>
