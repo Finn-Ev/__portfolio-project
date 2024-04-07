@@ -118,9 +118,6 @@ export class CategoryService {
       },
     });
 
-    const allBookmarks = await this.prismaService.bookmark.findMany();
-    console.log({ allBookmarks });
-
     return this.prismaService.category.delete({
       where: {
         id: categoryId,
