@@ -38,7 +38,7 @@
         "unfavouriteButtonLabel": "Kein Favorit",
         "editButtonLabel": "Bearbeiten",
         "deleteButtonLabel": "Löschen",
-        "emptyListText": "Du hast noch keine Lesezeichen erstellt.",
+        "emptyListText": "Du hast keine Lesezeichen erstellt.",
         "Form": {
             "linkLabel": "Link",
             "linkPlaceholder": "https://beispiel.de",
@@ -70,7 +70,7 @@
         "createButtonLabel": "Kategorie erstellen",
         "createModalTitle": "Neue Kategorie erstellen.",
         "editModalTitle": "Kategorie aktualisieren.",
-        "emptyListText": "Du hast noch keine Kategorien erstellt.",
+        "emptyListText": "Du hast keine Kategorien erstellt.",
         "emptyCategoryText": "Diese Kategorie ist leer.",
         "uncategorisedBookmarksText": "Nicht kategorisierte Lesezeichen:",
         "editButtonLabel": "Bearbeiten",
@@ -96,7 +96,7 @@
     },
     "Favourite": {
         "pageTitle": "Deine favorisierten Lesezeichen.",
-        "emptyListText": "Du hast noch keine Lesezeichen als Favoriten markiert."
+        "emptyListText": "Du hast keine Lesezeichen als Favoriten markiert."
     },
     "Navbar": {
         "bookmarksLinkLabel": "Lesezeichen",

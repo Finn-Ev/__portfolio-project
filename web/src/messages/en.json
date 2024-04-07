@@ -38,7 +38,7 @@
         "unfavouriteButtonLabel": "Unfavourite",
         "editButtonLabel": "Edit",
         "deleteButtonLabel": "Delete",
-        "emptyListText": "You haven't created any bookmarks yet.",
+        "emptyListText": "You haven't created any bookmarks.",
         "Form": {
             "linkLabel": "Link",
             "linkPlaceholder": "https://example.com",
@@ -70,7 +70,7 @@
         "createButtonLabel": "Create category",
         "createModalTitle": "Create a new category.",
         "editModalTitle": "Update category.",
-        "emptyListText": "You haven't created any categories yet.",
+        "emptyListText": "You haven't created any categories.",
         "emptyCategoryText": "This category is empty.",
         "uncategorisedBookmarksText": "Uncategorised bookmarks:",
         "editButtonLabel": "Edit",
@@ -96,7 +96,7 @@
     },
     "Favourite": {
         "pageTitle": "Your favourite bookmarks.",
-        "emptyListText": "You haven't marked any bookmarks as a favourite yet."
+        "emptyListText": "You haven't marked any bookmarks as a favourite."
     },
     "Navbar": {
         "bookmarksLinkLabel": "Bookmarks",
