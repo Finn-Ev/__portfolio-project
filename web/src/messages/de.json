@@ -61,7 +61,7 @@
             "cancelButtonLabel": "Abbrechen"
         },
         "Toast": {
-            "deleteSuccessMessage": "Lesezeichen erfolgreich gelöscht."
+            "deleteSuccessMessage": "Das Lesezeichen wurde gelöscht."
         },
         "categorySelect__RootCategoryName": "Keine Kategorie"
     },
@@ -91,7 +91,7 @@
             "cancelButtonLabel": "Abbrechen"
         },
         "Toast": {
-            "deleteSuccessMessage": "Lesezeichen erfolgreich gelöscht."
+            "deleteSuccessMessage": "Das Lesezeichen wurde gelöscht."
         }
     },
     "Favourite": {
