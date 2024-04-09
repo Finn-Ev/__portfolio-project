@@ -21,12 +21,16 @@ import {
 import { authenticateUser } from '../../../../lib/actions/auth';
 import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { PulseLoader } from 'react-spinners';
 
 export default function AuthForm() {
   const t = useTranslations();
 
   const router = useRouter();
   const { toast } = useToast();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const formSchema = z
     .object({
@@ -49,7 +53,10 @@ export default function AuthForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (form.formState.isSubmitting) return;
+    setIsLoading(true);
+
     const { success, errorMessage } = await authenticateUser(values, true);
 
     if (success) {
@@ -60,7 +67,9 @@ export default function AuthForm() {
     } else {
       showErrorToast(errorMessage);
     }
-  };
+
+    setIsLoading(false);
+  }
 
   return (
     <>
@@ -117,7 +126,7 @@ export default function AuthForm() {
 
       <Link href="/auth/login" className="flex justify-center mt-3">
         <Button variant={'link'} className="underline">
-          {t('Auth.alreadyHaveAccountText')}
+          {isLoading ? <PulseLoader size={12} color="#FFF" /> : t('Auth.alreadyHaveAccountText')}
         </Button>
       </Link>
     </>

@@ -16,6 +16,7 @@ import { useTranslations } from 'next-intl';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Category } from '../lib/types/category';
 import { getAllCategories } from '../lib/actions/categories/get-all';
+import { PulseLoader } from 'react-spinners';
 
 interface BookmarkFormDialogProps {
   triggerElement: React.ReactNode;
@@ -47,6 +48,7 @@ export default function BookmarkFormDialog({
   });
 
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isEditing = !!bookmarkId;
 
@@ -69,6 +71,8 @@ export default function BookmarkFormDialog({
   }, []);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (form.formState.isSubmitting) return;
+    setIsLoading(true);
     const { success, errorMessage } = isEditing
       ? await updateBookmark(bookmarkId!, { ...values, categoryId: parseInt(values.categoryId!) })
       : await createBookmark({ ...values, categoryId: parseInt(values.categoryId!) });
@@ -80,6 +84,7 @@ export default function BookmarkFormDialog({
       showErrorToast(errorMessage);
     }
 
+    setIsLoading(false);
     setOpen(false);
     onClose?.();
   }
@@ -171,7 +176,13 @@ export default function BookmarkFormDialog({
               />
             )}
             <Button type="submit" className="mt-3 w-full">
-              {isEditing ? t('Bookmark.Form.saveLabel') : t('Bookmark.Form.submitLabel')}
+              {isLoading ? (
+                <PulseLoader size={12} color="#FFF" />
+              ) : isEditing ? (
+                t('Bookmark.Form.saveLabel')
+              ) : (
+                t('Bookmark.Form.submitLabel')
+              )}
             </Button>
           </form>
         </Form>

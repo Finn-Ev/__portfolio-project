@@ -13,12 +13,16 @@ import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
+import { PulseLoader } from 'react-spinners';
+import { useState } from 'react';
 
 export default function AuthForm() {
   const t = useTranslations();
 
   const router = useRouter();
   const { toast } = useToast();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const formSchema = z.object({
     email: z
@@ -33,7 +37,11 @@ export default function AuthForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (form.formState.isSubmitting) return;
+
+    setIsLoading(true);
+
     const { success, errorMessage } = await authenticateUser(values);
 
     if (success) {
@@ -44,7 +52,9 @@ export default function AuthForm() {
     } else {
       showErrorToast(errorMessage);
     }
-  };
+
+    setIsLoading(false);
+  }
 
   return (
     <>
@@ -85,7 +95,7 @@ export default function AuthForm() {
 
       <Link href="/auth/register" className="flex justify-center mt-3">
         <Button variant={'link'} className="underline">
-          {t('Auth.doNotHaveAccountText')}
+          {isLoading ? <PulseLoader size={12} color="#FFF" /> : t('Auth.doNotHaveAccountText')}
         </Button>
       </Link>
     </>

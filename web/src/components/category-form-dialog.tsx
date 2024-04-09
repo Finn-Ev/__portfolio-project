@@ -14,6 +14,7 @@ import { createCategory } from '@/lib/actions/categories/create';
 import { updateCategory } from '@/lib/actions/categories/update';
 import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
+import { PulseLoader } from 'react-spinners';
 
 interface CategoryFormDialogProps {
   triggerElement: React.ReactNode;
@@ -39,6 +40,7 @@ export default function CategoryFormDialog({
   });
 
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isEditing = !!categoryId;
 
@@ -54,6 +56,10 @@ export default function CategoryFormDialog({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (form.formState.isSubmitting) return;
+
+    setIsLoading(true);
+
     const { success, errorMessage } = isEditing
       ? await updateCategory(categoryId!, values)
       : await createCategory(values);
@@ -65,6 +71,7 @@ export default function CategoryFormDialog({
       showErrorToast(errorMessage);
     }
 
+    setIsLoading(false);
     setOpen(false);
     onClose?.();
   }
@@ -115,7 +122,13 @@ export default function CategoryFormDialog({
               )}
             />
             <Button type="submit" className="mt-3 w-full">
-              {isEditing ? t('Category.Form.saveLabel') : t('Category.Form.submitLabel')}
+              {isLoading ? (
+                <PulseLoader size={12} color="#FFF" />
+              ) : isEditing ? (
+                t('Category.Form.saveLabel')
+              ) : (
+                t('Category.Form.submitLabel')
+              )}
             </Button>
           </form>
         </Form>
