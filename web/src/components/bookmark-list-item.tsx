@@ -96,7 +96,7 @@ export default function BookmarkListItem({
               <p className="overflow-x-auto">{description}</p>
             </div>
           )}
-          <div className="w-full flex justify-between gap-2 ">
+          <div className="w-full flex justify-between flex-wrap gap-2 ">
             <div className="flex items-center cursor-pointer gap-1" onClick={handleToggleFavourite}>
               <Star fill={isFavourite ? '#FFD700' : 'none'} color={isFavourite ? '#FFD700' : 'black'} />
               {isFavourite ? t('Bookmark.unfavouriteButtonLabel') : t('Bookmark.favouriteButtonLabel')}
