@@ -59,7 +59,16 @@ export default function BookmarkFormDialog({
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  // maybe find a better way to solve this...
+  const [categories, setCategories] = useState<Category[]>([]);
+  useEffect(() => {
+    (async () => {
+      const { value: categories } = await getAllCategories();
+      setCategories(categories!);
+    })();
+  }, []);
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     const { success, errorMessage } = isEditing
       ? await updateBookmark(bookmarkId!, { ...values, categoryId: parseInt(values.categoryId!) })
       : await createBookmark({ ...values, categoryId: parseInt(values.categoryId!) });
@@ -73,19 +82,18 @@ export default function BookmarkFormDialog({
 
     setOpen(false);
     onClose?.();
-  };
+  }
 
-  // maybe find a better way to solve this...
-  const [categories, setCategories] = useState<Category[]>([]);
-  useEffect(() => {
-    (async () => {
-      const { value: categories } = await getAllCategories();
-      setCategories(categories!);
-    })();
-  }, []);
+  function onOpenChange(newOpenValue: boolean) {
+    if (!newOpenValue) {
+      onClose?.();
+      form.reset();
+    }
+    setOpen(newOpenValue);
+  }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{triggerElement}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

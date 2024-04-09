@@ -53,7 +53,7 @@ export default function CategoryFormDialog({
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     const { success, errorMessage } = isEditing
       ? await updateCategory(categoryId!, values)
       : await createCategory(values);
@@ -67,10 +67,18 @@ export default function CategoryFormDialog({
 
     setOpen(false);
     onClose?.();
-  };
+  }
+
+  function onOpenChange(newOpenValue: boolean) {
+    if (!newOpenValue) {
+      onClose?.();
+      form.reset();
+    }
+    setOpen(newOpenValue);
+  }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{triggerElement}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
