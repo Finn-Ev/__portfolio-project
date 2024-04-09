@@ -23,6 +23,7 @@ export default async function BookmarksPage() {
         title={t('Bookmark.pageTitle')}
         actionButton={
           <BookmarkFormDialog
+            defaultValues={{ link: '', title: '', description: '' }}
             triggerElement={
               <Button variant="outline">
                 {t('Bookmark.createButtonLabel')} <PlusCircle className="ml-2" />

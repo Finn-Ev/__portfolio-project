@@ -56,7 +56,7 @@ export default function CategoryFormDialog({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (form.formState.isSubmitting) return;
+    if (!isEditing && form.formState.isSubmitting) return; // prevent unintentional double creation of categories
 
     setIsLoading(true);
 
@@ -71,9 +71,9 @@ export default function CategoryFormDialog({
       showErrorToast(errorMessage);
     }
 
-    setIsLoading(false);
     setOpen(false);
     onClose?.();
+    setIsLoading(false);
   }
 
   function onOpenChange(newOpenValue: boolean) {

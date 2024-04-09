@@ -71,7 +71,7 @@ export default function BookmarkFormDialog({
   }, []);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (form.formState.isSubmitting) return;
+    if (!isEditing && form.formState.isSubmitting) return; // prevent unintentional double creation of bookmarks
     setIsLoading(true);
     const { success, errorMessage } = isEditing
       ? await updateBookmark(bookmarkId!, { ...values, categoryId: parseInt(values.categoryId!) })
@@ -84,9 +84,9 @@ export default function BookmarkFormDialog({
       showErrorToast(errorMessage);
     }
 
-    setIsLoading(false);
     setOpen(false);
     onClose?.();
+    setIsLoading(false);
   }
 
   function onOpenChange(newOpenValue: boolean) {
