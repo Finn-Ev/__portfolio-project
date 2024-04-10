@@ -38,6 +38,11 @@ export default function RootLayout({
   const messages = useMessages();
   return (
     <html lang={params.locale}>
+      <head>
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
+      </head>
       {/* <ThemeProvider> */}
       <NextIntlClientProvider locale={params.locale} messages={messages}>
         <body className={cn('min-h-screen antialiased bg-background-page', avenirFont.className)}>
