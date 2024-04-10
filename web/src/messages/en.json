@@ -112,6 +112,10 @@
         "ascendingLabel": "Oldest first"
     },
     "Miscellaneous": {
-        "genericErrorMessage": "Please try again later."
+        "genericErrorMessage": "Please try again later.",
+        "pageNotFound": {
+            "pageTitle": "This page could not be found.",
+            "linkText": "Take this way"
+        }
     }
 }

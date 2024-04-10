@@ -112,6 +112,10 @@
         "ascendingLabel": "Älteste zuerst"
     },
     "Miscellaneous": {
-        "genericErrorMessage": "Bitte versuche es später erneut."
+        "genericErrorMessage": "Bitte versuche es später erneut.",
+        "pageNotFound": {
+            "pageTitle": "Die Seite existiert nicht.",
+            "linkText": "Hier entlang"
+        }
     }
 }
