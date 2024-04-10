@@ -41,7 +41,6 @@ export const BookmarkListProvider = ({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     const savedSortConfig = localStorage.getItem(LOCAL_STORAGE_SORT_CONFIG_KEY);
-    console.log('savedSortConfig', savedSortConfig);
     if (savedSortConfig) {
       setSortConfig(JSON.parse(savedSortConfig));
     }
