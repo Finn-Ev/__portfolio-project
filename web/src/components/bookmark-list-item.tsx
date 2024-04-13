@@ -96,44 +96,46 @@ export default function BookmarkListItem({
               <p className="overflow-x-auto">{description}</p>
             </div>
           )}
-          <div className="w-full flex justify-between flex-wrap gap-2 ">
+          <div className="w-full flex gap-2 justify-between">
+            <div className="flex gap-2">
+              <div className="flex items-center">
+                <BookmarkFormDialog
+                  bookmarkId={id}
+                  defaultValues={{ title, link, description, categoryId: categoryId.toString() }}
+                  triggerElement={
+                    <div className="flex items-center cursor-pointer gap-1">
+                      <Edit />
+                      {t('Bookmark.editButtonLabel')}
+                    </div>
+                  }
+                />
+              </div>
+              <div className="flex items-center cursor-pointer gap-1">
+                <AlertDialog>
+                  <AlertDialogTrigger className="flex items-center gap-1">
+                    <Trash2 />
+                    {t('Bookmark.deleteButtonLabel')}
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>{t('Bookmark.DeleteConfirmation.title')}</AlertDialogTitle>
+                      <AlertDialogDescription>{t('Bookmark.DeleteConfirmation.text')}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>
+                        {t('Bookmark.DeleteConfirmation.cancelButtonLabel')}
+                      </AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDeleteBookmark}>
+                        {t('Bookmark.DeleteConfirmation.confirmButtonLabel')}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            </div>
+
             <div className="flex items-center cursor-pointer gap-1" onClick={handleToggleFavourite}>
               <Star fill={isFavourite ? '#FFD700' : 'none'} color={isFavourite ? '#FFD700' : 'black'} />
-              {isFavourite ? t('Bookmark.favouriteButtonLabel') : t('Bookmark.unfavouriteButtonLabel')}
-            </div>
-            <div className="flex items-center">
-              <BookmarkFormDialog
-                bookmarkId={id}
-                defaultValues={{ title, link, description, categoryId: categoryId.toString() }}
-                triggerElement={
-                  <div className="flex items-center cursor-pointer gap-1">
-                    <Edit />
-                    {t('Bookmark.editButtonLabel')}
-                  </div>
-                }
-              />
-            </div>
-            <div className="flex items-center cursor-pointer gap-1">
-              <AlertDialog>
-                <AlertDialogTrigger className="flex items-center gap-1">
-                  <Trash2 />
-                  {t('Bookmark.deleteButtonLabel')}
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>{t('Bookmark.DeleteConfirmation.title')}</AlertDialogTitle>
-                    <AlertDialogDescription>{t('Bookmark.DeleteConfirmation.text')}</AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>
-                      {t('Bookmark.DeleteConfirmation.cancelButtonLabel')}
-                    </AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDeleteBookmark}>
-                      {t('Bookmark.DeleteConfirmation.confirmButtonLabel')}
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
             </div>
           </div>
         </div>

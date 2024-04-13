@@ -34,8 +34,6 @@
         "createButtonLabel": "Create bookmark",
         "createModalTitle": "Create a new bookmark.",
         "editModalTitle": "Update bookmark.",
-        "favouriteButtonLabel": "Favourite",
-        "unfavouriteButtonLabel": "Unfavourite",
         "editButtonLabel": "Edit",
         "deleteButtonLabel": "Delete",
         "emptyListText": "You haven't created any bookmarks.",
