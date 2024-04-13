@@ -5,8 +5,8 @@ import { getAllBookmarks } from '@/lib/actions/bookmarks/get-all';
 import PageHeader from '@/components/page-header';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
 
 export default async function BookmarksPage() {
   const t = await getTranslations();
@@ -35,4 +35,16 @@ export default async function BookmarksPage() {
       <BookmarkList emptyListText={t('Bookmark.emptyListText')} bookmarks={bookmarks!} />
     </div>
   );
+}
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const t = await getTranslations({ locale });
+
+  return {
+    title: t('Miscellaneous.pageTabTitles.bookmarks'),
+  };
 }

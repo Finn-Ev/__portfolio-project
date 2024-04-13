@@ -6,6 +6,7 @@ import CategoryFormDialog from '@/components/category-form-dialog';
 import CategoryList from '@/components/category-list';
 import { getAllCategories } from '@/lib/actions/categories/get-all';
 import { getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
 
 export default async function BookmarksPage() {
   const t = await getTranslations();
@@ -33,4 +34,16 @@ export default async function BookmarksPage() {
       <CategoryList emptyListText={t('Category.emptyListText')} categories={categories!} />
     </div>
   );
+}
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const t = await getTranslations({ locale });
+
+  return {
+    title: t('Miscellaneous.pageTabTitles.categories'),
+  };
 }

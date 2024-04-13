@@ -3,6 +3,8 @@
 import LanguageSelect from '@/components/language-select';
 import { USER_TOKEN_COOKIE_NAME } from '@/constants';
 import { redirect } from '@/lib/navigation';
+import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { cookies } from 'next/headers';
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
@@ -18,4 +20,16 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
       </div>
     </main>
   );
+}
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const t = await getTranslations({ locale });
+
+  return {
+    title: t('Miscellaneous.pageTabTitles.welcome'),
+  };
 }

@@ -111,6 +111,14 @@
     },
     "Miscellaneous": {
         "genericErrorMessage": "Bitte versuche es später erneut.",
+        "pageTabTitles": {
+            "default": "Lesezeichen App",
+            "welcome": "Willkommen",
+            "bookmarks": "Alle Lesezeichen",
+            "categories": "Kategorien",
+            "favourites": "Favoriten",
+            "settings": "Einstellungen"
+        },
         "pageNotFound": {
             "pageTitle": "Die Seite existiert nicht.",
             "linkText": "Hier entlang"

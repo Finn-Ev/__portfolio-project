@@ -1,6 +1,7 @@
 import LogoutBtn from '@/components/logout-btn';
 import { getCurrentUser } from '@/lib/actions/auth';
 import { getTranslations } from 'next-intl/server';
+import { Metadata } from 'next';
 
 export default async function Page() {
   const t = await getTranslations('Auth');
@@ -16,4 +17,16 @@ export default async function Page() {
       <LogoutBtn className="max-w-64" />
     </div>
   );
+}
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const t = await getTranslations({ locale });
+
+  return {
+    title: t('Miscellaneous.pageTabTitles.settings'),
+  };
 }

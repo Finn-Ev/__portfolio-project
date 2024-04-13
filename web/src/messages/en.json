@@ -111,6 +111,14 @@
     },
     "Miscellaneous": {
         "genericErrorMessage": "Please try again later.",
+        "pageTabTitles": {
+            "default": "Bookmark App",
+            "welcome": "Welcome",
+            "bookmarks": "Bookmark",
+            "categories": "Categories",
+            "favourites": "Favourites",
+            "settings": "Settings"
+        },
         "pageNotFound": {
             "pageTitle": "This page could not be found.",
             "linkText": "Take this way"

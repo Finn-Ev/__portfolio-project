@@ -4,6 +4,7 @@ import '@/styles/globals.css';
 import { cn } from '@/lib/utils/cn';
 import { Toaster } from '@/components/ui/toast/toaster';
 
+import { getTranslations } from 'next-intl/server';
 import { ThemeProvider } from '@/providers';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 
@@ -23,10 +24,6 @@ const avenirFont = localFont({
     },
   ],
 });
-
-export const metadata: Metadata = {
-  title: 'Bookmark App',
-};
 
 export default function RootLayout({
   children,
@@ -55,4 +52,19 @@ export default function RootLayout({
       {/* </ThemeProvider> */}
     </html>
   );
+}
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const t = await getTranslations({ locale });
+
+  return {
+    title: {
+      default: t('Miscellaneous.pageTabTitles.default'),
+      template: `%s | ${t('Miscellaneous.pageTabTitles.default')}`,
+    },
+  };
 }
