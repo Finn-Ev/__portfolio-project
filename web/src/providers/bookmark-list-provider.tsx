@@ -35,7 +35,7 @@ export const useBookmarkListContext = () => {
 export const BookmarkListProvider = ({ children }: { children: React.ReactNode }) => {
   const [expandedBookmarkId, setExpandedBookmarkId] = useState<number | null>(null);
   const [sortConfig, setSortConfig] = useState({
-    field: SORT_FIELD.UPDATED_AT,
+    field: SORT_FIELD.CREATED_AT,
     direction: SORT_DIRECTION.DESC,
   });
 
