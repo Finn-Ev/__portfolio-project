@@ -51,11 +51,6 @@ export const BookmarkListProvider = ({ children }: { children: React.ReactNode }
     localStorage.setItem(LOCAL_STORAGE_SORT_CONFIG_KEY, JSON.stringify(newSortConfig));
   }
 
-  //   useEffect(() => {
-  //     console.log('newSortConfig', sortConfig);
-  //     localStorage.setItem(LOCAL_STORAGE_SORT_CONFIG_KEY, JSON.stringify(sortConfig));
-  //   }, [sortConfig]);
-
   return (
     <BookmarkListContext.Provider
       value={{ expandedBookmarkId, setExpandedBookmarkId, sortConfig, changeSortConfig }}
