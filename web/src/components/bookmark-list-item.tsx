@@ -99,7 +99,7 @@ export default function BookmarkListItem({
           <div className="w-full flex justify-between flex-wrap gap-2 ">
             <div className="flex items-center cursor-pointer gap-1" onClick={handleToggleFavourite}>
               <Star fill={isFavourite ? '#FFD700' : 'none'} color={isFavourite ? '#FFD700' : 'black'} />
-              {isFavourite ? t('Bookmark.unfavouriteButtonLabel') : t('Bookmark.favouriteButtonLabel')}
+              {isFavourite ? t('Bookmark.favouriteButtonLabel') : t('Bookmark.unfavouriteButtonLabel')}
             </div>
             <div className="flex items-center">
               <BookmarkFormDialog
