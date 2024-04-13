@@ -69,7 +69,7 @@ export default function CategoryListItem({ category }: CategoryListItemProps) {
 
   return (
     <>
-      <div className="mt-3">
+      <div className="mb-8">
         <div className="bg-background rounded-lg p-4">
           <div className="flex justify-between">
             <div>
