@@ -1,1 +1,1 @@
-WEB: https://master--fe-bookmarks-web.netlify.app
+[FRONTEND-DEMO](https://fe-bookmarks-web.netlify.app)
