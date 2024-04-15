@@ -1,8 +1,8 @@
-import { Bookmark } from '../lib/types';
-import useWindowResize from '../lib/utils/use-window-resize';
-import { SORT_DIRECTION, SORT_FIELD, useBookmarkListContext } from '../providers';
-import BookmarkListColumn from './bookmark-list-column';
-import BookmarkListSortSelect from './bookmark-list-sort-select';
+import { Bookmark } from '@/lib/types';
+import useWindowResize from '@/lib/utils/use-window-resize';
+import { SORT_DIRECTION, SORT_FIELD, useBookmarkListContext } from '@/providers';
+import BookmarkListColumn from '@/components/bookmark-list-column';
+import BookmarkListSortSelect from '@/components/bookmark-list-sort-select';
 
 export default function BookmarkListColumns({ bookmarks }: { bookmarks: Bookmark[] }) {
   const { width } = useWindowResize();

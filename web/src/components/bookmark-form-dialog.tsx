@@ -14,8 +14,8 @@ import { updateBookmark } from '@/lib/actions/bookmarks/update';
 import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Category } from '../lib/types/category';
-import { getAllCategories } from '../lib/actions/categories/get-all';
+import { Category } from '@/lib/types/category';
+import { getAllCategories } from '@/lib/actions/categories/get-all';
 import { PulseLoader } from 'react-spinners';
 
 interface BookmarkFormDialogProps {

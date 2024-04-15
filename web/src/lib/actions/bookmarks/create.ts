@@ -1,7 +1,7 @@
 'use server';
 
 import { fetchBackend } from '@/lib/actions/fetch-backend';
-import { getCurrentUser } from '../auth';
+import { getCurrentUser } from '@/lib/actions/auth';
 
 export async function createBookmark(data: {
   title: string;

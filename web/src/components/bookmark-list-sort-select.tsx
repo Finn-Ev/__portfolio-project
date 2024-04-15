@@ -1,5 +1,5 @@
 import { Check, SortAscIcon, SortDescIcon } from 'lucide-react';
-import { SORT_DIRECTION, SORT_FIELD, useBookmarkListContext } from '../providers';
+import { SORT_DIRECTION, SORT_FIELD, useBookmarkListContext } from '@/providers';
 import {
   DropdownMenu,
   DropdownMenuContent,

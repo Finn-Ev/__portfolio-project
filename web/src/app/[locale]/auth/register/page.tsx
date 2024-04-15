@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { authenticateUser } from '../../../../lib/actions/auth';
+import { authenticateUser } from '@/lib/actions/auth';
 import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';

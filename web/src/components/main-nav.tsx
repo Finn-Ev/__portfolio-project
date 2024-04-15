@@ -5,7 +5,7 @@ import ThemeToggle from '@/components/theme-toggle';
 import { useState } from 'react';
 import { cn } from '@/lib/utils/cn';
 import Link from 'next/link';
-import LanguageSelect from './language-select';
+import LanguageSelect from '@/components/language-select';
 import { useTranslations } from 'next-intl';
 
 export default function MainNav() {

@@ -14,13 +14,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { setFavourite } from '../lib/actions/bookmarks/favourites/set';
-import { useToast } from './ui/toast/use-toast';
-import { deleteBookmark } from '../lib/actions/bookmarks/delete';
+import { setFavourite } from '@/lib/actions/bookmarks/favourites/set';
+import { useToast } from '@/components/ui/toast/use-toast';
+import { deleteBookmark } from '@/lib/actions/bookmarks/delete';
 import { useRouter } from 'next/navigation';
-import BookmarkFormDialog from './bookmark-form-dialog';
-import showErrorToast from '../lib/utils/show-error-toast';
-import { useBookmarkListContext } from '../providers';
+import BookmarkFormDialog from '@/components/bookmark-form-dialog';
+import showErrorToast from '@/lib/utils/show-error-toast';
+import { useBookmarkListContext } from '@/providers';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
