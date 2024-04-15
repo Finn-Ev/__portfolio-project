@@ -22,6 +22,7 @@ import BookmarkFormDialog from './bookmark-form-dialog';
 import showErrorToast from '../lib/utils/show-error-toast';
 import { useBookmarkListContext } from '../providers';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 export default function BookmarkListItem({
   id,
@@ -37,13 +38,16 @@ export default function BookmarkListItem({
 
   const { expandedBookmarkId, setExpandedBookmarkId } = useBookmarkListContext();
 
+  const [isFavouriteState, setIsFavouriteState] = useState(isFavourite);
   const isExpanded = expandedBookmarkId === id;
 
   async function handleToggleFavourite() {
+    setIsFavouriteState(!isFavouriteState);
     const { success, errorMessage } = await setFavourite(id, !isFavourite);
 
     if (!success) {
       showErrorToast(errorMessage);
+      setIsFavouriteState(isFavourite);
     }
 
     router.refresh();
@@ -135,7 +139,10 @@ export default function BookmarkListItem({
             </div>
 
             <div className="flex items-center cursor-pointer gap-1" onClick={handleToggleFavourite}>
-              <Star fill={isFavourite ? '#FFD700' : 'none'} color={isFavourite ? '#FFD700' : 'black'} />
+              <Star
+                fill={isFavouriteState ? '#FFD700' : 'none'}
+                color={isFavouriteState ? '#FFD700' : 'black'}
+              />
             </div>
           </div>
         </div>
