@@ -3,6 +3,7 @@
 import { Bookmark } from '@/lib/types';
 import { BookmarkListProvider } from '@/providers';
 import BookmarkListColumns from '@/components/bookmark-list-columns';
+import BookmarkListSortSelect from '@/components/bookmark-list-sort-select';
 
 interface BookmarkListProps {
   bookmarks: Bookmark[];
@@ -15,6 +16,7 @@ export default function BookmarkList({ emptyListText, bookmarks }: BookmarkListP
   return (
     <BookmarkListProvider>
       <BookmarkListColumns bookmarks={bookmarks} />
+      <BookmarkListSortSelect />
     </BookmarkListProvider>
   );
 }

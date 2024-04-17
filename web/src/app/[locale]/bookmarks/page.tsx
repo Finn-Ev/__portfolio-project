@@ -18,7 +18,7 @@ export default async function BookmarksPage() {
   }
 
   return (
-    <div>
+    <div className="bookmarks-page">
       <PageHeader
         title={t('Bookmark.pageTitle')}
         actionButton={

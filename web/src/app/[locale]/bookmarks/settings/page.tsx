@@ -12,7 +12,7 @@ export default async function Page() {
   }
 
   return (
-    <div className=" p-4 flex flex-col gap-4">
+    <div className="settings-page p-4 flex flex-col gap-4">
       {t('loggedInAsText')} {user!.email}
       <LogoutBtn className="max-w-64" />
     </div>

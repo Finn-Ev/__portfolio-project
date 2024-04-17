@@ -6,7 +6,6 @@ import BookmarkListSortSelect from '@/components/bookmark-list-sort-select';
 
 export default function BookmarkListColumns({ bookmarks }: { bookmarks: Bookmark[] }) {
   const { width } = useWindowResize();
-
   const { sortConfig } = useBookmarkListContext();
 
   if (!width) return null;
@@ -27,16 +26,11 @@ export default function BookmarkListColumns({ bookmarks }: { bookmarks: Bookmark
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
+  return <div>{getBookmarksListColumns()}</div>;
+
   // The expanded state of a bookmark should not affect the bookmarks in the same row-level;
   // To achieve this, the bookmarks need to be split into their own independent columns so that each bookmark has a row of its own which does not affect the other bookmarks
   // Otherwise, some resizing or repositioning or empty space would occur on the same row bookmarks
-  return (
-    <div>
-      <BookmarkListSortSelect />
-      {getBookmarksListColumns()}
-    </div>
-  );
-
   function getBookmarksListColumns() {
     if (width! < 640) {
       return (
