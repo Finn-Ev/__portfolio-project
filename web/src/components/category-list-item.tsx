@@ -76,39 +76,39 @@ export default function CategoryListItem({ category }: CategoryListItemProps) {
               <h2 className="font-semibold">{category.title}</h2>
               {category.description && <p className="mt-3 mb-2">{category.description}</p>}
             </div>
-            <div>
-              <div className="flex items-center cursor-pointer gap-3">
-                <CategoryFormDialog
-                  categoryId={category.id}
-                  defaultValues={{ description: category.description, title: category.title }}
-                  triggerElement={
-                    <div className="flex items-center cursor-pointer gap-1">
-                      <Edit />
-                      {t('Category.editButtonLabel')}
-                    </div>
-                  }
-                />
-                <AlertDialog>
-                  <AlertDialogTrigger className="flex items-center gap-1">
-                    <Trash2 />
-                    {t('Category.deleteButtonLabel')}
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>{t('Category.DeleteConfirmation.title')}</AlertDialogTitle>
-                      <AlertDialogDescription>{t('Category.DeleteConfirmation.text')}</AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>
-                        {t('Category.DeleteConfirmation.cancelButtonLabel')}
-                      </AlertDialogCancel>
-                      <AlertDialogAction onClick={handleDeleteCategory}>
-                        {t('Category.DeleteConfirmation.confirmButtonLabel')}
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
+          </div>
+          <div>
+            <div className="flex flex-wrap justify-end items-center cursor-pointer gap-3">
+              <CategoryFormDialog
+                categoryId={category.id}
+                defaultValues={{ description: category.description, title: category.title }}
+                triggerElement={
+                  <div className="flex items-center cursor-pointer gap-1">
+                    <Edit />
+                    {t('Category.editButtonLabel')}
+                  </div>
+                }
+              />
+              <AlertDialog>
+                <AlertDialogTrigger className="flex items-center gap-1">
+                  <Trash2 />
+                  {t('Category.deleteButtonLabel')}
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>{t('Category.DeleteConfirmation.title')}</AlertDialogTitle>
+                    <AlertDialogDescription>{t('Category.DeleteConfirmation.text')}</AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>
+                      {t('Category.DeleteConfirmation.cancelButtonLabel')}
+                    </AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDeleteCategory}>
+                      {t('Category.DeleteConfirmation.confirmButtonLabel')}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         </div>

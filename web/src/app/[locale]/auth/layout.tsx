@@ -13,8 +13,8 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <main className="h-screen flex items-center justify-center">
-      <div className="flex flex-col items-center h-fit justify-center p-8 rounded-lg bg-background m-4">
+    <main className="flex items-center justify-center">
+      <div className="flex flex-col items-center justify-center p-8 rounded-lg bg-background m-4">
         <div>{children}</div>
         <LanguageSelect className="mt-3" />
       </div>

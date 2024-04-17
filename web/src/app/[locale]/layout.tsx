@@ -42,8 +42,13 @@ export default function RootLayout({
       </head>
       {/* <ThemeProvider> */}
       <NextIntlClientProvider locale={params.locale} messages={messages}>
-        <body className={cn('min-h-screen antialiased bg-background-page', avenirFont.className)}>
-          <div className="container mx-auto px-0 xl:px-4">
+        <body
+          className={cn(
+            'min-h-full h-auto antialiased bg-background-page overflow-x-hidden',
+            avenirFont.className,
+          )}
+        >
+          <div className=" mx-auto px-0 xl:px-4">
             {children}
             <Toaster />
           </div>

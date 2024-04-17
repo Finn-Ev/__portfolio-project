@@ -6,8 +6,8 @@ export default function PageHeader({
   actionButton?: React.ReactNode;
 }) {
   return (
-    <div className="flex justify-between items-center w-full mb-4 h-11">
-      <h1 className="font-semibold text-lg">{title}</h1>
+    <div className="flex flex-col md:flex-row justify-between md:items-center w-full mb-8 md:mb-4 h-12">
+      <h1 className="font-semibold text-lg text-center md:text-start mb-1">{title}</h1>
       {actionButton}
     </div>
   );

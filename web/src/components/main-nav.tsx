@@ -13,50 +13,36 @@ export default function MainNav() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="fade-in-20 h-screen bg-background">
+    <div className="fade-in-20 min-h-full h-auto bg-background">
       <div
         className={cn(
-          'h-full flex items-start flex-col gap-4 mx-auto p-4 transition-all duration-150',
+          'min-h-screen h-full flex items-start flex-col gap-4 mx-auto pl-4 md:p-4 transition-all duration-150',
           expanded ? 'w-[200px]' : 'w-[60px]',
         )}
       >
         <div className="flex justify-between w-full">
           <PanelTopClose
             className={cn(
-              'transition-transform duration-300 cursor-pointer z-10',
+              'hidden md:block transition-transform duration-300 cursor-pointer z-10 ',
               expanded ? '-rotate-90' : 'rotate-90',
             )}
             onClick={() => setExpanded(!expanded)}
           />
 
+          {/* Desktop - additional dynamic sidebar content */}
           {expanded && (
             <>
-              <div
-                className={
-                  cn()
-                  //   'transition-opacity',
-                  //   expanded ? 'opacity-100 duration-500' : 'opacity-0 h-0 w-0  hidden duration-100',
-                }
-              >
-                <ThemeToggle />
-              </div>
+              <ThemeToggle />
 
-              <Link
-                onClick={() => setExpanded(false)}
-                href={'/bookmarks/settings'}
-                className={
-                  cn()
-                  //   'transition-opacity',
-                  //   expanded ? 'opacity-100 duration-500' : 'opacity-0 h-0 w-0 duration-100',
-                }
-              >
+              <Link onClick={() => setExpanded(false)} href={'/bookmarks/settings'}>
                 <User />
               </Link>
             </>
           )}
+          {/* Mobile - additional static sidebar content */}
         </div>
 
-        <hr className="bg-foreground text-foreground h-px w-full my-1" />
+        <hr className="hidden md:block bg-foreground text-foreground h-px w-full my-1" />
 
         <Link href={'/bookmarks'} className="flex gap-2  h-7" onClick={() => setExpanded(false)}>
           <AlignLeft className="cursor-pointer" />
@@ -95,7 +81,15 @@ export default function MainNav() {
           </span>
         </Link>
 
-        <LanguageSelect />
+        {/* Mobile - additional static sidebar content */}
+        <Link className="md:mt-0 md:hidden" onClick={() => setExpanded(false)} href={'/bookmarks/settings'}>
+          <User />
+        </Link>
+
+        <ThemeToggle className="md:hidden mt-2 " />
+        {/* Mobile - additional static sidebar content */}
+
+        <LanguageSelect className="mt-2 md:mt-auto" />
       </div>
     </div>
   );

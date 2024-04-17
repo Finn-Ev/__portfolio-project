@@ -60,7 +60,7 @@ export default function AuthForm() {
     <>
       <h1 className="text-2xl mb-6">{t('Auth.loginTitle')}</h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
             name="email"

@@ -13,7 +13,7 @@ interface LanguageSelectProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function LanguageSelect(props: LanguageSelectProps) {
   return (
-    <div className="flex gap-2 mt-auto" {...props}>
+    <div className="flex gap-2" {...props}>
       <DropdownMenu>
         <DropdownMenuTrigger>
           <LanguagesIcon />

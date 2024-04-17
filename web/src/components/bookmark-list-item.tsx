@@ -101,7 +101,7 @@ export default function BookmarkListItem({
             </div>
           )}
           <div className="w-full flex gap-2 justify-between">
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <div className="flex items-center">
                 <BookmarkFormDialog
                   bookmarkId={id}
