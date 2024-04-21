@@ -17,7 +17,7 @@ export default function BookmarkListSortSelect() {
   return (
     <div id="bookmark-sort-select">
       <DropdownMenu>
-        <DropdownMenuTrigger className="absolute right-1 md:right-4 top-1 md:bottom-4 bg-background p-2 rounded-full shadow-xl">
+        <DropdownMenuTrigger className="absolute h-fit right-1 md:right-4 max-md:top-1 md:bottom-4 bg-background p-2 rounded-full shadow-xl">
           {sortConfig.direction === SORT_DIRECTION.ASC ? <SortAscIcon /> : <SortDescIcon />}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="mb-2">
