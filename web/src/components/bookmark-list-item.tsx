@@ -36,12 +36,20 @@ export default function BookmarkListItem({
   const router = useRouter();
   const { toast } = useToast();
 
-  const { expandedBookmarkId, setExpandedBookmarkId } = useBookmarkListContext();
+  const {
+    expandedBookmarkId,
+    setExpandedBookmarkId,
+    favouritesAreGettingMutated,
+    setFavouritesAreGettingMutated,
+  } = useBookmarkListContext();
 
   const [isFavouriteState, setIsFavouriteState] = useState(isFavourite);
   const isExpanded = expandedBookmarkId === id;
 
   async function handleToggleFavourite() {
+    if (favouritesAreGettingMutated) return;
+
+    setFavouritesAreGettingMutated(true);
     setIsFavouriteState(!isFavouriteState);
     const { success, errorMessage } = await setFavourite(id, !isFavourite);
 
@@ -50,6 +58,7 @@ export default function BookmarkListItem({
       setIsFavouriteState(isFavourite);
     }
 
+    setTimeout(() => setFavouritesAreGettingMutated(false), 1500); // prevent spam-clicking and to allow the app to sync the state from the server
     router.refresh();
   }
 
@@ -140,6 +149,7 @@ export default function BookmarkListItem({
 
             <div className="flex items-center cursor-pointer gap-1" onClick={handleToggleFavourite}>
               <Star
+                className={favouritesAreGettingMutated ? 'cursor-wait' : ''}
                 fill={isFavouriteState ? '#FFD700' : 'none'}
                 color={isFavouriteState ? '#FFD700' : 'black'}
               />

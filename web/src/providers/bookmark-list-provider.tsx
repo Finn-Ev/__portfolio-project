@@ -17,6 +17,8 @@ export enum SORT_DIRECTION {
 interface BookmarkListContext {
   expandedBookmarkId: number | null;
   setExpandedBookmarkId: React.Dispatch<React.SetStateAction<number | null>>;
+  favouritesAreGettingMutated: boolean;
+  setFavouritesAreGettingMutated: React.Dispatch<React.SetStateAction<boolean>>;
   sortConfig: {
     field: SORT_FIELD;
     direction: SORT_DIRECTION;
@@ -36,6 +38,7 @@ export const useBookmarkListContext = () => {
 
 export const BookmarkListProvider = ({ children }: { children: React.ReactNode }) => {
   const [expandedBookmarkId, setExpandedBookmarkId] = useState<number | null>(null);
+  const [favouritesAreGettingMutated, setFavouritesAreGettingMutated] = useState(false);
   const [sortConfig, setSortConfig] = useState({
     field: SORT_FIELD.CREATED_AT,
     direction: SORT_DIRECTION.DESC,
@@ -55,7 +58,14 @@ export const BookmarkListProvider = ({ children }: { children: React.ReactNode }
 
   return (
     <BookmarkListContext.Provider
-      value={{ expandedBookmarkId, setExpandedBookmarkId, sortConfig, changeSortConfig }}
+      value={{
+        expandedBookmarkId,
+        setExpandedBookmarkId,
+        favouritesAreGettingMutated,
+        setFavouritesAreGettingMutated,
+        sortConfig,
+        changeSortConfig,
+      }}
     >
       {children}
     </BookmarkListContext.Provider>
