@@ -4,7 +4,6 @@ import { getAllFavourites } from '@/lib/actions/bookmarks/favourites/get-all';
 import PageHeader from '@/components/page-header';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
-import BookmarkListSortSelect from '@/components/bookmark-list-sort-select';
 
 export default async function BookmarksPage() {
   const t = await getTranslations();
