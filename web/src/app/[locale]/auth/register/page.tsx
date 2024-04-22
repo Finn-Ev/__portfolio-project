@@ -6,7 +6,6 @@ import { useToast } from '@/components/ui/toast/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import {
@@ -22,7 +21,7 @@ import { authenticateUser } from '@/lib/actions/auth';
 import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { PulseLoader } from 'react-spinners';
+import LoadingIndicator from '@/components/loading-indicator';
 
 export default function AuthForm() {
   const t = useTranslations();
@@ -126,7 +125,7 @@ export default function AuthForm() {
 
       <Link href="/auth/login" className="flex justify-center mt-3">
         <Button variant={'link'} className="underline">
-          {isLoading ? <PulseLoader size={12} color="#FFF" /> : t('Auth.alreadyHaveAccountText')}
+          {isLoading ? <LoadingIndicator /> : t('Auth.alreadyHaveAccountText')}
         </Button>
       </Link>
     </>

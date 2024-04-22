@@ -16,7 +16,7 @@ import { useTranslations } from 'next-intl';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Category } from '@/lib/types/category';
 import { getAllCategories } from '@/lib/actions/categories/get-all';
-import { PulseLoader } from 'react-spinners';
+import LoadingIndicator from '@/components/loading-indicator';
 
 interface BookmarkFormDialogProps {
   triggerElement: React.ReactNode;
@@ -177,7 +177,7 @@ export default function BookmarkFormDialog({
             )}
             <Button type="submit" className="mt-3 w-full">
               {isLoading ? (
-                <PulseLoader size={12} color="#FFF" />
+                <LoadingIndicator />
               ) : isEditing ? (
                 t('Bookmark.Form.saveLabel')
               ) : (

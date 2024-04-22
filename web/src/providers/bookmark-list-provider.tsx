@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useContext, useEffect, useState } from 'react';
 
 const LOCAL_STORAGE_SORT_CONFIG_KEY = 'bookmark-list-sort-config';

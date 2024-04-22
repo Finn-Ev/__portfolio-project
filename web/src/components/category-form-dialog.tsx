@@ -14,7 +14,7 @@ import { createCategory } from '@/lib/actions/categories/create';
 import { updateCategory } from '@/lib/actions/categories/update';
 import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
-import { PulseLoader } from 'react-spinners';
+import LoadingIndicator from '@/components/loading-indicator';
 
 interface CategoryFormDialogProps {
   triggerElement: React.ReactNode;
@@ -123,7 +123,7 @@ export default function CategoryFormDialog({
             />
             <Button type="submit" className="mt-3 w-full">
               {isLoading ? (
-                <PulseLoader size={12} color="#FFF" />
+                <LoadingIndicator />
               ) : isEditing ? (
                 t('Category.Form.saveLabel')
               ) : (

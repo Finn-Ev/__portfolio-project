@@ -7,14 +7,13 @@ import { authenticateUser } from '@/lib/actions/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
-import { PulseLoader } from 'react-spinners';
 import { useState } from 'react';
+import LoadingIndicator from '@/components/loading-indicator';
 
 export default function AuthForm() {
   const t = useTranslations();
@@ -95,7 +94,7 @@ export default function AuthForm() {
 
       <Link href="/auth/register" className="flex justify-center mt-3">
         <Button variant={'link'} className="underline">
-          {isLoading ? <PulseLoader size={12} color="#FFF" /> : t('Auth.doNotHaveAccountText')}
+          {isLoading ? <LoadingIndicator /> : t('Auth.doNotHaveAccountText')}
         </Button>
       </Link>
     </>
