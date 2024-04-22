@@ -11,7 +11,7 @@ interface BookmarkListProps {
 }
 
 export default function BookmarkList({ emptyListText, bookmarks }: BookmarkListProps) {
-  if (!bookmarks.length) return <p>{emptyListText}</p>;
+  if (!bookmarks.length) return <p className="text-center">{emptyListText}</p>;
 
   return (
     <BookmarkListProvider>
