@@ -4,16 +4,20 @@ import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next';
 
 export default async function Page() {
-  const t = await getTranslations('Auth');
+  const t = await getTranslations();
   const user = await getCurrentUser();
 
-  if (!user) {
-    return null;
-  }
-
   return (
-    <div className="settings-page p-4 flex flex-col gap-4">
-      {t('loggedInAsText')} {user!.email}
+    <div className="settings-page p-4 flex flex-col items-center justify-center h-full gap-4">
+      {user?.email ? (
+        <div className="text-center">
+          {t('Auth.loggedInAsText')}:
+          <br />
+          {user!.email}
+        </div>
+      ) : (
+        <div>{t('Miscellaneous.clientCookiesError')}</div>
+      )}
       <LogoutBtn className="max-w-64" />
     </div>
   );

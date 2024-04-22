@@ -111,6 +111,7 @@
     },
     "Miscellaneous": {
         "genericErrorMessage": "Bitte versuche es später erneut.",
+        "clientCookiesError": "Etwas scheint mit den gespeicherten Cookies nicht zu stimmen. Bitte logge dich erneut ein.",
         "pageTabTitles": {
             "default": "Lesezeichen App",
             "welcome": "Willkommen",

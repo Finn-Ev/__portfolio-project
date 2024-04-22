@@ -111,6 +111,7 @@
     },
     "Miscellaneous": {
         "genericErrorMessage": "Please try again later.",
+        "clientCookiesError": "It seems like something is off with your cookies. Please login again.",
         "pageTabTitles": {
             "default": "Bookmark App",
             "welcome": "Welcome",
