@@ -89,7 +89,7 @@
             "cancelButtonLabel": "Abbrechen"
         },
         "Toast": {
-            "deleteSuccessMessage": "Das Lesezeichen wurde gelöscht."
+            "deleteSuccessMessage": "Die Kategorie wurde gelöscht."
         }
     },
     "Favourite": {

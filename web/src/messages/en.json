@@ -59,7 +59,7 @@
             "cancelButtonLabel": "Cancel"
         },
         "Toast": {
-            "deleteSuccessMessage": "Bookmark deleted."
+            "deleteSuccessMessage": "The bookmark was deleted."
         },
         "categorySelect__RootCategoryName": "No category"
     },
@@ -89,7 +89,7 @@
             "cancelButtonLabel": "Cancel"
         },
         "Toast": {
-            "deleteSuccessMessage": "Bookmark deleted."
+            "deleteSuccessMessage": "The category was deleted."
         }
     },
     "Favourite": {
