@@ -110,9 +110,16 @@
         "ascendingLabel": "Oldest first"
     },
     "Miscellaneous": {
-        "genericErrorMessage": "Please try again later.",
-        "clientCookiesError": "It seems like something is off with your cookies. Please login again.",
-        "pageTabTitles": {
+        "genericErrorTitle": "Error",
+        "ErrorMessages": {
+            "generic": "Please try again later.",
+            "unknown": "An unknown error occurred. Please try again later.",
+            "clientCookies": "It seems like something is off with your cookies. Please login again.",
+            "Unauthorized": "Please login again to continue.",
+            "EMAIL_ALREADY_EXISTS": "An account with this email address already exists.",
+            "INVALID_CREDENTIALS": "Invalid credentials."
+        },
+        "PageTabTitles": {
             "default": "Bookmark App",
             "welcome": "Welcome",
             "bookmarks": "Bookmark",
@@ -120,7 +127,7 @@
             "favourites": "Favourites",
             "settings": "Settings"
         },
-        "pageNotFound": {
+        "PageNotFound": {
             "pageTitle": "This page could not be found.",
             "linkText": "Take this way"
         }

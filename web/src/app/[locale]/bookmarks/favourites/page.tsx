@@ -8,10 +8,10 @@ import { Metadata } from 'next';
 export default async function BookmarksPage() {
   const t = await getTranslations();
 
-  const { value: bookmarks, errorMessage, success } = await getAllFavourites();
+  const { value: bookmarks, errorCode, success } = await getAllFavourites();
 
   if (!success) {
-    return <ErrorMessage message={errorMessage!} />;
+    return <ErrorMessage errorCode={errorCode!} />;
   }
 
   return (
@@ -30,6 +30,6 @@ export async function generateMetadata({
   const t = await getTranslations({ locale });
 
   return {
-    title: t('Miscellaneous.pageTabTitles.favourites'),
+    title: t('Miscellaneous.PageTabTitles.favourites'),
   };
 }

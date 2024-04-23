@@ -12,17 +12,17 @@ export async function authenticateUser(
     password: string;
   },
   isNewUser: boolean = false,
-): Promise<{ success: boolean; errorMessage?: string }> {
+): Promise<{ success: boolean; errorCode?: string }> {
   const urlPath = isNewUser ? '/auth/register' : '/auth/login';
 
   try {
     const response = await fetchBackend<AuthResponse>('POST', urlPath, payload);
 
     if (!response.success) {
-      return response; // don't need to try to set cookies if the request failed
+      return response;
     }
 
-    const { access_token, root_category_id } = response.value!;
+    const { access_token } = response.value!;
 
     cookies().set(USER_TOKEN_COOKIE_NAME, access_token, {
       maxAge: 60 * 60 * 24 * 7,
@@ -32,6 +32,6 @@ export async function authenticateUser(
 
     return response;
   } catch (error) {
-    return { success: false, errorMessage: (error as Error).message };
+    return { success: false, errorCode: (error as Error).message };
   }
 }

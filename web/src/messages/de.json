@@ -110,9 +110,16 @@
         "ascendingLabel": "Älteste zuerst"
     },
     "Miscellaneous": {
-        "genericErrorMessage": "Bitte versuche es später erneut.",
-        "clientCookiesError": "Etwas scheint mit den gespeicherten Cookies nicht zu stimmen. Bitte logge dich erneut ein.",
-        "pageTabTitles": {
+        "genericErrorTitle": "Fehler",
+        "ErrorMessages": {
+            "genericError": "Bitte versuche es später erneut.",
+            "unknownError": "Ein unbekannter Fehler ist aufgetreten. Bitte versuche es später erneut.",
+            "clientCookies": "Etwas scheint mit den gespeicherten Cookies nicht zu stimmen. Bitte logge dich erneut ein.",
+            "Unauthorized": "Bitte melde dich erneut an, um fortzufahren.",
+            "EMAIL_ALREADY_EXISTS": "Diese E-Mail-Adresse ist bereits registriert.",
+            "INVALID_CREDENTIALS": "Die eingegebenen Daten sind ungültig."
+        },
+        "PageTabTitles": {
             "default": "Lesezeichen App",
             "welcome": "Willkommen",
             "bookmarks": "Alle Lesezeichen",
@@ -120,7 +127,7 @@
             "favourites": "Favoriten",
             "settings": "Einstellungen"
         },
-        "pageNotFound": {
+        "PageNotFound": {
             "pageTitle": "Die Seite existiert nicht.",
             "linkText": "Hier entlang"
         }

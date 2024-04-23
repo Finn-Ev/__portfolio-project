@@ -68,8 +68,8 @@ export async function generateMetadata({
 
   return {
     title: {
-      default: t('Miscellaneous.pageTabTitles.default'),
-      template: `%s | ${t('Miscellaneous.pageTabTitles.default')}`,
+      default: t('Miscellaneous.PageTabTitles.default'),
+      template: `%s | ${t('Miscellaneous.PageTabTitles.default')}`,
     },
   };
 }

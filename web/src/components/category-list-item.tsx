@@ -13,10 +13,9 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { deleteCategory } from '@/lib/actions/categories/delete';
-import { useToast } from '@/components/ui/toast/use-toast';
+import { toast } from '@/components/ui/toast/use-toast';
 import { useRouter } from 'next/navigation';
 import CategoryFormDialog from '@/components/category-form-dialog';
-import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
 
 const ROOT_CATEGORY_TITLE = '__ROOT__';
@@ -27,21 +26,24 @@ interface CategoryListItemProps {
 
 export default function CategoryListItem({ category }: CategoryListItemProps) {
   const t = useTranslations();
-  const { toast } = useToast();
   const router = useRouter();
 
   const isRootCategory = category.title === ROOT_CATEGORY_TITLE;
   const categoryIsEmpty = category.bookmarks.length === 0;
 
   const handleDeleteCategory = async () => {
-    const { success, errorMessage } = await deleteCategory(category.id);
+    const { success, errorCode } = await deleteCategory(category.id);
 
     if (success) {
       toast({
         title: t('Category.Toast.deleteSuccessMessage'),
       });
     } else {
-      showErrorToast(errorMessage);
+      toast({
+        title: t('Miscellaneous.genericErrorTitle'),
+        description: t(`Miscellaneous.ErrorMessages.${errorCode}`),
+        variant: 'destructive',
+      });
     }
 
     router.refresh();

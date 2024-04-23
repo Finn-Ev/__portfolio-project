@@ -11,10 +11,10 @@ import { Metadata } from 'next';
 export default async function BookmarksPage() {
   const t = await getTranslations();
 
-  const { value: categories, errorMessage, success } = await getAllCategories();
+  const { value: categories, errorCode, success } = await getAllCategories();
 
   if (!success) {
-    return <ErrorMessage message={errorMessage!} />;
+    return <ErrorMessage errorCode={errorCode!} />;
   }
 
   return (
@@ -44,6 +44,6 @@ export async function generateMetadata({
   const t = await getTranslations({ locale });
 
   return {
-    title: t('Miscellaneous.pageTabTitles.categories'),
+    title: t('Miscellaneous.PageTabTitles.categories'),
   };
 }

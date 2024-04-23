@@ -15,11 +15,10 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { setFavourite } from '@/lib/actions/bookmarks/favourites/set';
-import { useToast } from '@/components/ui/toast/use-toast';
+import { toast } from '@/components/ui/toast/use-toast';
 import { deleteBookmark } from '@/lib/actions/bookmarks/delete';
 import { useRouter } from 'next/navigation';
 import BookmarkFormDialog from '@/components/bookmark-form-dialog';
-import showErrorToast from '@/lib/utils/show-error-toast';
 import { useBookmarkListContext } from '@/providers';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -34,7 +33,6 @@ export default function BookmarkListItem({
 }: Bookmark) {
   const t = useTranslations();
   const router = useRouter();
-  const { toast } = useToast();
 
   const {
     expandedBookmarkId,
@@ -51,10 +49,14 @@ export default function BookmarkListItem({
 
     setFavouritesAreGettingMutated(true);
     setIsFavouriteState(!isFavouriteState);
-    const { success, errorMessage } = await setFavourite(id, !isFavourite);
+    const { success, errorCode } = await setFavourite(id, !isFavourite);
 
     if (!success) {
-      showErrorToast(errorMessage);
+      toast({
+        title: t('Miscellaneous.genericErrorTitle'),
+        description: t(`Miscellaneous.ErrorMessages.${errorCode}`),
+        variant: 'destructive',
+      });
       setIsFavouriteState(isFavourite);
     }
 
@@ -63,13 +65,17 @@ export default function BookmarkListItem({
   }
 
   async function handleDeleteBookmark() {
-    const { success, errorMessage } = await deleteBookmark(id);
+    const { success, errorCode } = await deleteBookmark(id);
     if (success) {
       toast({
         title: t('Bookmark.Toast.deleteSuccessMessage'),
       });
     } else {
-      showErrorToast(errorMessage);
+      toast({
+        title: t('Miscellaneous.genericErrorTitle'),
+        description: t(`Miscellaneous.ErrorMessages.${errorCode}`),
+        variant: 'destructive',
+      });
     }
 
     setExpandedBookmarkId(null);

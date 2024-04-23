@@ -16,7 +16,7 @@ export default async function Page() {
           {user!.email}
         </div>
       ) : (
-        <div>{t('Miscellaneous.clientCookiesError')}</div>
+        <div>{t('Miscellaneous.ErrorMessages.clientCookies')}</div>
       )}
       <LogoutBtn className="max-w-64" />
     </div>
@@ -31,6 +31,6 @@ export async function generateMetadata({
   const t = await getTranslations({ locale });
 
   return {
-    title: t('Miscellaneous.pageTabTitles.settings'),
+    title: t('Miscellaneous.PageTabTitles.settings'),
   };
 }

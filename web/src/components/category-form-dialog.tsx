@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useToast } from '@/components/ui/toast/use-toast';
+import { toast } from '@/components/ui/toast/use-toast';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { createCategory } from '@/lib/actions/categories/create';
 import { updateCategory } from '@/lib/actions/categories/update';
-import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
 import LoadingIndicator from '@/components/loading-indicator';
 
@@ -60,7 +59,7 @@ export default function CategoryFormDialog({
 
     setIsLoading(true);
 
-    const { success, errorMessage } = isEditing
+    const { success, errorCode } = isEditing
       ? await updateCategory(categoryId!, values)
       : await createCategory(values);
 
@@ -68,7 +67,11 @@ export default function CategoryFormDialog({
       router.refresh();
       if (!isEditing) form.reset(); // only reset the form if we're creating a new category; otherwise the form would have the original values from before editing the category
     } else {
-      showErrorToast(errorMessage);
+      toast({
+        title: t('Miscellaneous.genericErrorTitle'),
+        description: t(`Miscellaneous.ErrorMessages.${errorCode}`),
+        variant: 'destructive',
+      });
     }
 
     setOpen(false);

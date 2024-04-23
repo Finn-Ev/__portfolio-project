@@ -6,9 +6,9 @@ export default function NotFoundPage() {
   const t = useTranslations('');
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <h1>{t('Miscellaneous.pageNotFound.pageTitle')}</h1>
+      <h1>{t('Miscellaneous.PageNotFound.pageTitle')}</h1>
       <Link href="/" className="ml-2">
-        <Button className="mt-4">{t('Miscellaneous.pageNotFound.linkText')}</Button>
+        <Button className="mt-4">{t('Miscellaneous.PageNotFound.linkText')}</Button>
       </Link>
     </div>
   );

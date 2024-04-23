@@ -8,7 +8,7 @@ export async function fetchBackend<T>(
   method: HttpMethod,
   path: string,
   payload: any = null,
-): Promise<{ success: boolean; value?: T; errorMessage?: string }> {
+): Promise<{ success: boolean; value?: T; errorCode?: string }> {
   const accessToken = cookies().get('user_token')?.value;
 
   const options: RequestInit = {
@@ -43,14 +43,14 @@ export async function fetchBackend<T>(
 
     const responseBody = await response.json();
 
-    // console.log('responseBody', responseBody);
+    console.log('responseBody', responseBody);
 
     if (!response.ok) {
-      return { success: false, errorMessage: responseBody.message };
+      return { success: false, errorCode: responseBody.message };
     }
 
     return { success: true, value: responseBody as T };
   } catch (error) {
-    return { success: false, errorMessage: (error as Error).message };
+    return { success: false, errorCode: (error as Error).message };
   }
 }

@@ -34,6 +34,6 @@ export async function generateMetadata({
   const t = await getTranslations({ locale });
 
   return {
-    title: t('Miscellaneous.pageTabTitles.welcome'),
+    title: t('Miscellaneous.PageTabTitles.welcome'),
   };
 }

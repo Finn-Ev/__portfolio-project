@@ -11,12 +11,12 @@ import { createBookmark } from '@/lib/actions/bookmarks/create';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { updateBookmark } from '@/lib/actions/bookmarks/update';
-import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Category } from '@/lib/types/category';
 import { getAllCategories } from '@/lib/actions/categories/get-all';
 import LoadingIndicator from '@/components/loading-indicator';
+import { toast } from './ui/toast/use-toast';
 
 interface BookmarkFormDialogProps {
   triggerElement: React.ReactNode;
@@ -73,7 +73,7 @@ export default function BookmarkFormDialog({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!isEditing && form.formState.isSubmitting) return; // prevent unintentional double creation of bookmarks
     setIsLoading(true);
-    const { success, errorMessage } = isEditing
+    const { success, errorCode } = isEditing
       ? await updateBookmark(bookmarkId!, { ...values, categoryId: parseInt(values.categoryId!) })
       : await createBookmark({ ...values, categoryId: parseInt(values.categoryId!) });
 
@@ -81,7 +81,11 @@ export default function BookmarkFormDialog({
       router.refresh();
       if (!isEditing) form.reset(); // only reset the form if we're creating a new bookmark; otherwise the form would have the original values from before editing the bookmark
     } else {
-      showErrorToast(errorMessage);
+      toast({
+        title: t('Miscellaneous.genericErrorTitle'),
+        description: t(`Miscellaneous.ErrorMessages.${errorCode}`),
+        variant: 'destructive',
+      });
     }
 
     setOpen(false);

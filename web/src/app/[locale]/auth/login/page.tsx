@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useToast } from '@/components/ui/toast/use-toast';
+import { toast } from '@/components/ui/toast/use-toast';
 import { authenticateUser } from '@/lib/actions/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,6 @@ import { Input } from '@/components/ui/input';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import LoadingIndicator from '@/components/loading-indicator';
@@ -19,16 +18,17 @@ export default function AuthForm() {
   const t = useTranslations();
 
   const router = useRouter();
-  const { toast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const formSchema = z.object({
     email: z
       .string({ required_error: t('Auth.Form.Error.emailEmpty') })
+      .trim()
       .email({ message: t('Auth.Form.Error.emailInvalid') }),
     password: z
       .string({ required_error: t('Auth.Form.Error.passwordEmpty') })
+      .trim()
       .min(8, { message: t('Auth.Form.Error.loginPasswordTooShort') }),
   });
 
@@ -41,7 +41,7 @@ export default function AuthForm() {
 
     setIsLoading(true);
 
-    const { success, errorMessage } = await authenticateUser(values);
+    const { success, errorCode } = await authenticateUser(values);
 
     if (success) {
       toast({
@@ -49,9 +49,17 @@ export default function AuthForm() {
       });
       router.push('/bookmarks');
     } else {
-      showErrorToast(errorMessage);
+      toast({
+        title: t('Miscellaneous.genericErrorTitle'),
+        description: t(`Miscellaneous.ErrorMessages.${errorCode}`),
+        variant: 'destructive',
+      });
     }
 
+    form.reset({
+      email: values.email,
+      password: '',
+    });
     setIsLoading(false);
   }
 
@@ -87,14 +95,14 @@ export default function AuthForm() {
             )}
           />
           <Button type="submit" className="mt-3 w-full">
-            {t('Auth.Form.loginButtonLabel')}
+            {isLoading ? <LoadingIndicator /> : t('Auth.Form.loginButtonLabel')}
           </Button>
         </form>
       </Form>
 
       <Link href="/auth/register" className="flex justify-center mt-3">
         <Button variant={'link'} className="underline">
-          {isLoading ? <LoadingIndicator /> : t('Auth.doNotHaveAccountText')}
+          {t('Auth.doNotHaveAccountText')}
         </Button>
       </Link>
     </>

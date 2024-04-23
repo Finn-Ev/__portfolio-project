@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useToast } from '@/components/ui/toast/use-toast';
+import { toast } from '@/components/ui/toast/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { authenticateUser } from '@/lib/actions/auth';
-import showErrorToast from '@/lib/utils/show-error-toast';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import LoadingIndicator from '@/components/loading-indicator';
@@ -27,7 +26,6 @@ export default function AuthForm() {
   const t = useTranslations();
 
   const router = useRouter();
-  const { toast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,12 +33,15 @@ export default function AuthForm() {
     .object({
       email: z
         .string({ required_error: t('Auth.Form.Error.emailEmpty') })
+        .trim()
         .email({ message: t('Auth.Form.Error.emailInvalid') }),
       password: z
         .string({ required_error: t('Auth.Form.Error.passwordEmpty') })
+        .trim()
         .min(8, { message: t('Auth.Form.Error.registrationPasswordTooShort') }),
       passwordConfirmation: z
         .string({ required_error: t('Auth.Form.Error.passwordEmpty') })
+        .trim()
         .min(8, { message: t('Auth.Form.Error.passwordEmpty') }),
     })
     .refine((data) => data.password === data.passwordConfirmation, {
@@ -56,7 +57,7 @@ export default function AuthForm() {
     if (form.formState.isSubmitting) return;
     setIsLoading(true);
 
-    const { success, errorMessage } = await authenticateUser(values, true);
+    const { success, errorCode } = await authenticateUser(values, true);
 
     if (success) {
       toast({
@@ -64,9 +65,18 @@ export default function AuthForm() {
       });
       router.push('/bookmarks');
     } else {
-      showErrorToast(errorMessage);
+      toast({
+        title: t('Miscellaneous.genericErrorTitle'),
+        description: t(`Miscellaneous.ErrorMessages.${errorCode}`),
+        variant: 'destructive',
+      });
     }
 
+    form.reset({
+      email: values.email,
+      passwordConfirmation: '',
+      password: '',
+    });
     setIsLoading(false);
   }
 
@@ -118,14 +128,14 @@ export default function AuthForm() {
             )}
           />
           <Button type="submit" className="mt-3 w-full">
-            {t('Auth.Form.registerButtonLabel')}
+            {isLoading ? <LoadingIndicator /> : t('Auth.Form.registerButtonLabel')}
           </Button>
         </form>
       </Form>
 
       <Link href="/auth/login" className="flex justify-center mt-3">
         <Button variant={'link'} className="underline">
-          {isLoading ? <LoadingIndicator /> : t('Auth.alreadyHaveAccountText')}
+          {t('Auth.alreadyHaveAccountText')}
         </Button>
       </Link>
     </>
