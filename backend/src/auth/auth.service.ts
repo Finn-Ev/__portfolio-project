@@ -63,7 +63,7 @@ export class AuthService {
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new ForbiddenException('Email address is already in use');
+          throw new ForbiddenException('EMAIL_ALREADY_EXISTS');
         }
       }
       throw error;
@@ -84,13 +84,13 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new ForbiddenException('Invalid credentials. Please try again.');
+      throw new ForbiddenException('INVALID_CREDENTIALS');
     }
 
     const pwMatches = await argon.verify(user.pwHash, dto.password);
 
     if (!pwMatches) {
-      throw new ForbiddenException('Invalid credentials. Please try again.');
+      throw new ForbiddenException('INVALID_CREDENTIALS');
     }
 
     const token = await this.signToken(user.id, user.email);
