@@ -165,7 +165,6 @@ export default function BookmarkFormDialog({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {/* TODO iterate over user categories */}
                         {categories.map((category) => (
                           <SelectItem key={category.id} value={category.id.toString()}>
                             {category.title === '__ROOT__'
