@@ -6,6 +6,7 @@ import { redirect } from '@/lib/navigation';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { cookies } from 'next/headers';
+import ThemeToggle from '@/components/theme-toggle';
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
   if (cookies().get(USER_TOKEN_COOKIE_NAME)?.value) {
@@ -13,10 +14,13 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <main className="flex items-center justify-center">
+    <main className="flex items-center justify-center md:h-screen">
       <div className="flex flex-col items-center justify-center p-8 rounded-lg bg-background m-4">
         <div>{children}</div>
-        <LanguageSelect className="mt-3" />
+        <div className="flex gap-2">
+          <LanguageSelect className="mt-3" />
+          <ThemeToggle className="mt-3" />
+        </div>
       </div>
     </main>
   );
